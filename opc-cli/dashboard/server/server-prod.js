@@ -34,7 +34,7 @@ app.use(express.json());
 app.use('/api/skill/cut', cutRouter);
 
 // Load configuration for server settings
-const CONFIG_DIR = path.join(os.homedir(), '.opc_skills', 'opc');
+const CONFIG_DIR = path.join(os.homedir(), '.opc_cli', 'opc');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 
 function loadConfig() {

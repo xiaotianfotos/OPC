@@ -1,4 +1,4 @@
-"""Platform detection for opc-skill.
+"""Platform detection for opc-cli.
 
 Auto-detects the compute backend based on OS:
   - macOS → mlx (Apple Silicon)

@@ -24,7 +24,7 @@ from flask_cors import CORS
 from scripts.shared.config import load_config
 
 cfg = load_config()
-_workspace = Path(cfg.get('workspace_dir', str(Path.home() / ".opc_skill" / "workspace"))).expanduser()
+_workspace = Path(cfg.get('workspace_dir', str(Path.home() / ".opc_cli" / "workspace"))).expanduser()
 
 # 模板和静态资源相对于项目根目录
 _project_dir = Path(__file__).resolve().parent.parent

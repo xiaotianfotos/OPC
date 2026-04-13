@@ -5,7 +5,7 @@
 __pycache__/
 *.pyc
 *.pyo
-opc_skill.egg-info/
+opc_cli.egg-info/
 dist/
 build/
 

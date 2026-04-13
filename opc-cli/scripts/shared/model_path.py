@@ -1,4 +1,4 @@
-"""Model path resolution for opc-skill.
+"""Model path resolution for opc-cli.
 
 Supports two model sources:
   - modelscope (default): Downloads from ModelScope, China-friendly

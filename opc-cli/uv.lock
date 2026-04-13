@@ -2130,7 +2130,7 @@ wheels = [
 ]
 
 [[package]]
-name = "opc-skill"
+name = "opc-cli"
 version = "0.2.0"
 source = { editable = "." }
 dependencies = [

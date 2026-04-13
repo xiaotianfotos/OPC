@@ -13,7 +13,7 @@
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # 一条命令安装（自动按平台选择依赖）
-cd ~/.claude/skills/opc-skill
+cd ~/.claude/skills/opc-cli
 uv sync
 
 # 后续所有命令通过 uv run 执行
@@ -230,7 +230,7 @@ Cloud Code,Claude Code
 
 ## 配置
 
-配置文件：`~/.opc_skills/opc/config.json`
+配置文件：`~/.opc_cli/opc/config.json`
 
 | 键 | 默认值 | 说明 |
 |---|---|---|
@@ -317,7 +317,7 @@ OPC Dashboard 提供统一的技能管理界面，采用技能注册式架构。
 ### 启动 Dashboard
 
 ```bash
-cd /vol2/1000/work/skills/opc-skill/dashboard/server
+cd /vol2/1000/work/skills/opc-cli/dashboard/server
 npm install          # 首次安装
 npm run build        # 构建前端
 node server-prod.js  # 启动服务器

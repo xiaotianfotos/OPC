@@ -31,7 +31,7 @@
 
 ## 配置
 
-配置文件位于 `~/.opc_skills/opc/config.json`
+配置文件位于 `~/.opc_cli/opc/config.json`
 
 ### 配置项
 
@@ -77,7 +77,7 @@ opc config --set-dashboard-port 12080
 ### 1. 启动 Dashboard 服务器
 
 ```bash
-cd /vol2/1000/work/skills/opc-skill/dashboard/server
+cd /vol2/1000/work/skills/opc-cli/dashboard/server
 node server-prod.js
 ```
 

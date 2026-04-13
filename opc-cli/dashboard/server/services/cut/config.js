@@ -1,19 +1,19 @@
 /**
  * Cut Service Configuration
- * Loads configuration from ~/.opc_skills/opc/config.json
+ * Loads configuration from ~/.opc_cli/opc/config.json
  */
 
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
 
-const CONFIG_DIR = path.join(os.homedir(), '.opc_skills', 'opc');
+const CONFIG_DIR = path.join(os.homedir(), '.opc_cli', 'opc');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 
 const DEFAULT_CONFIG = {
   tts_engine: 'edge-tts',
   output_dir: os.tmpdir(),
-  workspace_dir: path.join(os.homedir(), '.opc_skill', 'workspace'),
+  workspace_dir: path.join(os.homedir(), '.opc_cli', 'workspace'),
   dashboard_host: '0.0.0.0',
   dashboard_port: 12080,
   cut_server_port: 12082,

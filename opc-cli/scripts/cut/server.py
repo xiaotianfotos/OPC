@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Cutx Auto Server - Qwen3-ASR Edition for opc-skill
+Cutx Auto Server - Qwen3-ASR Edition for opc-cli
 
 Usage:
     uv run python scripts/cut/server.py --video /path/to/video.mp4 [--json /path/to/result.json]
@@ -29,7 +29,7 @@ from shared.config import load_config
 
 # Get workspace from config or use default
 cfg = load_config()
-workspace_dir = os.path.expanduser(cfg.get('workspace_dir', str(Path.home() / ".opc_skill" / "workspace")))
+workspace_dir = os.path.expanduser(cfg.get('workspace_dir', str(Path.home() / ".opc_cli" / "workspace")))
 WORKSPACE_DIR = Path(workspace_dir)
 UPLOAD_FOLDER = WORKSPACE_DIR / 'uploads'
 OUTPUT_FOLDER = WORKSPACE_DIR / 'outputs'

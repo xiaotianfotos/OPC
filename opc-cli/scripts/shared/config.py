@@ -5,14 +5,14 @@ import os
 import tempfile
 from pathlib import Path
 
-CONFIG_DIR = Path.home() / ".opc_skills" / "opc"
+CONFIG_DIR = Path.home() / ".opc_cli" / "opc"
 CONFIG_FILE = CONFIG_DIR / "config.json"
 CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
 DEFAULT_CONFIG = {
     "tts_engine": "edge-tts",
     "output_dir": os.environ.get("OPC_OUTPUT_DIR", tempfile.gettempdir()),
-    "workspace_dir": os.environ.get("OPC_WORKSPACE_DIR", str(Path.home() / ".opc_skill" / "workspace")),  # Default workspace for ASR/Cut
+    "workspace_dir": os.environ.get("OPC_WORKSPACE_DIR", str(Path.home() / ".opc_cli" / "workspace")),  # Default workspace for ASR/Cut
     "tts_format": "mp3",
     # edge-tts defaults
     "edge_voice": "zh-CN-XiaoxiaoNeural",

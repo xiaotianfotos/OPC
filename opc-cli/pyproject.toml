@@ -1,5 +1,5 @@
 [project]
-name = "opc-skill"
+name = "opc-cli"
 version = "0.2.0"
 description = "OPC TTS & ASR CLI Tool with AirPlay/DLNA support"
 requires-python = ">=3.10, <3.14"

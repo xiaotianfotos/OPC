@@ -13,7 +13,7 @@
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # 一条命令安装（自动按平台选择依赖）
-cd ~/.claude/skills/opc-skill
+cd ~/.claude/skills/opc-cli
 uv sync
 
 # 后续所有命令通过 uv run 执行
@@ -230,7 +230,7 @@ Cloud Code,Claude Code
 
 ## 配置
 
-配置文件：`~/.opc_skills/opc/config.json`
+配置文件：`~/.opc_cli/opc/config.json`
 
 | 键 | 默认值 | 说明 |
 |---|---|---|
