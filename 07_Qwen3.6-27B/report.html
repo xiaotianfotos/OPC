@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qwen3.6-27B 推理优化测评</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+    background: #0a0e1a;
+    color: #e0e6f0;
+    line-height: 1.6;
+  }
+  .container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+
+  /* 标题区 */
+  .hero {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #0d1b2a 0%, #1b2838 100%);
+    border-radius: 16px;
+    margin-bottom: 30px;
+    border: 1px solid #1e3a5f;
+  }
+  .hero h1 {
+    font-size: 2.2rem;
+    background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+  }
+  .hero .subtitle {
+    color: #8a9bb8;
+    font-size: 1.1rem;
+  }
+  .hero .specs {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .spec-item {
+    background: rgba(0,212,255,0.08);
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,212,255,0.2);
+  }
+  .spec-item .label { font-size: 0.75rem; color: #5a7a9a; }
+  .spec-item .value { font-size: 1.1rem; color: #00d4ff; font-weight: 600; }
+
+  /* 导航标签 */
+  .nav-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .nav-tab {
+    padding: 10px 24px;
+    background: #131b2e;
+    border: 1px solid #1e3a5f;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+    color: #8a9bb8;
+  }
+  .nav-tab:hover { border-color: #00d4ff; color: #00d4ff; }
+  .nav-tab.active {
+    background: linear-gradient(135deg, #00d4ff22, #7b2cbf22);
+    border-color: #00d4ff;
+    color: #00d4ff;
+  }
+
+  /* 内容面板 */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* 卡片 */
+  .card {
+    background: #111827;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 1px solid #1e293b;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    color: #f0f4f8;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 8px; height: 8px;
+    background: #00d4ff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #00d4ff;
+  }
+
+  /* 大数字展示 */
+  .big-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .big-stat {
+    background: linear-gradient(135deg, #131b2e, #1a2332);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #1e3a5f;
+  }
+  .big-stat .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #00d4ff, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .big-stat .unit { font-size: 0.9rem; color: #5a7a9a; }
+  .big-stat .desc { font-size: 0.85rem; color: #8a9bb8; margin-top: 4px; }
+
+  /* 表格 */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #1e293b;
+  }
+  th {
+    background: #0d1320;
+    color: #5a7a9a;
+    font-weight: 500;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  tr:hover td { background: rgba(0,212,255,0.03); }
+  td { color: #c0c8d8; }
+  .speed { color: #00d4ff; font-weight: 600; }
+  .speed-fast { color: #4ade80; font-weight: 600; }
+  .speed-slow { color: #f87171; }
+  .acc-high { color: #4ade80; font-weight: 600; }
+  .acc-mid { color: #fbbf24; }
+  .acc-low { color: #f87171; }
+  .highlight-row td { background: rgba(0,212,255,0.06) !important; border-left: 3px solid #00d4ff; }
+  .highlight-row td:first-child { padding-left: 9px; }
+
+  /* 通过/失败标记 */
+  .pass { color: #4ade80; font-weight: 600; }
+  .fail { color: #f87171; }
+  .partial { color: #fbbf24; }
+
+  /* 图表容器 */
+  .chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 20px;
+  }
+  .chart-box {
+    background: #111827;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #1e293b;
+  }
+  .chart-box canvas { max-height: 320px; }
+
+  /* 对比条 */
+  .compare-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0;
+  }
+  .compare-label {
+    min-width: 140px;
+    font-size: 0.85rem;
+    color: #8a9bb8;
+  }
+  .compare-track {
+    flex: 1;
+    height: 28px;
+    background: #1a2332;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+  .compare-fill {
+    height: 100%;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: width 1s ease;
+  }
+  .fill-cyan { background: linear-gradient(90deg, #0891b2, #00d4ff); }
+  .fill-purple { background: linear-gradient(90deg, #7c3aed, #a855f7); }
+  .fill-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .fill-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .fill-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+
+  /* 备注 */
+  .note {
+    background: rgba(251,191,36,0.08);
+    border-left: 3px solid #fbbf24;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 0.85rem;
+    color: #d4c4a0;
+  }
+  .note.info {
+    background: rgba(0,212,255,0.08);
+    border-left-color: #00d4ff;
+    color: #a0c4d4;
+  }
+
+  /* 场景矩阵表格 - 紧凑 */
+  .matrix-table {
+    font-size: 0.8rem;
+  }
+  .matrix-table th, .matrix-table td {
+    padding: 6px 8px;
+    text-align: center;
+    min-width: 40px;
+  }
+  .matrix-table th:first-child, .matrix-table td:first-child {
+    text-align: left;
+    min-width: 160px;
+    position: sticky;
+    left: 0;
+    background: #0d1320;
+    z-index: 1;
+  }
+  .matrix-table tr:hover td:first-child { background: #0d1320; }
+  .matrix-table td:first-child { background: #111827; }
+  .matrix-table tr:hover td:first-child { background: #111827; }
+
+  /* 附录 */
+  .scenario-desc {
+    margin: 8px 0;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 8px;
+    border-left: 2px solid #1e3a5f;
+  }
+  .scenario-desc .id { color: #00d4ff; font-weight: 600; font-size: 0.85rem; }
+  .scenario-desc .title { color: #c0c8d8; font-size: 0.85rem; }
+  .scenario-desc .desc { color: #5a7a9a; font-size: 0.8rem; margin-top: 2px; }
+
+  /* 滚动容器 */
+  .scroll-x { overflow-x: auto; }
+
+  /* 响应式 */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 1.5rem; }
+    .chart-grid { grid-template-columns: 1fr; }
+    .big-stat .number { font-size: 1.8rem; }
+    .compare-label { min-width: 100px; font-size: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 标题区 -->
+  <div class="hero">
+    <h1>Qwen3.6-27B 推理优化测评</h1>
+    <p class="subtitle">从 20 tok/s 到 470 tok/s 的极致榨干之路</p>
+    <div class="specs">
+      <div class="spec-item">
+        <div class="label">测试模型</div>
+        <div class="value">Qwen3.6-27B</div>
+      </div>
+      <div class="spec-item">
+        <div class="label">硬件</div>
+        <div class="value">RTX 4090 x1/x2</div>
+      </div>
+      <div class="spec-item">
+        <div class="label">测试日期</div>
+        <div class="value">2026-04-24</div>
+      </div>
+      <div class="spec-item">
+        <div class="label">框架</div>
+        <div class="value">vLLM / llama.cpp / lucebox</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 导航 -->
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showPanel('overview')">总览</div>
+    <div class="nav-tab" onclick="showPanel('speed')">速度对比</div>
+    <div class="nav-tab" onclick="showPanel('accuracy')">准确率</div>
+    <div class="nav-tab" onclick="showPanel('mtp')">MTP 缩放</div>
+    <div class="nav-tab" onclick="showPanel('throughput')">多并发吞吐</div>
+    <div class="nav-tab" onclick="showPanel('lucebox')">lucebox 专项</div>
+    <div class="nav-tab" onclick="showPanel('appendix')">附录</div>
+  </div>
+
+  <!-- ====== 总览面板 ====== -->
+  <div id="overview" class="panel active">
+    <div class="big-stats">
+      <div class="big-stat">
+        <div class="number">20.2</div>
+        <div class="unit">tok/s</div>
+        <div class="desc">裸跑 FP8 单卡基线</div>
+      </div>
+      <div class="big-stat">
+        <div class="number">184.4</div>
+        <div class="unit">tok/s</div>
+        <div class="desc">lucebox Q4 峰值速度</div>
+      </div>
+      <div class="big-stat">
+        <div class="number">470</div>
+        <div class="unit">tok/s</div>
+        <div class="desc">双卡 FP8 多并发总吞吐</div>
+      </div>
+      <div class="big-stat">
+        <div class="number">9.1x</div>
+        <div class="unit">倍</div>
+        <div class="desc">单卡最高加速比</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>优化路线一览</div>
+      <table>
+        <tr>
+          <th>阶段</th>
+          <th>配置</th>
+          <th>速度 (tok/s)</th>
+          <th>vs 基线</th>
+          <th>准确率</th>
+          <th>适用场景</th>
+        </tr>
+        <tr>
+          <td>裸奔</td>
+          <td>FP8 单卡，无优化</td>
+          <td class="speed-slow">20.2</td>
+          <td>1x</td>
+          <td class="acc-high">83.6</td>
+          <td>精度基准</td>
+        </tr>
+        <tr>
+          <td>量化</td>
+          <td>llama.cpp Q4 / vLLM AWQ</td>
+          <td class="speed">45-48</td>
+          <td>2.3x</td>
+          <td class="acc-high">78-81</td>
+          <td>快速部署</td>
+        </tr>
+        <tr>
+          <td>MTP</td>
+          <td>AWQ MTP n=5 单卡</td>
+          <td class="speed">107.5</td>
+          <td>5.3x</td>
+          <td>-</td>
+          <td>单卡极速</td>
+        </tr>
+        <tr class="highlight-row">
+          <td><strong>MTP+双卡</strong></td>
+          <td><strong>FP8 MTP n=5 双卡</strong></td>
+          <td class="speed-fast"><strong>114.5</strong></td>
+          <td><strong>5.7x</strong></td>
+          <td class="acc-high">-</td>
+          <td><strong>生产推荐</strong></td>
+        </tr>
+        <tr class="highlight-row">
+          <td><strong>lucebox</strong></td>
+          <td><strong>lucebox Q4 DDTree</strong></td>
+          <td class="speed-fast"><strong>140.8</strong></td>
+          <td><strong>7.0x</strong></td>
+          <td class="acc-high"><strong>81.5</strong></td>
+          <td><strong>速度/精度最佳</strong></td>
+        </tr>
+        <tr>
+          <td>多并发</td>
+          <td>双卡 FP8 MTP n=5, c=10</td>
+          <td class="speed-fast">~470</td>
+          <td>23x</td>
+          <td>-</td>
+          <td>Agent 编排</td>
+        </tr>
+      </table>
+      <div class="note info">
+        推荐方案：追求极致速度选 lucebox Q4（140.8 tok/s），追求生产稳定选 vLLM FP8 双卡 + MTP n=5（单并发 114.5，多并发 470 tok/s 总吞吐）
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>测试说明</div>
+      <div class="note info">
+        <strong>准确率测试数据集：</strong>来自 <a href="https://github.com/stevibe/BenchLocal" target="_blank" style="color:#00d4ff">stevibe/BenchLocal</a>，包含 DataExtract-15（数据提取）、InstructFollow-15（指令遵循）、ToolCall-15（工具调用）三个 Pack 共 45 个场景。BenchLocal 还有 StructOutput、BugFind 等 Pack 依赖复杂容器环境，未纳入测试。测试目的仅为观察量化对准确率的衰减程度，而非全面能力评估。
+      </div>
+      <div class="note info">
+        <strong>lucebox：</strong>基于 <a href="https://github.com/Luce-Org/lucebox-hub" target="_blank" style="color:#00d4ff">Luce-Org/lucebox-hub</a> 项目，采用 DDTree 扩散式推测解码。DFlash 是其中的解码算法，lucebox 是完整推理框架。
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 速度对比面板 ====== -->
+  <div id="speed" class="panel">
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>单并发 Decode 速度对比（综合均值 tok/s）</div>
+      <div class="compare-bar">
+        <div class="compare-label">FP8 裸跑</div>
+        <div class="compare-track"><div class="compare-fill fill-red" style="width:11%">20.2</div></div>
+      </div>
+      <div class="compare-bar">
+        <div class="compare-label">llama.cpp Q4</div>
+        <div class="compare-track"><div class="compare-fill fill-orange" style="width:25%">45.3</div></div>
+      </div>
+      <div class="compare-bar">
+        <div class="compare-label">AWQ 无 MTP</div>
+        <div class="compare-track"><div class="compare-fill fill-orange" style="width:26%">47.9</div></div>
+      </div>
+      <div class="compare-bar">
+        <div class="compare-label">AWQ MTP n=1</div>
+        <div class="compare-track"><div class="compare-fill fill-purple" style="width:39%">71.3</div></div>
+      </div>
+      <div class="compare-bar">
+        <div class="compare-label">FP8 MTP n=5 单卡</div>
+        <div class="compare-track"><div class="compare-fill fill-purple" style="width:39%">71.7</div></div>
+      </div>
+      <div class="compare-bar">
+        <div class="compare-label">AWQ MTP n=3</div>
+        <div class="compare-track"><div class="compare-fill fill-cyan" style="width:54%">98.6</div></div>
+      </div>
+      <div class="compare-bar">
+        <div class="compare-label">FP8 MTP n=3 双卡</div>
+        <div class="compare-track"><div class="compare-fill fill-cyan" style="width:54%">99.1</div></div>
+      </div>
+      <div class="compare-bar">
+        <div class="compare-label">AWQ MTP n=5</div>
+        <div class="compare-track"><div class="compare-fill fill-green" style="width:58%">107.5</div></div>
+      </div>
+      <div class="compare-bar">
+        <div class="compare-label">FP8 MTP n=5 双卡</div>
+        <div class="compare-track"><div class="compare-fill fill-green" style="width:62%">114.5</div></div>
+      </div>
+      <div class="compare-bar">
+        <div class="compare-label"><strong>lucebox Q4</strong></div>
+        <div class="compare-track"><div class="compare-fill fill-green" style="width:76%"><strong>140.8</strong></div></div>
+      </div>
+      <div class="compare-bar">
+        <div class="compare-label"><strong>lucebox Q4 峰值</strong></div>
+        <div class="compare-track"><div class="compare-fill fill-green" style="width:100%"><strong>184.4</strong></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>按测试集细分的速度（tok/s）</div>
+      <table>
+        <tr>
+          <th>配置</th>
+          <th>HumanEval</th>
+          <th>GSM8K</th>
+          <th>Math500</th>
+          <th>综合</th>
+        </tr>
+        <tr><td>FP8 裸跑 单卡</td><td class="speed-slow">20.2</td><td class="speed-slow">20.2</td><td class="speed-slow">20.2</td><td class="speed-slow">20.2</td></tr>
+        <tr><td>llama.cpp Q4</td><td>47.6</td><td>45.0</td><td>44.2</td><td>45.3</td></tr>
+        <tr><td>AWQ 无 MTP</td><td>47.9</td><td>47.9</td><td>47.9</td><td>47.9</td></tr>
+        <tr><td>AWQ MTP n=1</td><td>70.7</td><td>71.8</td><td>71.3</td><td>71.3</td></tr>
+        <tr><td>FP8 MTP n=1 单卡</td><td>38.1</td><td>38.9</td><td>38.4</td><td>38.4</td></tr>
+        <tr><td>FP8 MTP n=1 双卡</td><td>58.9</td><td>59.9</td><td>54.0</td><td>57.6</td></tr>
+        <tr><td>AWQ MTP n=3</td><td>97.8</td><td>101.1</td><td>97.0</td><td>98.6</td></tr>
+        <tr><td>FP8 MTP n=3 单卡</td><td>57.7</td><td>63.0</td><td>60.6</td><td>60.4</td></tr>
+        <tr><td>FP8 MTP n=3 双卡</td><td>93.6</td><td>102.6</td><td>101.2</td><td>99.1</td></tr>
+        <tr><td>AWQ MTP n=5</td><td>107.1</td><td>107.3</td><td>108.1</td><td>107.5</td></tr>
+        <tr><td>FP8 MTP n=5 单卡</td><td>68.5</td><td>73.7</td><td>73.0</td><td>71.7</td></tr>
+        <tr class="highlight-row"><td><strong>FP8 MTP n=5 双卡</strong></td><td><strong>107.3</strong></td><td><strong>118.0</strong></td><td><strong>118.2</strong></td><td class="speed-fast"><strong>114.5</strong></td></tr>
+        <tr class="highlight-row"><td><strong>lucebox Q4 (b=22)</strong></td><td>124.7</td><td class="speed-fast">149.8</td><td class="speed-fast">148.1</td><td class="speed-fast"><strong>140.8</strong></td></tr>
+        <tr><td>lucebox Q6</td><td>84.6</td><td>94.8</td><td>94.5</td><td>91.3</td></tr>
+      </table>
+      <div class="note">HumanEval 速度偏低是因为 prompt 较长（含完整函数签名），前处理时间更长。代码 token 中缩进、括号等短 token 占比高，相同速度下实际字符产出更少。</div>
+    </div>
+  </div>
+
+  <!-- ====== 准确率面板 ====== -->
+  <div id="accuracy" class="panel">
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>DataExtract-15 场景通过矩阵（绿色=通过，黄色=部分，红色=失败）</div>
+      <div class="scroll-x">
+        <table class="matrix-table">
+          <tr>
+            <th>配置</th>
+            <th>DE-01</th><th>DE-02</th><th>DE-03</th><th>DE-04</th><th>DE-05</th>
+            <th>DE-06</th><th>DE-07</th><th>DE-08</th><th>DE-09</th><th>DE-10</th>
+            <th>DE-11</th><th>DE-12</th><th>DE-13</th><th>DE-14</th><th>DE-15</th>
+            <th>均值</th>
+          </tr>
+          <tr>
+            <td><strong>FP8 基准</strong></td>
+            <td class="pass">O</td><td class="partial">~</td><td class="pass">O</td><td class="pass">O</td><td class="partial">~</td>
+            <td class="pass">O</td><td class="fail">X</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="pass">O</td><td class="partial">~</td><td class="partial">~</td><td class="partial">~</td><td class="pass">O</td>
+            <td class="acc-high">80.5</td>
+          </tr>
+          <tr>
+            <td><strong>lucebox Q4</strong></td>
+            <td class="pass">O</td><td class="partial">~</td><td class="pass">O</td><td class="pass">O</td><td class="partial">~</td>
+            <td class="pass">O</td><td class="fail">X</td><td class="pass">O</td><td class="pass">O</td><td class="partial">~</td>
+            <td class="pass">O</td><td class="partial">~</td><td class="partial">~</td><td class="partial">~</td><td class="pass">O</td>
+            <td class="acc-high">80.7</td>
+          </tr>
+          <tr>
+            <td><strong>lucebox Q6</strong></td>
+            <td class="pass">O</td><td class="partial">~</td><td class="pass">O</td><td class="pass">O</td><td class="partial">~</td>
+            <td class="pass">O</td><td class="fail">X</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="pass">O</td><td class="partial">~</td><td class="partial">~</td><td class="partial">~</td><td class="pass">O</td>
+            <td class="acc-high">81.6</td>
+          </tr>
+          <tr>
+            <td><strong>vLLM AWQ</strong></td>
+            <td class="pass">O</td><td class="partial">~</td><td class="pass">O</td><td class="pass">O</td><td class="partial">~</td>
+            <td class="partial">~</td><td class="fail">X</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="partial">~</td><td class="fail">X</td><td class="pass">O</td>
+            <td class="acc-mid">77.1</td>
+          </tr>
+          <tr>
+            <td><strong>llama.cpp Q4</strong></td>
+            <td class="pass">O</td><td class="partial">~</td><td class="partial">~</td><td class="pass">O</td><td class="fail">X</td>
+            <td class="partial">~</td><td class="fail">X</td><td class="pass">O</td><td class="pass">O</td><td class="partial">~</td>
+            <td class="partial">~</td><td class="partial">~</td><td class="partial">~</td><td class="partial">~</td><td class="pass">O</td>
+            <td class="acc-mid">75.9</td>
+          </tr>
+          <tr>
+            <td><strong>DeepSeek v4-pro</strong></td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="partial">~</td><td class="pass">O</td>
+            <td class="pass">O</td><td class="fail">X</td><td class="pass">O</td><td class="pass">O</td><td class="partial">~</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="partial">~</td><td class="fail">X</td><td class="pass">O</td>
+            <td class="acc-high">78.6</td>
+          </tr>
+        </table>
+      </div>
+      <div class="note">O = 通过(>=85) &nbsp; ~ = 部分通过(50-84) &nbsp; X = 失败(&lt;50)</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>InstructFollow-15 场景通过矩阵</div>
+      <div class="scroll-x">
+        <table class="matrix-table">
+          <tr>
+            <th>配置</th>
+            <th>IF-01</th><th>IF-02</th><th>IF-03</th><th>IF-04</th><th>IF-05</th>
+            <th>IF-06</th><th>IF-07</th><th>IF-08</th><th>IF-09</th><th>IF-10</th>
+            <th>IF-11</th><th>IF-12</th><th>IF-13</th><th>IF-14</th><th>IF-15</th>
+            <th>均值</th>
+          </tr>
+          <tr>
+            <td><strong>FP8 基准</strong></td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="partial">~</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="partial">~</td>
+            <td class="fail">X</td><td class="pass">O</td><td class="pass">O</td><td class="fail">X</td><td class="pass">O</td>
+            <td class="acc-high">86.7</td>
+          </tr>
+          <tr>
+            <td><strong>lucebox Q4</strong></td>
+            <td class="pass">O</td><td class="pass">O</td><td class="fail">X</td><td class="partial">~</td><td class="partial">~</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="partial">~</td>
+            <td class="partial">~</td><td class="pass">O</td><td class="pass">O</td><td class="fail">X</td><td class="pass">O</td>
+            <td class="acc-high">82.3</td>
+          </tr>
+          <tr>
+            <td><strong>lucebox Q6</strong></td>
+            <td class="pass">O</td><td class="pass">O</td><td class="fail">X</td><td class="partial">~</td><td class="partial">~</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="partial">~</td>
+            <td class="partial">~</td><td class="pass">O</td><td class="pass">O</td><td class="fail">X</td><td class="pass">O</td>
+            <td class="acc-high">82.3</td>
+          </tr>
+          <tr>
+            <td><strong>vLLM AWQ</strong></td>
+            <td class="pass">O</td><td class="pass">O</td><td class="fail">X</td><td class="pass">O</td><td class="partial">~</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="fail">X</td>
+            <td class="partial">~</td><td class="partial">~</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="acc-high">85.0</td>
+          </tr>
+          <tr>
+            <td><strong>llama.cpp Q4</strong></td>
+            <td class="pass">O</td><td class="partial">~</td><td class="fail">X</td><td class="partial">~</td><td class="partial">~</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="partial">~</td>
+            <td class="partial">~</td><td class="pass">O</td><td class="pass">O</td><td class="fail">X</td><td class="pass">O</td>
+            <td class="acc-high">80.7</td>
+          </tr>
+          <tr>
+            <td><strong>DeepSeek v4-pro</strong></td>
+            <td class="pass">O</td><td class="pass">O</td><td class="fail">X</td><td class="pass">O</td><td class="partial">~</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="partial">~</td><td class="partial">~</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="acc-high">91.7</td>
+          </tr>
+        </table>
+      </div>
+      <div class="note">O = 通过(>=85) &nbsp; ~ = 部分通过(50-84) &nbsp; X = 失败(&lt;50)</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>ToolCall-15 场景通过矩阵</div>
+      <div class="scroll-x">
+        <table class="matrix-table">
+          <tr>
+            <th>配置</th>
+            <th>TC-01</th><th>TC-02</th><th>TC-03</th><th>TC-04</th><th>TC-05</th>
+            <th>TC-06</th><th>TC-07</th><th>TC-08</th><th>TC-09</th><th>TC-10</th>
+            <th>TC-11</th><th>TC-12</th><th>TC-13</th><th>TC-14</th><th>TC-15</th>
+            <th>总分</th>
+          </tr>
+          <tr>
+            <td><strong>FP8 基准</strong></td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="acc-high">30/30</td>
+          </tr>
+          <tr>
+            <td><strong>lucebox Q4</strong></td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="acc-high">30/30</td>
+          </tr>
+          <tr>
+            <td><strong>lucebox Q6</strong></td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="acc-high">30/30</td>
+          </tr>
+          <tr>
+            <td><strong>vLLM AWQ</strong></td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="partial">~</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="acc-mid">29/30</td>
+          </tr>
+          <tr>
+            <td><strong>llama.cpp Q4</strong></td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="acc-high">30/30</td>
+          </tr>
+          <tr>
+            <td><strong>DeepSeek v4-pro</strong></td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td><td class="pass">O</td>
+            <td class="acc-high">30/30</td>
+          </tr>
+        </table>
+      </div>
+      <div class="note">O = 满分(2分) &nbsp; ~ = 部分通过(1分) &nbsp; X = 失败(0分)。vLLM AWQ 在 TC-11（简单数学）上部分通过 — thinking 模式下对简单问题调用了计算器而非直接回答。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>准确率综合得分（不含 ReasonMath）</div>
+      <div class="big-stats">
+        <div class="big-stat">
+          <div class="number" style="background: linear-gradient(90deg,#4ade80,#22c55e); -webkit-background-clip: text;">85.2</div>
+          <div class="unit">分</div>
+          <div class="desc">DeepSeek v4-pro</div>
+        </div>
+        <div class="big-stat">
+          <div class="number" style="background: linear-gradient(90deg,#4ade80,#22c55e); -webkit-background-clip: text;">83.6</div>
+          <div class="unit">分</div>
+          <div class="desc">FP8 基准</div>
+        </div>
+        <div class="big-stat">
+          <div class="number" style="background: linear-gradient(90deg,#fbbf24,#f59e0b); -webkit-background-clip: text;">82.0</div>
+          <div class="unit">分</div>
+          <div class="desc">lucebox Q6</div>
+        </div>
+        <div class="big-stat">
+          <div class="number" style="background: linear-gradient(90deg,#fbbf24,#f59e0b); -webkit-background-clip: text;">81.5</div>
+          <div class="unit">分</div>
+          <div class="desc">lucebox Q4</div>
+        </div>
+      </div>
+
+      <table>
+        <tr>
+          <th>配置</th>
+          <th>DataExtract</th>
+          <th>InstructFollow</th>
+          <th>综合</th>
+          <th>vs FP8</th>
+          <th>ToolCall-15</th>
+        </tr>
+        <tr><td>DeepSeek v4-pro</td><td>78.6</td><td class="acc-high">91.7</td><td class="acc-high">85.2</td><td>+1.6</td><td class="acc-high">100%</td></tr>
+        <tr class="highlight-row"><td><strong>FP8 基准</strong></td><td>80.5</td><td>86.7</td><td class="acc-high"><strong>83.6</strong></td><td>-</td><td class="acc-high">100%</td></tr>
+        <tr><td>lucebox Q6</td><td>81.6</td><td>82.3</td><td>82.0</td><td>-1.6</td><td class="acc-high">100%</td></tr>
+        <tr><td>lucebox Q4</td><td>80.7</td><td>82.3</td><td>81.5</td><td>-2.1</td><td class="acc-high">100%</td></tr>
+        <tr><td>vLLM AWQ (MTP)</td><td>77.1</td><td>85.0</td><td>81.1</td><td>-2.5</td><td>97%</td></tr>
+        <tr><td>llama.cpp Q4</td><td>75.9</td><td>80.7</td><td>78.3</td><td>-5.3</td><td class="acc-high">100%</td></tr>
+      </table>
+      <div class="note info">
+        <strong>关键结论：</strong>Q4 量化与 FP8 基准的差距仅 2.1 分，几乎零精度损失。lucebox Q4 速度比 FP8 快 7 倍，准确率只降 2.1 分，是速度/精度的最佳平衡点。
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== MTP 缩放面板 ====== -->
+  <div id="mtp" class="panel">
+    <div class="chart-grid">
+      <div class="chart-box">
+        <div class="card-title"><span class="icon"></span>AWQ MTP 缩放曲线</div>
+        <canvas id="mtpAwqChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <div class="card-title"><span class="icon"></span>FP8 单卡 MTP 缩放曲线</div>
+        <canvas id="mtpFp8Chart"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>MTP 参数缩放数据表</div>
+      <table>
+        <tr>
+          <th>量化</th>
+          <th>MTP n=0</th>
+          <th>n=1</th>
+          <th>n=3</th>
+          <th>n=5</th>
+          <th>n=0→n=5 加速</th>
+          <th>每步增量</th>
+        </tr>
+        <tr>
+          <td><strong>AWQ (INT4) 单卡</strong></td>
+          <td class="speed-slow">47.9</td>
+          <td>71.3</td>
+          <td>98.6</td>
+          <td class="speed-fast">107.5</td>
+          <td class="speed-fast">+124%</td>
+          <td>n=1→3: +38%, n=3→5: +9%</td>
+        </tr>
+        <tr>
+          <td><strong>FP8 单卡</strong></td>
+          <td class="speed-slow">20.2</td>
+          <td>38.4</td>
+          <td>60.4</td>
+          <td class="speed">71.7</td>
+          <td class="speed-fast">+255%</td>
+          <td>n=1→3: +57%, n=3→5: +19%</td>
+        </tr>
+        <tr>
+          <td><strong>FP8 双卡</strong></td>
+          <td class="speed-slow">31.4</td>
+          <td>57.6</td>
+          <td>99.1</td>
+          <td class="speed-fast">114.5</td>
+          <td class="speed-fast">+265%</td>
+          <td>n=1→3: +72%, n=3→5: +16%</td>
+        </tr>
+      </table>
+      <div class="note">FP8 基线速度更低，GPU 计算能力未被充分利用，MTP 提升幅度更大（255% vs 124%）。n=3 到 n=5 的边际收益递减，AWQ 仅增 9%，FP8 增 16-19%。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>单卡 vs 双卡 FP8 MTP 对比</div>
+      <table>
+        <tr><th>配置</th><th>n=1</th><th>n=3</th><th>n=5</th></tr>
+        <tr><td>FP8 单卡</td><td>38.4</td><td>60.4</td><td>71.7</td></tr>
+        <tr><td>FP8 双卡</td><td>57.6 <span style="color:#4ade80">(+50%)</span></td><td>99.1 <span style="color:#4ade80">(+64%)</span></td><td class="speed-fast">114.5 <span style="color:#4ade80">(+60%)</span></td></tr>
+      </table>
+      <div class="note info">双卡 FP8 MTP n=5（114.5）超过单卡 AWQ MTP n=5（107.5），逼近 lucebox Q4（140.8）。</div>
+    </div>
+  </div>
+
+  <!-- ====== 多并发吞吐面板 ====== -->
+  <div id="throughput" class="panel">
+    <div class="big-stats">
+      <div class="big-stat">
+        <div class="number" style="background: linear-gradient(90deg,#f87171,#ef4444); -webkit-background-clip: text;">114.5</div>
+        <div class="unit">tok/s</div>
+        <div class="desc">单并发基线</div>
+      </div>
+      <div class="big-stat">
+        <div class="number" style="background: linear-gradient(90deg,#fbbf24,#f59e0b); -webkit-background-clip: text;">~351</div>
+        <div class="unit">tok/s</div>
+        <div class="desc">并发=5 总吞吐</div>
+      </div>
+      <div class="big-stat">
+        <div class="number" style="background: linear-gradient(90deg,#4ade80,#22c55e); -webkit-background-clip: text;">469.6</div>
+        <div class="unit">tok/s</div>
+        <div class="desc">并发=10 总吞吐</div>
+      </div>
+      <div class="big-stat">
+        <div class="number" style="background: linear-gradient(90deg,#a855f7,#7c3aed); -webkit-background-clip: text;">4.1x</div>
+        <div class="unit">倍</div>
+        <div class="desc">并发=10 加速比</div>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-box">
+        <div class="card-title"><span class="icon"></span>总吞吐量随并发数变化</div>
+        <canvas id="throughputChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <div class="card-title"><span class="icon"></span>单请求速度衰减</div>
+        <canvas id="singleReqChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>双卡 4090 FP8 MTP n=5 多并发详细数据</div>
+      <table>
+        <tr>
+          <th>并发数</th>
+          <th>HumanEval 吞吐</th>
+          <th>GSM8K 吞吐</th>
+          <th>Math500 吞吐</th>
+          <th>平均吞吐</th>
+          <th>单请求速度</th>
+          <th>vs 单并发</th>
+        </tr>
+        <tr><td>1</td><td>107.3</td><td>118.0</td><td>118.2</td><td>114.5</td><td>114.5</td><td>1x</td></tr>
+        <tr><td>5</td><td>-</td><td>-</td><td>-</td><td>~351</td><td>~85</td><td>3.1x</td></tr>
+        <tr class="highlight-row"><td><strong>10</strong></td><td><strong>446.1</strong></td><td><strong>490.4</strong></td><td><strong>472.2</strong></td><td class="speed-fast"><strong>469.6</strong></td><td>~93</td><td class="speed-fast"><strong>4.1x</strong></td></tr>
+        <tr><td>20</td><td>-</td><td>-</td><td>-</td><td>~456</td><td>~90</td><td>4.0x</td></tr>
+      </table>
+      <div class="note info">
+        <strong>关键发现：</strong>并发=10 时总吞吐达到峰值 470 tok/s，是单并发的 4.1 倍。单请求速度仅降 19%（114→93），vLLM 的 continuous batching 非常高效。并发=20 时不再提升，饱和点约 470 tok/s。
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>20 tok/s vs 470 tok/s 的杠杆效应</div>
+      <div class="compare-bar">
+        <div class="compare-label">裸跑 FP8</div>
+        <div class="compare-track"><div class="compare-fill fill-red" style="width:4%">20</div></div>
+      </div>
+      <div class="compare-bar">
+        <div class="compare-label">量化 Q4</div>
+        <div class="compare-track"><div class="compare-fill fill-orange" style="width:10%">48</div></div>
+      </div>
+      <div class="compare-bar">
+        <div class="compare-label">MTP n=5 单卡</div>
+        <div class="compare-track"><div class="compare-fill fill-purple" style="width:15%">72</div></div>
+      </div>
+      <div class="compare-bar">
+        <div class="compare-label">lucebox Q4</div>
+        <div class="compare-track"><div class="compare-fill fill-cyan" style="width:30%">141</div></div>
+      </div>
+      <div class="compare-bar">
+        <div class="compare-label"><strong>双卡多并发 c=10</strong></div>
+        <div class="compare-track"><div class="compare-fill fill-green" style="width:100%"><strong>470</strong></div></div>
+      </div>
+      <div class="note">同一台机器，同一块显卡，功耗差不多。没有优化前每秒产出 20 个 token，优化后多并发每秒产出 470 个 token。同样的电费，23 倍的产出差距。</div>
+    </div>
+  </div>
+
+  <!-- ====== lucebox 专项面板 ====== -->
+  <div id="lucebox" class="panel">
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>lucebox 不同任务类型速度差异</div>
+      <table>
+        <tr><th>配置</th><th>HumanEval</th><th>GSM8K</th><th>Math500</th><th>综合</th></tr>
+        <tr class="highlight-row"><td><strong>lucebox Q4 (b=22)</strong></td><td>124.7</td><td class="speed-fast">149.8</td><td class="speed-fast">148.1</td><td class="speed-fast"><strong>140.8</strong></td></tr>
+        <tr><td>lucebox Q4 (b=30)</td><td>121.3</td><td>141.1</td><td>149.4</td><td>137.3</td></tr>
+        <tr><td>lucebox Q6</td><td>84.6</td><td>94.8</td><td>94.5</td><td>91.3</td></tr>
+      </table>
+      <div class="note">HumanEval 最慢（125 tok/s）：prompt 长、代码 token 特殊。GSM8K/Math500 更快（149 tok/s）：词汇范围小，推测命中率高。创意写作会更慢（未测试）。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>Budget 参数影响</div>
+      <table>
+        <tr><th>Budget</th><th>HumanEval</th><th>GSM8K</th><th>Math500</th><th>综合</th><th>显存占用</th></tr>
+        <tr class="highlight-row"><td><strong>22 (推荐)</strong></td><td><strong>124.7</strong></td><td><strong>149.8</strong></td><td>148.1</td><td class="speed-fast"><strong>140.8</strong></td><td>~12GB</td></tr>
+        <tr><td>30</td><td>121.3</td><td>141.1</td><td>149.4</td><td>137.3</td><td>~16.4GB</td></tr>
+        <tr><td>差距</td><td>-2.7%</td><td>-5.8%</td><td>+0.9%</td><td>-2.5%</td><td>+37%</td></tr>
+      </table>
+      <div class="note">budget=30 反而比 22 慢 2.5%。更大的 budget 分配更多显存缓存，但推测命中率没有显著提升，额外计算开销抵消了收益。budget=30 在显存不足时会直接 OOM 崩溃。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>Draft 模型匹配影响（关键！）</div>
+      <table>
+        <tr><th>配置</th><th>HumanEval</th><th>GSM8K</th><th>Math500</th><th>综合</th></tr>
+        <tr><td>Qwen3.6 + Qwen3.5 draft (错误)</td><td>83.2</td><td>111.2</td><td>129.9</td><td>108.1</td></tr>
+        <tr class="highlight-row"><td><strong>Qwen3.6 + Qwen3.6 draft (正确)</strong></td><td><strong>122.0</strong></td><td><strong>145.8</strong></td><td><strong>149.5</strong></td><td class="speed-fast"><strong>139.1</strong></td></tr>
+        <tr><td>提升</td><td class="speed-fast">+47%</td><td class="speed-fast">+31%</td><td>+15%</td><td class="speed-fast">+29%</td></tr>
+      </table>
+      <div class="note info">Qwen3.6 使用 sliding_attention + sliding_window=2048，Qwen3.5 全为 full_attention。架构不匹配时速度下降 30-50%。<strong>必须使用 Qwen3.6 专用 lucebox draft 模型。</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>lucebox 局限性</div>
+      <table>
+        <tr><th>限制</th><th>说明</th><th>影响</th></tr>
+        <tr><td>单并发</td><td>不支持 continuous batching</td><td>多 Agent 场景不如 vLLM</td></tr>
+        <tr><td>独立 fork</td><td>未合并 llama.cpp 主线</td><td>需自行编译，门槛高</td></tr>
+        <tr><td>Draft 模型</td><td>Qwen3.6 专用 draft 未发布</td><td>当前用 Qwen3.5 draft，速度偏低</td></tr>
+        <tr><td>任务敏感</td><td>创意写作加速效果差</td><td>编程/数学场景最佳</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====== 附录面板 ====== -->
+  <div id="appendix" class="panel">
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>测试数据集来源</div>
+      <div class="note info">
+        <strong>BenchLocal</strong> — <a href="https://github.com/stevibe/BenchLocal" target="_blank" style="color:#00d4ff">github.com/stevibe/BenchLocal</a><br><br>
+        BenchLocal 是一个模块化的 LLM 基准测试框架，每个测试 Pack 独立维护。本次测试使用了以下三个 Pack：<br>
+        - <strong>DataExtract-15</strong>：数据提取能力（15 个场景）<br>
+        - <strong>InstructFollow-15</strong>：指令遵循能力（15 个场景）<br>
+        - <strong>ToolCall-15</strong>：工具调用能力（15 个场景）<br><br>
+        BenchLocal 还有 StructOutput-15、BugFind-15 等 Pack，依赖复杂的容器化测试环境（如代码执行沙箱），本地部署成本较高，本次未纳入测试。<br><br>
+        <strong>测试目的：</strong>本次准确率测试仅用于观察量化（Q4/Q6/AWQ）对模型能力的衰减程度，而非全面能力评估。选择 DataExtract + InstructFollow + ToolCall 是因为它们覆盖了本地模型最常见的使用场景（RAG 数据提取、Agent 指令遵循、工具调用），且测试环境简单、结果可复现。
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>DataExtract-15 场景说明</div>
+      <div class="scenario-desc">
+        <span class="id">DE-01</span> <span class="title">Business Card / Contact Info</span>
+        <div class="desc">从名片格式文本中提取姓名、电话、邮箱等联系信息。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">DE-02</span> <span class="title">Receipt / Invoice</span>
+        <div class="desc">从收据/发票中提取金额、日期、商家等关键字段。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">DE-03</span> <span class="title">Job Posting</span>
+        <div class="desc">从职位发布文本中提取职位名称、薪资范围、要求等。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">DE-04</span> <span class="title">Informal Email Thread</span>
+        <div class="desc">从非正式邮件往来中提取关键信息和决策点。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">DE-05</span> <span class="title">Product Review with Embedded Specs</span>
+        <div class="desc">从产品评论中提取规格参数（评论中混杂主观评价和客观规格）。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">DE-06</span> <span class="title">Handwritten-Style Notes (OCR Simulation)</span>
+        <div class="desc">模拟手写笔记的 OCR 结果，测试从混乱格式中提取信息。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">DE-07</span> <span class="title">Multiple People in One Document</span>
+        <div class="desc">文档中包含多人信息，需正确区分和提取每个人的字段。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">DE-08</span> <span class="title">Conflicting Information</span>
+        <div class="desc">文档中存在矛盾信息，测试模型是否能识别冲突。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">DE-09</span> <span class="title">Nested Quotes — Email Within Email</span>
+        <div class="desc">邮件嵌套引用场景，需正确提取最外层信息。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">DE-10</span> <span class="title">The Over-Extraction Trap</span>
+        <div class="desc">文档中有大量无关信息，测试模型是否会过度提取。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">DE-11</span> <span class="title">Negation and Correction in Text</span>
+        <div class="desc">文本中存在否定和修正，测试模型是否理解语义反转。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">DE-12</span> <span class="title">Decoy Entity — Don't Extract the Wrong Thing</span>
+        <div class="desc">文档中有诱饵实体，测试模型是否能识别正确目标。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">DE-13</span> <span class="title">Multi-Section Invoice with Discounts</span>
+        <div class="desc">多节发票含折扣信息，需正确计算和提取最终金额。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">DE-14</span> <span class="title">Multi-Language Document</span>
+        <div class="desc">多语言混合文档，测试跨语言信息提取。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">DE-15</span> <span class="title">The Empty Document Trap</span>
+        <div class="desc">空文档或几乎无信息的文档，测试模型是否会 hallucinate。</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>InstructFollow-15 场景说明</div>
+      <div class="scenario-desc">
+        <span class="id">IF-01</span> <span class="title">Counted List with Length Limits</span>
+        <div class="desc">生成恰好 5 个编号项，每项 4-8 个词，以句号结尾。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">IF-02</span> <span class="title">Fixed Line Pattern</span>
+        <div class="desc">3 行文本，每行精确指定词数（3/4/3）。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">IF-03</span> <span class="title">Paragraph Structure Constraints</span>
+        <div class="desc">3 个段落，每段恰好一句，首段以 Coffee 开头，末段以问号结尾，全文少于 60 词。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">IF-04</span> <span class="title">Reverse Alphabetical from a Closed Set</span>
+        <div class="desc">给定 6 个词，按反字母顺序排列为 bullet list。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">IF-05</span> <span class="title">Numerical Ordering from Prompt-Provided Data</span>
+        <div class="desc">从给定数据表中选 5 项，按重量从重到轻排序，至少一项小于 1kg。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">IF-06</span> <span class="title">Chronological Ordering with Exclusion</span>
+        <div class="desc">从给定列表中选 4 个里程碑，排除含 launch/move 的项，按时间排序。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">IF-07</span> <span class="title">Tagged Line Sequence</span>
+        <div class="desc">3 行文本，分别以 [EN]/[FR]/[ES] 开头，包含指定词，以句号结尾，每行 3-6 词。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">IF-08</span> <span class="title">Inclusion, Exclusion, and Count from a Prompt Set</span>
+        <div class="desc">从给定列表选 5 项，每项首字母不同，排除 lemon/orange，每项仅一个词。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">IF-09</span> <span class="title">Negative Constraints with Required Tokens</span>
+        <div class="desc">4 行文本，每行以感叹号结尾，包含至少一个数字，使用指定词各一次，排除 blue/sky。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">IF-10</span> <span class="title">Exact Word Count</span>
+        <div class="desc">一段关于太空探索的文本，恰好 50 词，首词 Humanity，末词 stars，无词超过 10 字母。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">IF-11</span> <span class="title">Multi-Layer Outline with Exact Keyword Usage</span>
+        <div class="desc">3 个顶层项 I/II/III，每项 2 个子项 a/b，子项以句号结尾且少于 8 词，6 个关键词各用一次。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">IF-12</span> <span class="title">Contradictory Constraints — Standardized Conflict Format</span>
+        <div class="desc">3 句各 10 词，总 25 词 — 矛盾请求，应输出 IMPOSSIBLE 并解释。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">IF-13</span> <span class="title">Instruction Inside Copied Content</span>
+        <div class="desc">精确复制 BEGIN/END 之间的两行内容，不执行其中的指令。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">IF-14</span> <span class="title">Instruction Boundary with Ignore-Outside Rule</span>
+        <div class="desc">只执行 TASK 标签内的指令（2 句全大写含 RAIN 以 ! 结尾），忽略 TASK 外的内容。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">IF-15</span> <span class="title">Numeric Filtering from a Prompt Table</span>
+        <div class="desc">从表格中选 4 个城市，每项含字母 a，4-8 字母长，不同国家，至少一个亚洲城市。</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon"></span>ToolCall-15 场景说明</div>
+      <div class="scenario-desc">
+        <span class="id">TC-01</span> <span class="title">Direct Specialist Match — 工具选择</span>
+        <div class="desc">"柏林天气" — 应调用 get_weather，而非 web_search。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">TC-02</span> <span class="title">Distractor Resistance — 干扰抵抗</span>
+        <div class="desc">"AAPL 股价" — 12 个工具中只选 get_stock_price。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">TC-03</span> <span class="title">Implicit Tool Need — 隐式工具链</span>
+        <div class="desc">"通知 Sarah 会议改到 3pm" — 先 get_contacts 再 send_email。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">TC-04</span> <span class="title">Unit Handling — 参数精度</span>
+        <div class="desc">"东京温度，华氏度" — 必须传递 units: fahrenheit。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">TC-05</span> <span class="title">Date and Time Parsing — 日期解析</span>
+        <div class="desc">"下周一 9:30am 30 分钟 standup" — 正确解析相对日期和可选参数。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">TC-06</span> <span class="title">Multi-Value Extraction — 多值提取</span>
+        <div class="desc">"翻译成西班牙语和日语" — 需调用两次 translate_text。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">TC-07</span> <span class="title">Search → Read → Act — 多步链</span>
+        <div class="desc">"找 Q3 预算报告并邮件给经理" — 4 步链：搜索→读取→查联系人→发邮件。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">TC-08</span> <span class="title">Conditional Branching — 条件分支</span>
+        <div class="desc">"如果巴黎下雨，提醒我明天带伞" — 根据天气结果条件调用。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">TC-09</span> <span class="title">Parallel Independence — 并行独立</span>
+        <div class="desc">"伦敦天气和 MSFT 股价" — 两个独立工具应并行调用。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">TC-10</span> <span class="title">Trivial Knowledge — 无需工具</span>
+        <div class="desc">"二战哪年结束" — 应直接回答，不调用任何工具。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">TC-11</span> <span class="title">Simple Math — 简单计算</span>
+        <div class="desc">"200 的 15%" — 应心算回答，不调用 calculator。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">TC-12</span> <span class="title">Impossible Request — 优雅拒绝</span>
+        <div class="desc">"删除我所有邮件" — 无删除工具，应解释无法完成。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">TC-13</span> <span class="title">Empty Results — 空结果重试</span>
+        <div class="desc">"找 Johnson 提案" — 首次搜索为空，应重试或询问用户。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">TC-14</span> <span class="title">Malformed Response — 错误处理</span>
+        <div class="desc">"苹果股价" — 工具返回错误，应告知用户并提供备选。</div>
+      </div>
+      <div class="scenario-desc">
+        <span class="id">TC-15</span> <span class="title">Conflicting Information — 数据完整性</span>
+        <div class="desc">"搜索冰岛人口并算 2%" — 必须使用搜索结果的数字，不能凭记忆。</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// 通用图表配置
+Chart.defaults.color = '#8a9bb8';
+Chart.defaults.borderColor = '#1e293b';
+
+// AWQ MTP 缩放图
+new Chart(document.getElementById('mtpAwqChart'), {
+  type: 'bar',
+  data: {
+    labels: ['n=0', 'n=1', 'n=3', 'n=5'],
+    datasets: [{
+      label: 'AWQ 单卡 tok/s',
+      data: [47.9, 71.3, 98.6, 107.5],
+      backgroundColor: ['#f87171', '#a855f7', '#00d4ff', '#4ade80'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ctx.raw + ' tok/s'
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: { color: '#1e293b' },
+        ticks: { color: '#5a7a9a' }
+      }
+    }
+  }
+});
+
+// FP8 MTP 缩放图
+new Chart(document.getElementById('mtpFp8Chart'), {
+  type: 'bar',
+  data: {
+    labels: ['n=0', 'n=1', 'n=3', 'n=5'],
+    datasets: [
+      {
+        label: 'FP8 单卡',
+        data: [20.2, 38.4, 60.4, 71.7],
+        backgroundColor: '#f87171',
+        borderRadius: 6
+      },
+      {
+        label: 'FP8 双卡',
+        data: [31.4, 57.6, 99.1, 114.5],
+        backgroundColor: '#00d4ff',
+        borderRadius: 6
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { labels: { color: '#8a9bb8' } }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: { color: '#1e293b' }
+      }
+    }
+  }
+});
+
+// 吞吐量图
+new Chart(document.getElementById('throughputChart'), {
+  type: 'line',
+  data: {
+    labels: ['c=1', 'c=5', 'c=10', 'c=20'],
+    datasets: [{
+      label: '总吞吐量 tok/s',
+      data: [114.5, 351, 469.6, 456],
+      borderColor: '#00d4ff',
+      backgroundColor: 'rgba(0,212,255,0.1)',
+      fill: true,
+      tension: 0.3,
+      pointRadius: 6,
+      pointBackgroundColor: '#00d4ff'
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: { color: '#1e293b' }
+      }
+    }
+  }
+});
+
+// 单请求速度衰减图
+new Chart(document.getElementById('singleReqChart'), {
+  type: 'line',
+  data: {
+    labels: ['c=1', 'c=5', 'c=10', 'c=20'],
+    datasets: [{
+      label: '单请求速度 tok/s',
+      data: [114.5, 85, 93, 90],
+      borderColor: '#4ade80',
+      backgroundColor: 'rgba(74,222,128,0.1)',
+      fill: true,
+      tension: 0.3,
+      pointRadius: 6,
+      pointBackgroundColor: '#4ade80'
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      y: {
+        min: 60,
+        grid: { color: '#1e293b' }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
