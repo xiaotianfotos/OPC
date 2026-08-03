@@ -77,7 +77,7 @@ opc config --set-dashboard-port 12080
 ### 1. 启动 Dashboard 服务器
 
 ```bash
-cd /vol2/1000/work/skills/opc-cli/dashboard/server
+cd opc-cli/dashboard/server
 node server-prod.js
 ```
 
@@ -119,7 +119,7 @@ curl -X POST http://localhost:12080/api/skill/cut/init \
 ## 前端构建
 
 ```bash
-cd /vol2/1000/work/skills/opc-skill/dashboard/server
+cd opc-cli/dashboard/server
 npm install
 npm run build
 ```

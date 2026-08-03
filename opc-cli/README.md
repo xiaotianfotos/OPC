@@ -29,7 +29,7 @@ opc config --set-model-source modelscope   # 默认
 opc config --set-model-source huggingface  # MLX 8bit 量化模型
 
 # 设置模型缓存目录
-opc config --set-model-cache-dir /vol2/1000/llm/models
+opc config --set-model-cache-dir ~/models
 ```
 
 首次运行时模型会自动下载（ASR 需要约 5GB 磁盘空间）。

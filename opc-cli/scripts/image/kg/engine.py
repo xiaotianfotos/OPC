@@ -14,8 +14,20 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
-DEFAULT_GRAPH = Path(__file__).parent.parent / "examples" / "prompt_graph.json"
-EXTENSIONS = Path(__file__).parent / "extensions.json"
+_USER_DATA_DIR = Path.home() / ".opc_cli" / "opc"
+_BUILTIN_DIR = Path(__file__).parent
+
+_USER_GRAPH = _USER_DATA_DIR / "kg" / "prompt_graph.json"
+_PACKAGED_GRAPH = _BUILTIN_DIR / "data" / "prompt_graph.json"
+_LEGACY_PACKAGED_GRAPH = _BUILTIN_DIR.parent / "examples" / "prompt_graph.json"
+DEFAULT_GRAPH = (
+    _USER_GRAPH
+    if _USER_GRAPH.exists()
+    else _PACKAGED_GRAPH
+    if _PACKAGED_GRAPH.exists()
+    else _LEGACY_PACKAGED_GRAPH
+)
+EXTENSIONS = _USER_DATA_DIR / "kg" / "extensions.json" if (_USER_DATA_DIR / "kg" / "extensions.json").exists() else _BUILTIN_DIR / "extensions.json"
 
 
 class PromptKG:
@@ -66,16 +78,22 @@ class PromptKG:
                 self._entity_prompts[tag].append(rec["id"])
         self._entity_prompts = dict(self._entity_prompts)
 
-        # Load templates from templates/ directory
+        # Load templates: user dir first, then builtin
         self._templates = {}
-        templates_dir = Path(__file__).parent.parent / "templates"
-        if templates_dir.exists():
+        _tpl_dirs = [
+            _USER_DATA_DIR / "templates",
+            Path(__file__).parent.parent / "templates",
+        ]
+        for templates_dir in _tpl_dirs:
+            if not templates_dir.exists():
+                continue
             for d in templates_dir.iterdir():
                 tpl_path = d / "template.json"
                 if tpl_path.exists():
                     try:
                         tpl = json.loads(tpl_path.read_text("utf-8"))
-                        self._templates[tpl["name"]] = tpl
+                        if tpl["name"] not in self._templates:
+                            self._templates[tpl["name"]] = tpl
                     except Exception:
                         pass
 

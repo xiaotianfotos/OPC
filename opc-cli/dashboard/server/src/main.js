@@ -9,6 +9,7 @@ import CutEditor from './views/CutEditor.vue';
 import CutEditorView from './views/CutEditorView.vue';
 import KGView from './views/KGView.vue';
 import ModelCompare from './views/ModelCompare.vue';
+import Gallery from './views/Gallery.vue';
 
 const routes = [
   { path: '/', name: 'Landing', component: Landing },
@@ -18,7 +19,8 @@ const routes = [
   { path: '/skill/cut/editor', name: 'CutEditor', component: CutEditorView },
   { path: '/skill/cut/editor/:fileId', name: 'CutEditorFile', component: CutEditorView },
   { path: '/kg', name: 'KnowledgeGraph', component: KGView },
-  { path: '/evaluate', name: 'Evaluate', component: ModelCompare }
+  { path: '/evaluate', name: 'Evaluate', component: ModelCompare },
+  { path: '/gallery', name: 'Gallery', component: Gallery }
 ];
 
 const router = createRouter({

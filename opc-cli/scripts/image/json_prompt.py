@@ -202,7 +202,7 @@ def _extract_typography_layout(tl: dict) -> str:
     """Convert typography_layout DSL to Chinese descriptive text.
 
     This produces output similar to the successful prompts from
-    /vol2/1000/output/cover_styles/ where Chinese text placement,
+    cover style experiments where Chinese text placement,
     color, and hierarchy were explicitly described.
     """
     lines = tl.get("lines", [])

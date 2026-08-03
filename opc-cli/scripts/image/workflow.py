@@ -6,28 +6,45 @@ import shutil
 import sys
 from pathlib import Path
 
-WORKFLOWS_DIR = Path(__file__).parent / "workflows"
+_BUILTIN_DIR = Path(__file__).parent / "workflows"
+_USER_DIR = Path.home() / ".opc_cli" / "opc" / "workflows"
+
+
+def _search_dirs():
+    """Yield workflow directories in priority order."""
+    if _USER_DIR.exists():
+        yield _USER_DIR
+    if _BUILTIN_DIR.exists():
+        yield _BUILTIN_DIR
+
+
+# Keep backward compat: single WORKFLOWS_DIR for import_workflow()
+WORKFLOWS_DIR = _USER_DIR if _USER_DIR.exists() else _BUILTIN_DIR
 
 
 def discover_workflows():
     results = []
-    for meta_path in sorted(WORKFLOWS_DIR.glob("*.meta.json")):
-        try:
-            with open(meta_path, "r", encoding="utf-8") as f:
-                meta = json.load(f)
-            alias = meta.get("alias", meta_path.stem.replace(".meta", ""))
-            wf_path = meta_path.parent / meta_path.name.replace(".meta.json", ".json")
-            if not wf_path.exists():
-                # Try finding by stripping .meta: image_foo.meta.json -> image_foo.json
-                base = meta_path.stem
-                if base.endswith(".meta"):
-                    wf_path = meta_path.parent / (base[:-5] + ".json")
-            if wf_path.exists():
-                results.append((alias, meta))
-            else:
-                print(f"Warning: workflow file not found for {meta_path.name}", file=sys.stderr)
-        except (json.JSONDecodeError, KeyError) as e:
-            print(f"Warning: invalid meta file {meta_path.name}: {e}", file=sys.stderr)
+    seen_aliases = set()
+    for wf_dir in _search_dirs():
+        for meta_path in sorted(wf_dir.glob("*.meta.json")):
+            try:
+                with open(meta_path, "r", encoding="utf-8") as f:
+                    meta = json.load(f)
+                alias = meta.get("alias", meta_path.stem.replace(".meta", ""))
+                if alias in seen_aliases:
+                    continue
+                wf_path = meta_path.parent / meta_path.name.replace(".meta.json", ".json")
+                if not wf_path.exists():
+                    base = meta_path.stem
+                    if base.endswith(".meta"):
+                        wf_path = meta_path.parent / (base[:-5] + ".json")
+                if wf_path.exists():
+                    results.append((alias, meta))
+                    seen_aliases.add(alias)
+                else:
+                    print(f"Warning: workflow file not found for {meta_path.name}", file=sys.stderr)
+            except (json.JSONDecodeError, KeyError) as e:
+                print(f"Warning: invalid meta file {meta_path.name}: {e}", file=sys.stderr)
     return results
 
 
@@ -35,11 +52,14 @@ def load_workflow(alias):
     for found_alias, meta in discover_workflows():
         if found_alias == alias:
             meta_path = None
-            for p in WORKFLOWS_DIR.glob("*.meta.json"):
-                with open(p, "r", encoding="utf-8") as f:
-                    m = json.load(f)
-                if m.get("alias") == alias:
-                    meta_path = p
+            for wf_dir in _search_dirs():
+                for p in wf_dir.glob("*.meta.json"):
+                    with open(p, "r", encoding="utf-8") as f:
+                        m = json.load(f)
+                    if m.get("alias") == alias:
+                        meta_path = p
+                        break
+                if meta_path:
                     break
             if meta_path is None:
                 raise FileNotFoundError(f"Meta file not found for alias '{alias}'")

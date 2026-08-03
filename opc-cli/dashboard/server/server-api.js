@@ -15,6 +15,7 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 import os from 'os';
 import cutRouter from './api/cut.js';
+import galleryRouter from './api/gallery.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,10 +32,26 @@ app.use(express.json());
 // Mount Cut API routes
 app.use('/api/skill/cut', cutRouter);
 
+// Mount Gallery API routes
+app.use('/api/gallery', galleryRouter);
+
 // ============ Knowledge Graph API ============
 
-const KG_DATA_PATH = path.join(__dirname, '..', '..', 'scripts', 'image', 'examples', 'prompt_graph.json');
-const TEMPLATES_DIR = path.join(__dirname, '..', '..', 'scripts', 'image', 'templates');
+const USER_DATA_DIR = path.join(os.homedir(), '.opc_cli', 'opc');
+const BUILTIN_SCRIPTS_DIR = path.join(__dirname, '..', '..', 'scripts', 'image');
+
+const USER_KG_PATH = path.join(USER_DATA_DIR, 'kg', 'prompt_graph.json');
+const PACKAGED_KG_PATH = path.join(BUILTIN_SCRIPTS_DIR, 'kg', 'data', 'prompt_graph.json');
+const LEGACY_PACKAGED_KG_PATH = path.join(BUILTIN_SCRIPTS_DIR, 'examples', 'prompt_graph.json');
+const KG_DATA_PATH = fs.existsSync(USER_KG_PATH)
+  ? USER_KG_PATH
+  : fs.existsSync(PACKAGED_KG_PATH)
+    ? PACKAGED_KG_PATH
+    : LEGACY_PACKAGED_KG_PATH;
+
+const TEMPLATES_DIR = fs.existsSync(path.join(USER_DATA_DIR, 'templates'))
+  ? path.join(USER_DATA_DIR, 'templates')
+  : path.join(BUILTIN_SCRIPTS_DIR, 'templates');
 
 // Map template style keywords to KG entities
 const STYLE_ENTITY_MAP = {
@@ -191,7 +208,9 @@ const API_HOST = config.dashboard_host || '0.0.0.0';
 
 // ============ Image Model Evaluation API ============
 
-const EVAL_DIR = path.join(__dirname, '..', '..', 'scripts', 'image', 'eval', 'results');
+const EVAL_DIR = fs.existsSync(path.join(USER_DATA_DIR, 'eval', 'results'))
+  ? path.join(USER_DATA_DIR, 'eval', 'results')
+  : path.join(BUILTIN_SCRIPTS_DIR, 'eval', 'results');
 
 app.get('/api/eval/models', (req, res) => {
   const defaultOrder = ['ernie-full', 'z-image', 'qwen-image'];
@@ -236,7 +255,9 @@ app.get('/api/eval/image/:alias/:filename', (req, res) => {
   res.sendFile(filePath);
 });
 
-const EVAL_PROMPTS_DIR = path.join(__dirname, '..', '..', 'scripts', 'image', 'eval', 'prompts');
+const EVAL_PROMPTS_DIR = fs.existsSync(path.join(USER_DATA_DIR, 'eval', 'prompts'))
+  ? path.join(USER_DATA_DIR, 'eval', 'prompts')
+  : path.join(BUILTIN_SCRIPTS_DIR, 'eval', 'prompts');
 
 app.get('/api/eval/prompts', (req, res) => {
   const prompts = [];
@@ -290,6 +311,13 @@ app.get('/api/skills', (req, res) => {
         displayName: '图像生成',
         description: '多模型图像生成评估',
         route: '/evaluate',
+        status: 'running'
+      },
+      {
+        name: 'gallery',
+        displayName: '图片画廊',
+        description: '生成图片的浏览与管理',
+        route: '/gallery',
         status: 'running'
       }
     ]

@@ -395,13 +395,17 @@ opc image kg validate <chosen entities>
 
 用户满意的结果应沉淀回 KG：
 
-- **新实体**: 修改 `scripts/image/kg/extensions.json` 添加实体 + 共现关系
-- **新模板**: 创建 `scripts/image/templates/<name>/template.json`
-- **新 prompt**: 添加到 `scripts/image/examples/prompt_graph.json` 的 `prompt_index`
+- **新实体**: 修改 `~/.opc_cli/opc/kg/extensions.json` 添加实体 + 共现关系
+- **新模板**: 创建 `~/.opc_cli/opc/templates/<name>/template.json`
+- **新 prompt**: 添加到 `~/.opc_cli/opc/kg/prompt_graph.json` 的 `prompt_index`
+
+仓库中的 `scripts/image/kg/extensions.json`、`scripts/image/templates/` 和
+`scripts/image/examples/prompt_graph.json` 是随包提供的内置数据；同名用户数据优先。
 
 ## 模板系统
 
-模板目录：`scripts/image/templates/`，每个模板一个子目录。
+首选模板目录为 `~/.opc_cli/opc/templates/`，内置模板位于
+`scripts/image/templates/`，每个模板一个子目录。
 
 **目录结构：**
 ```
@@ -433,8 +437,8 @@ templates/
 **使用模板生成图片：** AI 读取 `style_prefix` + 选中场景的 `template`，填充参数后拼接为完整 prompt。
 
 **新增模板：**
-1. 创建 `templates/<name>/template.json`
-2. 在 `kg/extensions.json` 添加实体和共现关系
+1. 创建 `~/.opc_cli/opc/templates/<name>/template.json`
+2. 在 `~/.opc_cli/opc/kg/extensions.json` 添加实体和共现关系
 3. Dashboard 和 CLI 自动发现（无需额外代码）
 
 ## 评估系统

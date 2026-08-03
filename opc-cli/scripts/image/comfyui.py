@@ -159,7 +159,8 @@ def download_images(history_result, server_url, output_dir, filename_prefix="opc
     return download_outputs(history_result, server_url, output_dir, filename_prefix)
 
 
-def generate_image(workflow, cfg, filename_prefix="opc_image"):
+def generate_image(workflow, cfg, filename_prefix="opc_image", prompt="",
+                   register_gallery=True):
     server_url = get_server_url(cfg)
 
     if not check_connection(cfg):
@@ -174,6 +175,13 @@ def generate_image(workflow, cfg, filename_prefix="opc_image"):
 
     output_dir = cfg.get("image_output_dir") or cfg.get("output_dir", tempfile.gettempdir())
     paths = download_images(result, server_url, output_dir, filename_prefix)
+
+    if register_gallery and paths:
+        try:
+            from image.gallery import register_images
+            register_images(paths, prompt=prompt, alias=filename_prefix)
+        except Exception as e:
+            print(f"Gallery registration failed (non-critical): {e}", file=sys.stderr)
 
     return {"prompt_id": prompt_id, "filepaths": paths}
 

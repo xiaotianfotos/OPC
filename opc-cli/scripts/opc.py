@@ -596,7 +596,8 @@ def _cmd_image_test(args):
     try:
         prepared = inject_params(workflow, meta, params)
         output_prefix = meta.get("alias", "test")
-        result = generate_image(prepared, cfg, filename_prefix=output_prefix)
+        result = generate_image(prepared, cfg, filename_prefix=output_prefix,
+                                prompt=prompt_text)
         print(json.dumps(result, ensure_ascii=False))
     except Exception as e:
         print(f"Test failed: {e}")
@@ -706,7 +707,8 @@ def _cmd_image_generate(args):
         output_dir = getattr(args, "output", None)
         if output_dir:
             cfg["image_output_dir"] = output_dir
-        result = generate_image(prepared, cfg, filename_prefix=output_prefix)
+        result = generate_image(prepared, cfg, filename_prefix=output_prefix,
+                                prompt=prompt_text)
         print(json.dumps(result, ensure_ascii=False))
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
@@ -1022,7 +1024,7 @@ def cmd_config(args):
         print(f"vision_api_url = {args.set_vision_api_url}")
     if args.set_vision_api_key:
         save_config("vision_api_key", args.set_vision_api_key)
-        print(f"vision_api_key = {args.set_vision_api_key}")
+        print(f"vision_api_key = {'*' * 8}{args.set_vision_api_key[-4:]}" if len(args.set_vision_api_key) > 4 else "vision_api_key = ****")
     if args.set_vision_model:
         save_config("vision_model", args.set_vision_model)
         print(f"vision_model = {args.set_vision_model}")
@@ -1034,6 +1036,9 @@ def cmd_config(args):
         status = "installed" if available else "NOT installed (run: uv sync --extra " + backend + ")"
         print(f"# Backend: {label} ({status})")
         cfg = load_config()
+        # Mask sensitive fields before display
+        if cfg.get("vision_api_key"):
+            cfg["vision_api_key"] = "****"
         print(json.dumps(cfg, indent=2, ensure_ascii=False))
 
 
