@@ -1,0 +1,66 @@
+{
+  "alias": "ideogram4",
+  "description": "Ideogram 4 text-to-image. Uses ideogram4_fp8_scaled with qwen3vl_8b CLIP, Ideogram4Scheduler, DualModelGuider, and flux2-vae. Supports structured JSON prompts. Presets: Quality (48 steps), Default (20 steps), Turbo (12 steps).",
+  "params": {
+    "prompt": {
+      "node": "98:24",
+      "field": "text",
+      "type": "string",
+      "required": true,
+      "description": "Text or JSON prompt for image generation"
+    },
+    "width": {
+      "node": "98:27",
+      "field": "value",
+      "type": "int",
+      "default": 1024,
+      "description": "Output width. Rounded up to a multiple of 16 by the workflow."
+    },
+    "height": {
+      "node": "98:28",
+      "field": "value",
+      "type": "int",
+      "default": 1024,
+      "description": "Output height. Rounded up to a multiple of 16 by the workflow."
+    },
+    "seed": {
+      "node": "98:18",
+      "field": "noise_seed",
+      "type": "int",
+      "default": -1,
+      "description": "-1 = random seed"
+    },
+    "quality": {
+      "node": "98:156",
+      "field": "choice",
+      "type": "string",
+      "default": "Quality",
+      "description": "Ideogram 4 scheduler preset: Quality, Default, or Turbo"
+    },
+    "cfg": {
+      "node": "98:155",
+      "field": "cfg",
+      "type": "float",
+      "default": 7,
+      "description": "DualModelGuider CFG"
+    },
+    "final_cfg": {
+      "node": "98:157",
+      "field": "cfg",
+      "type": "float",
+      "default": 3,
+      "description": "CFGOverride value applied from start_percent to end_percent"
+    },
+    "batch_size": {
+      "node": "98:11",
+      "field": "batch_size",
+      "type": "int",
+      "default": 1,
+      "description": "Number of images to generate per batch"
+    }
+  },
+  "output_prefix": {
+    "node": "158",
+    "field": "filename_prefix"
+  }
+}

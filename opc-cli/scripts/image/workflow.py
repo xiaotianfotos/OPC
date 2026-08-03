@@ -112,6 +112,16 @@ def inject_params(workflow, meta, params):
             raise ValueError(f"Node '{node_id}' not found in workflow (param '{name}')")
         result[node_id]["inputs"][field] = value
 
+        node = result[node_id]
+        if node.get("class_type") == "CustomCombo" and field == "choice":
+            for opt_key, opt_value in node.get("inputs", {}).items():
+                if opt_key.startswith("option") and str(opt_value) == str(value):
+                    try:
+                        node["inputs"]["index"] = int(opt_key.replace("option", "")) - 1
+                    except ValueError:
+                        pass
+                    break
+
     return result
 
 

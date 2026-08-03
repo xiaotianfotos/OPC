@@ -21,9 +21,24 @@ from image.comfyui import generate_image, check_connection, get_server_url
 from image.workflow import load_workflow, inject_params
 from shared.config import load_config
 
-EVAL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "eval")
-PROMPTS_DIR = os.path.join(EVAL_DIR, "prompts")
-RESULTS_DIR = os.path.join(EVAL_DIR, "results")
+_USER_DATA_DIR = os.path.join(os.path.expanduser("~"), ".opc_cli", "opc")
+_BUILTIN_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+
+EVAL_DIR = os.path.join(_USER_DATA_DIR, "eval")
+_PROMPTS_USER = os.path.join(_USER_DATA_DIR, "eval", "prompts")
+_PROMPTS_BUILTIN = os.path.join(_BUILTIN_DIR, "eval", "prompts")
+RESULTS_DIR = os.path.join(_USER_DATA_DIR, "eval", "results")
+
+os.makedirs(RESULTS_DIR, exist_ok=True)
+
+
+def _resolve_prompts_dir():
+    if os.path.isdir(_PROMPTS_USER) and os.listdir(_PROMPTS_USER):
+        return _PROMPTS_USER
+    return _PROMPTS_BUILTIN
+
+
+PROMPTS_DIR = _resolve_prompts_dir()
 
 NEGATIVE_PROMPT = "low quality, blurry, deformed, ugly, duplicate, watermark, signature, cropped, worst quality, low resolution, disfigured, bad anatomy"
 
@@ -34,7 +49,7 @@ DEFAULT_PARAMS = {
     "batch_size": 1,
 }
 
-KNOWN_MODELS = ["ernie-full", "qwen-image", "z-image"]
+KNOWN_MODELS = ["ernie-full", "qwen-image", "z-image", "klein", "ideogram4"]
 
 
 def discover_prompts():
@@ -199,7 +214,7 @@ def run_one(model, prompt_id, prompt_data, cfg, override_resolution=None):
 
         prepared = inject_params(wf, meta, params)
         cfg["image_output_dir"] = model_dir
-        result = generate_image(prepared, cfg, filename_prefix=file_prefix)
+        result = generate_image(prepared, cfg, filename_prefix=file_prefix, register_gallery=False)
 
         img_path = result["filepaths"][0]
         new_path = os.path.join(model_dir, os.path.basename(img_path))
@@ -289,9 +304,9 @@ def cmd_run(args):
             entry = run_one(model, pid, prompts[pid], cfg)
             results.append(entry)
             total_run += 1
+            save_results(model, results, {"elapsed_seconds": round(time.time() - start, 1)})
 
         elapsed = time.time() - start
-        save_results(model, results, {"elapsed_seconds": round(elapsed, 1)})
         ok = sum(1 for r in results if r["status"] == "ok")
         err = sum(1 for r in results if r["status"] == "error")
         print(f"[{model}] Done: {ok} ok, {err} error, {elapsed:.0f}s")

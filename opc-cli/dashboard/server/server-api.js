@@ -213,7 +213,7 @@ const EVAL_DIR = fs.existsSync(path.join(USER_DATA_DIR, 'eval', 'results'))
   : path.join(BUILTIN_SCRIPTS_DIR, 'eval', 'results');
 
 app.get('/api/eval/models', (req, res) => {
-  const defaultOrder = ['ernie-full', 'z-image', 'qwen-image'];
+  const defaultOrder = ['ernie-full', 'z-image', 'qwen-image', 'ideogram4'];
   try {
     if (!fs.existsSync(EVAL_DIR)) return res.json(defaultOrder);
     const dirs = fs.readdirSync(EVAL_DIR).filter(d => {
