@@ -17,6 +17,10 @@ opc video info h3-t2v
 | `h3-r2v` | up to 9 images, 3 videos, and 3 audio clips, plus text | H3 video + native audio |
 | `h3-t2v-upscale` | text | Legacy alias for `h3-t2v --upscale` |
 
+`h3-r2v` uses the full `minimax_h3_ref2va_int8_convrot.safetensors`
+reference model by default. The smaller pruned Ref2VA checkpoint is not used
+by the standard workflow.
+
 The safe test preset is `864x480`, 5 seconds, 20 steps. H3 converts five
 seconds to 124 frames on its required `17k+5` frame grid.
 

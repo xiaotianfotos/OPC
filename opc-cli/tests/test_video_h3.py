@@ -50,6 +50,10 @@ class H3WorkflowTests(unittest.TestCase):
         self.assertEqual(inputs["ref_images.ref_image_0"], ["30", 0])
         self.assertEqual(inputs["ref_images.ref_image_1"], ["31", 0])
         self.assertEqual(inputs["audio_vae"], ["4", 0])
+        self.assertEqual(
+            workflow["1"]["inputs"]["unet_name"],
+            "minimax_h3_ref2va_int8_convrot.safetensors",
+        )
 
     def test_reference_videos_and_audio_are_connected(self):
         workflow = build_h3_workflow(
