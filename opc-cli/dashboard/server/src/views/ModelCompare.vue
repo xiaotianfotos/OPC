@@ -3,7 +3,23 @@
     <!-- Header -->
     <header class="compare-header">
       <h1>模型评估</h1>
-      <p class="subtitle">{{ modelList.map(m => modelName(m)).join(' · ') }}</p>
+      <div class="model-selector">
+        <span class="selector-label">选择工作流（最多3个）：</span>
+        <div class="selector-chips">
+          <button
+            v-for="m in allModels"
+            :key="m"
+            class="model-chip"
+            :class="{
+              active: selectedModels.includes(m),
+              disabled: !selectedModels.includes(m) && selectedModels.length >= 3
+            }"
+            @click="toggleModel(m)"
+          >
+            {{ modelName(m) }}
+          </button>
+        </div>
+      </div>
     </header>
 
     <!-- Stats Panel -->
@@ -75,11 +91,15 @@
             {{ expandedPrompts[group.promptId] ? '收起提示词' : '展开提示词' }}
           </button>
           <div v-if="expandedPrompts[group.promptId]" class="prompt-full">
-            <div class="prompt-block">
+            <div class="prompt-block" v-if="group.raw">
+              <label>JSON Prompt</label>
+              <pre class="json-content">{{ formatJson(group.raw) }}</pre>
+            </div>
+            <div class="prompt-block" v-else>
               <label>Positive</label>
               <pre>{{ group.prompt }}</pre>
             </div>
-            <div class="prompt-block" v-if="group.negative">
+            <div class="prompt-block" v-if="!group.raw && group.negative">
               <label>Negative</label>
               <pre>{{ group.negative }}</pre>
             </div>
@@ -180,11 +200,16 @@ export default {
       lightboxGroup: null,
       lightboxModel: null,
       lightboxIndex: 0,
-      modelList: [],
+      allModels: [],
+      selectedModels: [],
     };
   },
 
   computed: {
+    modelList() {
+      return this.selectedModels;
+    },
+
     statsLoaded() {
       return Object.keys(this.metaByModel).length > 0;
     },
@@ -207,6 +232,7 @@ export default {
           tags: p.tags,
           prompt: p.prompt,
           negative: p.negative,
+          raw: p.raw,
         };
       }
       for (const r of this.results) {
@@ -283,11 +309,13 @@ export default {
       try {
         const res = await fetch('/api/eval/models');
         if (res.ok) {
-          this.modelList = await res.json();
+          this.allModels = await res.json();
+          this.selectedModels = this.allModels.slice(0, 3);
         }
       } catch (e) {
         console.error('Failed to discover models:', e);
-        this.modelList = ['ernie-full', 'ernie-turbo', 'z-image', 'qwen-image'];
+        this.allModels = ['ernie-full', 'ernie-turbo', 'z-image', 'qwen-image'];
+        this.selectedModels = this.allModels.slice(0, 3);
       }
     },
 
@@ -303,7 +331,7 @@ export default {
     },
 
     async loadResults() {
-      for (const alias of this.modelList) {
+      for (const alias of this.allModels) {
         try {
           const res = await fetch(`/api/eval/results/${alias}`);
           if (res.ok) {
@@ -323,12 +351,22 @@ export default {
       }
     },
 
+    toggleModel(m) {
+      const idx = this.selectedModels.indexOf(m);
+      if (idx >= 0) {
+        this.selectedModels = this.selectedModels.filter(s => s !== m);
+      } else if (this.selectedModels.length < 3) {
+        this.selectedModels = [...this.selectedModels, m];
+      }
+    },
+
     modelName(alias) {
       const map = {
         'ernie-full': 'Ernie-Full',
         'ernie-turbo': 'Ernie-Turbo',
         'z-image': 'Z-Image',
         'qwen-image': 'Qwen-2512',
+        'ideogram4': 'Ideogram 4',
       };
       return map[alias] || alias;
     },
@@ -386,6 +424,10 @@ export default {
       const m = Math.floor((seconds % 3600) / 60);
       if (h > 0) return `${h}h ${m}m`;
       return `${m}m`;
+    },
+
+    formatJson(obj) {
+      return JSON.stringify(obj, null, 2);
     },
 
     togglePrompt(pid) {
@@ -454,9 +496,52 @@ export default {
   letter-spacing: -0.5px;
 }
 
-.subtitle {
+.model-selector {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.selector-label {
   color: #888;
   font-size: 13px;
+}
+
+.selector-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.model-chip {
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  padding: 5px 14px;
+  color: #888;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.model-chip:hover:not(.disabled) {
+  border-color: #00d4ff;
+  color: #ccc;
+}
+
+.model-chip.active {
+  background: rgba(0, 212, 255, 0.12);
+  border-color: #00d4ff;
+  color: #00d4ff;
+}
+
+.model-chip.disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 /* Stats Panel */

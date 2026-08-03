@@ -1,0 +1,403 @@
+{
+  "37": {
+    "inputs": {
+      "aspect_ratio": "9:16 (Portrait Widescreen)",
+      "megapixels": 1
+    },
+    "class_type": "ResolutionSelector",
+    "_meta": {
+      "title": "分辨率选择器"
+    }
+  },
+  "158": {
+    "inputs": {
+      "filename_prefix": "Ideogram_4.0",
+      "images": [
+        "98:13",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "保存图像"
+    }
+  },
+  "98:9": {
+    "inputs": {
+      "vae_name": "flux2-vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "加载VAE"
+    }
+  },
+  "98:10": {
+    "inputs": {
+      "conditioning": [
+        "98:24",
+        0
+      ]
+    },
+    "class_type": "ConditioningZeroOut",
+    "_meta": {
+      "title": "条件零化"
+    }
+  },
+  "98:11": {
+    "inputs": {
+      "width": [
+        "98:31",
+        1
+      ],
+      "height": [
+        "98:32",
+        1
+      ],
+      "batch_size": 1
+    },
+    "class_type": "EmptyFlux2LatentImage",
+    "_meta": {
+      "title": "空Latent图像（Flux2）"
+    }
+  },
+  "98:12": {
+    "inputs": {
+      "noise": [
+        "98:18",
+        0
+      ],
+      "guider": [
+        "98:155",
+        0
+      ],
+      "sampler": [
+        "98:16",
+        0
+      ],
+      "sigmas": [
+        "98:17",
+        0
+      ],
+      "latent_image": [
+        "98:11",
+        0
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "自定义采样器（高级）"
+    }
+  },
+  "98:13": {
+    "inputs": {
+      "samples": [
+        "98:12",
+        0
+      ],
+      "vae": [
+        "98:9",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE解码"
+    }
+  },
+  "98:16": {
+    "inputs": {
+      "sampler_name": "euler"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "K采样器选择"
+    }
+  },
+  "98:17": {
+    "inputs": {
+      "steps": [
+        "98:151",
+        1
+      ],
+      "width": [
+        "98:31",
+        1
+      ],
+      "height": [
+        "98:32",
+        1
+      ],
+      "mu": [
+        "98:144",
+        0
+      ],
+      "std": [
+        "98:146",
+        0
+      ]
+    },
+    "class_type": "Ideogram4Scheduler",
+    "_meta": {
+      "title": "Ideogram 4 Scheduler"
+    }
+  },
+  "98:18": {
+    "inputs": {
+      "noise_seed": 470048616145257
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "随机噪波"
+    }
+  },
+  "98:23": {
+    "inputs": {
+      "unet_name": "ideogram4_fp8_scaled.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "UNet加载器"
+    }
+  },
+  "98:24": {
+    "inputs": {
+      "text": "{\n    \"high_level_description\": \"A surreal streetwear mixed-media collage poster featuring a relaxed skateboarder mid-air against a vibrant blue sky, backed by giant puffy 3D letters spelling 'COMFY'. The composition blends retro magazine cutout aesthetics with grunge elements like torn paper banners and distressed red stamps, conveying an effortless, cozy vibe.\",\n    \"style_description\": {\n        \"aesthetics\": \"Retro magazine cutout style, mixed-media digital collage, high-contrast streetwear graphic, featuring rough ripped paper edges and distressed grunge textures.\",\n        \"lighting\": \"High-contrast flash mixed with harsh midday sunlight on the skater cutout, contrasting with flat, bright graphic lighting on the 3D typography.\",\n        \"photo\": \"Vintage grainy 35mm film with distressed halftone scan textures and subtle light leaks.\",\n        \"medium\": \"Mixed-media digital collage\",\n        \"color_palette\": [\"#1E73BE\", \"#FDFDFD\", \"#C82A2A\", \"#657C9C\", \"#EFEFEF\"]\n    },\n    \"compositional_deconstruction\": {\n        \"background\": \"A vibrant, clear blue sky layered with a vintage grainy film texture and subtle halftone dot patterns, transitioning down to an implied pale gray concrete ramp at the very bottom edge.\",\n        \"elements\": [\n            {\n                \"type\": \"obj\",\n                \"bbox\": [128, 149, 354, 810],\n                \"desc\": \"Massive 3D puffy, inflatable white typography spelling 'COMFY'. The letters stretch across the upper half of the canvas, acting as a surreal, soft cloud-like backdrop.\",\n                \"color_palette\": [\"#FDFDFD\", \"#E0E0E0\", \"#D3DBE2\"]\n            },\n            {\n                \"type\": \"obj\",\n                \"bbox\": [459, 37, 727, 264],\n                \"desc\": \"A cluster of oversized, distressed red stamped circles and dots, applied loosely to the midground like a grunge ink stamp, partially obscuring the bottom left of the text.\",\n                \"color_palette\": [\"#C82A2A\", \"#A11D1D\"]\n            },\n            {\n                \"type\": \"obj\",\n                \"bbox\": [23, 366, 153, 666],\n                \"desc\": \"A vertically oriented, torn paper side banner pinned to the left edge. The rough-edged paper displays the bold, stamped text 'STAY COZY' in high-contrast black ink.\",\n                \"color_palette\": [\"#EFEFEF\", \"#1A1A1A\", \"#C82A2A\"]\n            },\n            {\n                \"type\": \"obj\",\n                \"bbox\": [287, 210, 756, 819],\n                \"desc\": \"A sharp photographic cutout of a skateboarder mid-air in a relaxed pose. He wears loose-fitting washed denim jeans and a plain white tee, appearing to effortlessly float above the concrete ramp. A distinct white cutout border surrounds his silhouette.\",\n                \"color_palette\": [\"#FDFDFD\", \"#657C9C\", \"#2B2B2B\", \"#DCA57D\"]\n            },\n            {\n                \"type\": \"obj\",\n                \"bbox\": [773, 39, 973, 187],\n                \"desc\": \"A surreal, miniature floating skateboard cutout, positioned playfully in the upper right sky as if defying gravity.\",\n                \"color_palette\": [\"#D2A679\", \"#2B2B2B\", \"#C82A2A\"]\n            },\n            {\n                \"type\": \"obj\",\n                \"bbox\": [105, 830, 905, 980],\n                \"desc\": \"A wide, horizontal strip of heavily textured torn paper spanning the lower third of the composition. It features the bold typographic phrase 'BEYOND THE COMFORT ZONE' intermixed with 'EFFORTLESS RIDE' alongside ripped edges that reveal the background.\",\n                \"color_palette\": [\"#EFEFEF\", \"#1A1A1A\", \"#999999\"]\n            }\n        ]\n    }\n}",
+      "clip": [
+        "98:14",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Positive Prompt)"
+    }
+  },
+  "98:14": {
+    "inputs": {
+      "clip_name": "qwen3vl_8b_fp8_scaled.safetensors",
+      "type": "ideogram4",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "加载CLIP"
+    }
+  },
+  "98:27": {
+    "inputs": {
+      "value": [
+        "37",
+        0
+      ]
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Int (Width)"
+    }
+  },
+  "98:28": {
+    "inputs": {
+      "value": [
+        "37",
+        1
+      ]
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Int (Height)"
+    }
+  },
+  "98:31": {
+    "inputs": {
+      "expression": "max(((a + 15) // 16) * 16, 256)",
+      "values.a": [
+        "98:27",
+        0
+      ]
+    },
+    "class_type": "ComfyMathExpression",
+    "_meta": {
+      "title": "数学表达式"
+    }
+  },
+  "98:32": {
+    "inputs": {
+      "expression": "max(((a + 15) // 16) * 16, 256)",
+      "values.a": [
+        "98:28",
+        0
+      ]
+    },
+    "class_type": "ComfyMathExpression",
+    "_meta": {
+      "title": "数学表达式"
+    }
+  },
+  "98:144": {
+    "inputs": {
+      "value": [
+        "98:145",
+        0
+      ]
+    },
+    "class_type": "ComfyNumberConvert",
+    "_meta": {
+      "title": "数字转换"
+    }
+  },
+  "98:145": {
+    "inputs": {
+      "json_string": [
+        "98:148",
+        0
+      ],
+      "key": "mu"
+    },
+    "class_type": "JsonExtractString",
+    "_meta": {
+      "title": "从JSON提取字符串"
+    }
+  },
+  "98:146": {
+    "inputs": {
+      "value": [
+        "98:150",
+        0
+      ]
+    },
+    "class_type": "ComfyNumberConvert",
+    "_meta": {
+      "title": "数字转换"
+    }
+  },
+  "98:147": {
+    "inputs": {
+      "json_string": "{\n  \"Quality\": {\n    \"num_steps\": 48,\n    \"mu\": 0.0,\n    \"std\": 1.5,\n    \"preset_id\": \"V4_QUALITY_48\"\n  },\n  \"Default\": {\n    \"num_steps\": 20,\n    \"mu\": 0.0,\n    \"std\": 1.75,\n    \"preset_id\": \"V4_DEFAULT_20\"\n  },\n  \"Turbo\": {\n    \"num_steps\": 12,\n    \"mu\": 0.5,\n    \"std\": 1.75,\n    \"preset_id\": \"V4_TURBO_12\"\n  }\n}",
+      "key": [
+        "98:156",
+        0
+      ]
+    },
+    "class_type": "JsonExtractString",
+    "_meta": {
+      "title": "从JSON提取字符串"
+    }
+  },
+  "98:148": {
+    "inputs": {
+      "string": [
+        "98:147",
+        0
+      ],
+      "find": "'",
+      "replace": "\""
+    },
+    "class_type": "StringReplace",
+    "_meta": {
+      "title": "替换"
+    }
+  },
+  "98:149": {
+    "inputs": {
+      "json_string": [
+        "98:148",
+        0
+      ],
+      "key": "num_steps"
+    },
+    "class_type": "JsonExtractString",
+    "_meta": {
+      "title": "从JSON提取字符串"
+    }
+  },
+  "98:150": {
+    "inputs": {
+      "json_string": [
+        "98:148",
+        0
+      ],
+      "key": "std"
+    },
+    "class_type": "JsonExtractString",
+    "_meta": {
+      "title": "从JSON提取字符串"
+    }
+  },
+  "98:151": {
+    "inputs": {
+      "value": [
+        "98:149",
+        0
+      ]
+    },
+    "class_type": "ComfyNumberConvert",
+    "_meta": {
+      "title": "数字转换"
+    }
+  },
+  "98:154": {
+    "inputs": {
+      "unet_name": "ideogram4_unconditional_fp8_scaled.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "UNet加载器"
+    }
+  },
+  "98:155": {
+    "inputs": {
+      "cfg": 7,
+      "model": [
+        "98:157",
+        0
+      ],
+      "positive": [
+        "98:24",
+        0
+      ],
+      "model_negative": [
+        "98:154",
+        0
+      ],
+      "negative": [
+        "98:10",
+        0
+      ]
+    },
+    "class_type": "DualModelGuider",
+    "_meta": {
+      "title": "Dual Model CFG Guider"
+    }
+  },
+  "98:156": {
+    "inputs": {
+      "choice": "Default",
+      "index": 1,
+      "option1": "Quality",
+      "option2": "Default",
+      "option3": "Turbo",
+      "option4": ""
+    },
+    "class_type": "CustomCombo",
+    "_meta": {
+      "title": "自定义组合"
+    }
+  },
+  "98:157": {
+    "inputs": {
+      "cfg": 3,
+      "start_percent": 0.7,
+      "end_percent": 1,
+      "model": [
+        "98:23",
+        0
+      ]
+    },
+    "class_type": "CFGOverride",
+    "_meta": {
+      "title": "CFG Override"
+    }
+  }
+}

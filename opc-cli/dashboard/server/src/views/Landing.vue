@@ -66,8 +66,16 @@
           <div class="stat-label">内置音色</div>
         </div>
         <div class="stat-item">
+          <div class="stat-number">5</div>
+          <div class="stat-label">压缩预设</div>
+        </div>
+        <div class="stat-item">
           <div class="stat-number">&infin;</div>
-          <div class="stat-label">扩展可能</div>
+          <div class="stat-label">工作流</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">8</div>
+          <div class="stat-label">KG 分类</div>
         </div>
       </div>
     </section>
@@ -123,6 +131,46 @@
             支持 HomePod、Apple TV 等无线播放。
           </p>
           <div class="flow-output">opc say "通知" --device HomePod</div>
+        </div>
+
+        <div class="flow-card reveal">
+          <div class="flow-number">05</div>
+          <div class="flow-icon">🎨</div>
+          <h3 class="flow-title">AI 图片生成</h3>
+          <p class="flow-desc">
+            通过 ComfyUI 工作流驱动，支持 ERNIE/Qwen/Z-Image 等多模型。JSON 结构化 Prompt 提升生成质量，支持批量生成与画廊管理。
+          </p>
+          <div class="flow-output">opc image -w ernie-turbo -p '{"subject":"a cat"}'</div>
+        </div>
+
+        <div class="flow-card reveal">
+          <div class="flow-number">06</div>
+          <div class="flow-icon">🧠</div>
+          <h3 class="flow-title">Prompt 知识图谱</h3>
+          <p class="flow-desc">
+            内置知识图谱引擎，涵盖风格、主体、光线等 8 大分类。智能推荐搭配组合，生成结构化 Prompt 骨架。
+          </p>
+          <div class="flow-output">opc image kg skeleton subject:food style:photography</div>
+        </div>
+
+        <div class="flow-card reveal">
+          <div class="flow-number">07</div>
+          <div class="flow-icon">🎵</div>
+          <h3 class="flow-title">音频处理</h3>
+          <p class="flow-desc">
+            基于 ffmpeg 的动态范围压缩器，内置 voice/music/limiter 等预设。支持 LUFS 响度分析，专业级参数控制。
+          </p>
+          <div class="flow-output">opc audio compress podcast.mp3 --preset voice</div>
+        </div>
+
+        <div class="flow-card reveal">
+          <div class="flow-number">08</div>
+          <div class="flow-icon">✏️</div>
+          <h3 class="flow-title">图片编辑</h3>
+          <p class="flow-desc">
+            基于 Klein-Edit 等工作流的 AI 图片编辑。支持多图输入、局部修改、风格迁移等编辑指令。
+          </p>
+          <div class="flow-output">opc image-edit --image photo.png -p "add a red hat"</div>
         </div>
       </div>
     </section>
@@ -218,6 +266,58 @@
           </p>
           <div class="feature-code">
             <span class="cmd">opc tts</span> <span class="arg">"你好"</span> <span class="flag">-e</span> qwen <span class="flag">--mode</span> voice_clone <span class="flag">--ref-audio</span> <span class="arg">ref.wav</span>
+          </div>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-header">
+            <span class="feature-badge badge-image">IMAGE</span>
+            <h3 class="feature-title">ComfyUI 图片生成</h3>
+          </div>
+          <p class="feature-desc">
+            JSON 结构化 Prompt 提升生成质量 8-15%，自动注入 negative prompt。支持多模型工作流切换与参数覆盖。
+          </p>
+          <div class="feature-code">
+            <span class="cmd">opc image</span> <span class="flag">-w</span> ernie-turbo <span class="flag">-p</span> <span class="arg">'{"subject":"美食摄影","style":"photography"}'</span>
+          </div>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-header">
+            <span class="feature-badge badge-kg">KG</span>
+            <h3 class="feature-title">Prompt 知识图谱</h3>
+          </div>
+          <p class="feature-desc">
+            内置知识图谱覆盖 8 大分类实体，支持搜索、搭配推荐、骨架生成和组合验证。告别盲目 prompt。
+          </p>
+          <div class="feature-code">
+            <span class="cmd">opc image kg</span> skeleton <span class="arg">subject:food</span> <span class="arg">lighting:neon</span>
+          </div>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-header">
+            <span class="feature-badge badge-audio">AUDIO</span>
+            <h3 class="feature-title">音频动态压缩</h3>
+          </div>
+          <p class="feature-desc">
+            基于 ffmpeg acompressor 的专业级压缩器。内置 voice/music/limiter 等 5 种预设，支持 LUFS 响度分析。
+          </p>
+          <div class="feature-code">
+            <span class="cmd">opc audio compress</span> <span class="arg">podcast.mp3</span> <span class="flag">--preset</span> voice <span class="flag">-o</span> <span class="arg">output.mp3</span>
+          </div>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-header">
+            <span class="feature-badge badge-edit">EDIT</span>
+            <h3 class="feature-title">AI 图片编辑</h3>
+          </div>
+          <p class="feature-desc">
+            通过 ComfyUI 工作流实现图片编辑，支持局部修改、风格迁移、多图混合。自动上传图片到 ComfyUI。
+          </p>
+          <div class="feature-code">
+            <span class="cmd">opc image-edit</span> <span class="flag">--image</span> <span class="arg">photo.png</span> <span class="flag">-p</span> <span class="arg">"make it look like a painting"</span>
           </div>
         </div>
       </div>
@@ -376,8 +476,9 @@
             <div class="sidebar">
               <div class="sidebar-item">🏠 Dashboard</div>
               <div class="sidebar-item active">✂️ Cut Editor</div>
-              <div class="sidebar-item">🔊 TTS Settings</div>
-              <div class="sidebar-item">🎙️ ASR Pipeline</div>
+              <div class="sidebar-item">🎨 Gallery</div>
+              <div class="sidebar-item">🧠 Knowledge Graph</div>
+              <div class="sidebar-item">📊 Evaluate</div>
               <div class="sidebar-item">⚙️ Configuration</div>
             </div>
             <div class="main-content">
@@ -1036,6 +1137,10 @@ section {
 .flow-card:nth-child(2) .flow-icon { background: rgba(155, 93, 229, 0.1); }
 .flow-card:nth-child(3) .flow-icon { background: rgba(241, 91, 181, 0.1); }
 .flow-card:nth-child(4) .flow-icon { background: rgba(254, 228, 64, 0.1); }
+.flow-card:nth-child(5) .flow-icon { background: rgba(0, 200, 150, 0.1); }
+.flow-card:nth-child(6) .flow-icon { background: rgba(200, 100, 255, 0.1); }
+.flow-card:nth-child(7) .flow-icon { background: rgba(255, 150, 50, 0.1); }
+.flow-card:nth-child(8) .flow-icon { background: rgba(100, 200, 255, 0.1); }
 
 .flow-title {
     font-family: 'Syne', sans-serif;
@@ -1126,6 +1231,10 @@ section {
 .badge-asr { color: var(--accent-purple); }
 .badge-cut { color: var(--accent-pink); }
 .badge-device { color: var(--accent-yellow); }
+.badge-image { color: #00f5d4; }
+.badge-kg { color: #9b5de5; }
+.badge-audio { color: #ff6b35; }
+.badge-edit { color: #64b5f6; }
 
 .feature-title {
     font-family: 'Syne', sans-serif;
@@ -1439,10 +1548,10 @@ section {
 }
 
 .stats-grid {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 2rem;
 }
 
@@ -1531,6 +1640,12 @@ footer {
 
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 1024px) and (min-width: 769px) {
+        .stats-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
     }
 
     .browser-content {

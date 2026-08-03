@@ -24,10 +24,14 @@ from tts.qwen_engine import tts_qwen, QWEN_MODELS, QWEN_SPEAKERS, QWEN_SPEAKER_I
 from asr.qwen_asr_engine import asr_transcribe, asr_align, result_to_dict, ASR_MODELS
 from asr.subtitle_gen import generate_srt, generate_ass_karaoke
 from asr.pipeline import run_pipeline, split_line_after, _load_lines, _save_lines, stage_check
-from image.comfyui import generate_image, check_connection, get_server_url, describe_image, compare_images, extract_comfyui_metadata
+from image.comfyui import generate_image, check_connection, get_server_url, describe_image, compare_images, extract_comfyui_metadata, upload_image
 from image.workflow import discover_workflows, load_workflow, inject_params, analyze_workflow, import_workflow
 from image.kg.engine import PromptKG
 from image.json_prompt import json_prompt_to_text, validate_json_prompt
+from audio.compressor import compress_audio, analyze_loudness, apply_preset, list_presets
+from video.generator import generate_video, check_connection as video_check_connection, get_server_url as video_get_server_url, upload_image as video_upload_image
+from video.transcribe import download_video, extract_audio, transcribe_audio, save_transcript, summarize_text
+from video.describe import describe_video
 
 
 # ── CLI Commands ──────────────────────────────────────────────────
@@ -713,6 +717,105 @@ def _cmd_image_generate(args):
         sys.exit(1)
 
 
+def _cmd_image_edit(args):
+    """Handle 'opc image-edit' — edit images using ComfyUI workflows."""
+    cfg = load_config()
+    alias = getattr(args, "alias", None) or "klein-edit"
+    images = getattr(args, "images", [])
+
+    if not images:
+        print("Error: Provide at least one image with --image <path>.")
+        sys.exit(1)
+
+    prompt_text = getattr(args, "prompt", None)
+    if not prompt_text:
+        print("Error: --prompt is required. Describe how to edit the image.")
+        print('  Example: opc image-edit --image photo.png -p "add a red hat"')
+        sys.exit(1)
+
+    try:
+        workflow, meta = load_workflow(alias)
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
+    server_url = get_server_url(cfg)
+    if not check_connection(cfg):
+        print(f"Error: Cannot connect to ComfyUI at {server_url}.", file=sys.stderr)
+        sys.exit(1)
+
+    # Upload images and inject filenames into workflow
+    image_params = meta.get("image_params", {})
+    uploaded_names = []
+    for i, img_path in enumerate(images):
+        print(f"Uploading image {i + 1}/{len(images)}: {img_path}", file=sys.stderr)
+        try:
+            remote_name = upload_image(img_path, server_url)
+            uploaded_names.append(remote_name)
+            print(f"  -> {remote_name}", file=sys.stderr)
+        except Exception as e:
+            print(f"Error uploading {img_path}: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    # Inject uploaded image names into the appropriate nodes
+    result_wf = json.loads(json.dumps(workflow))
+    for i, remote_name in enumerate(uploaded_names):
+        param_key = f"image_{i}" if i > 0 else "image"
+        spec = image_params.get(param_key)
+        if spec:
+            node_id = spec["node"]
+            field = spec.get("field", "image")
+            if node_id in result_wf:
+                result_wf[node_id]["inputs"][field] = remote_name
+            else:
+                print(f"Warning: node '{node_id}' not found for image param '{param_key}'", file=sys.stderr)
+
+    # Inject regular params (prompt, seed, steps, etc.)
+    params = {"prompt": prompt_text}
+    param_list = getattr(args, "param", []) or []
+    for pv in param_list:
+        if "=" not in pv:
+            print(f"Error: --param requires key=value format, got: {pv}")
+            sys.exit(1)
+        key, value = pv.split("=", 1)
+        params[key.strip()] = value.strip()
+
+    negative_text = ""
+    if not getattr(args, "text", False):
+        try:
+            prompt_json = json.loads(prompt_text)
+            nc = prompt_json.get("negative_constraints", [])
+            if isinstance(nc, list):
+                negative_text = ", ".join(nc)
+            elif isinstance(nc, str):
+                negative_text = nc
+            prompt_json_clean = {k: v for k, v in prompt_json.items() if k != "negative_constraints"}
+            prompt_text = json.dumps(prompt_json_clean, ensure_ascii=False)
+            params["prompt"] = prompt_text
+        except json.JSONDecodeError:
+            pass  # treat as plain text
+    else:
+        params["prompt"] = prompt_text
+
+    if negative_text and "negative_prompt" in meta.get("params", {}):
+        params["negative_prompt"] = negative_text
+
+    result_wf = inject_params(result_wf, meta, params)
+
+    output_dir = getattr(args, "output", None)
+    if output_dir:
+        cfg["image_output_dir"] = output_dir
+    output_prefix = meta.get("alias", alias)
+
+    try:
+        result = generate_image(result_wf, cfg, filename_prefix=output_prefix,
+                                prompt=prompt_text)
+        print(json.dumps(result, ensure_ascii=False))
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
 def _cmd_image_kg(args):
     kg = PromptKG()
     kg_action = getattr(args, "kg_action", None)
@@ -811,6 +914,383 @@ def _cmd_image_kg(args):
         print("  templates [--entity E]           List templates or find by entity")
 
 
+def cmd_audio(args):
+    """Handle 'opc audio' command: audio processing (compress, analyze, etc.)."""
+    audio_action = getattr(args, "audio_action", None)
+
+    if audio_action == "compress":
+        _cmd_audio_compress(args)
+    elif audio_action == "analyze":
+        _cmd_audio_analyze(args)
+    elif audio_action == "presets":
+        _cmd_audio_presets(args)
+    else:
+        print("Usage: opc audio <compress|analyze|presets>")
+        print("  compress <file>    Apply dynamic range compression")
+        print("  analyze <file>     Analyze audio loudness (LUFS)")
+        print("  presets            List available compressor presets")
+
+
+def _cmd_audio_compress(args):
+    """Apply compression to an audio file."""
+    input_path = args.input
+    if not os.path.exists(input_path):
+        print(f"Error: File not found: {input_path}")
+        sys.exit(1)
+
+    # Build parameters
+    params = {}
+    if args.preset:
+        params = apply_preset(args.preset)
+        print(f"Using preset: {args.preset}")
+    else:
+        # Use explicit parameters or defaults from screenshot
+        params = {
+            "threshold": args.threshold,
+            "ratio": args.ratio,
+            "attack": args.attack,
+            "release": args.release,
+            "knee": args.knee,
+            "makeup": args.makeup,
+            "mix": args.mix,
+        }
+
+    print(f"Parameters: threshold={params['threshold']}dB, ratio={params['ratio']}:1, "
+          f"attack={params['attack']}ms, release={params['release']}ms, "
+          f"knee={params['knee']}dB, makeup={params['makeup']}dB, mix={params['mix']}")
+
+    try:
+        output_path = compress_audio(
+            input_path,
+            output_path=args.output,
+            **params,
+        )
+        print(f"Compressed: {output_path}")
+
+        # Show file sizes
+        input_size = os.path.getsize(input_path) / 1024 / 1024
+        output_size = os.path.getsize(output_path) / 1024 / 1024
+        print(f"  Input:  {input_size:.2f} MB")
+        print(f"  Output: {output_size:.2f} MB")
+    except Exception as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
+
+def _cmd_audio_analyze(args):
+    """Analyze audio loudness."""
+    input_path = args.input
+    if not os.path.exists(input_path):
+        print(f"Error: File not found: {input_path}")
+        sys.exit(1)
+
+    print(f"Analyzing: {input_path}")
+    result = analyze_loudness(input_path)
+
+    if result.get("integrated_lufs") is not None:
+        print(f"  Integrated loudness: {result['integrated_lufs']:.1f} LUFS")
+    else:
+        print("  Integrated loudness: N/A")
+
+    if result.get("loudness_range") is not None:
+        print(f"  Loudness range:      {result['loudness_range']:.1f} LU")
+    else:
+        print("  Loudness range:      N/A")
+
+    if result.get("true_peak") is not None:
+        print(f"  True peak:           {result['true_peak']:.1f} dB")
+    else:
+        print("  True peak:           N/A")
+
+
+def _cmd_audio_presets(args):
+    """List available compressor presets."""
+    presets = list_presets()
+    print("Available compressor presets:")
+    for name, desc in presets.items():
+        print(f"  {name:12s} {desc}")
+    print("\nUsage: opc audio compress file.mp3 --preset voice")
+
+
+def cmd_video_gen(args):
+    """Handle 'opc video-gen' command — generate videos via ComfyUI workflows."""
+    cfg = load_config()
+    alias = getattr(args, "alias", None)
+    if not alias:
+        print("Error: Specify a workflow alias. Use 'opc video-gen list' to see available workflows.")
+        sys.exit(1)
+
+    # Use image workflow system — video workflows are stored alongside image ones
+    try:
+        workflow, meta = load_workflow(alias)
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
+    server_url = video_get_server_url(cfg)
+    if not video_check_connection(cfg):
+        print(f"Error: Cannot connect to ComfyUI at {server_url}.", file=sys.stderr)
+        sys.exit(1)
+
+    # Upload images if provided
+    image_params = meta.get("image_params", {})
+    uploaded_names = {}
+
+    # Handle i2v (single image)
+    image_path = getattr(args, "image", None)
+    if image_path:
+        print(f"Uploading image: {image_path}", file=sys.stderr)
+        try:
+            remote_name = video_upload_image(image_path, server_url)
+            uploaded_names["image"] = remote_name
+            print(f"  -> {remote_name}", file=sys.stderr)
+        except Exception as e:
+            print(f"Error uploading {image_path}: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    # Handle flf (first/last frames)
+    first_frame = getattr(args, "first_frame", None)
+    if first_frame:
+        print(f"Uploading first frame: {first_frame}", file=sys.stderr)
+        try:
+            remote_name = video_upload_image(first_frame, server_url)
+            uploaded_names["first_frame"] = remote_name
+            print(f"  -> {remote_name}", file=sys.stderr)
+        except Exception as e:
+            print(f"Error uploading {first_frame}: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    last_frame = getattr(args, "last_frame", None)
+    if last_frame:
+        print(f"Uploading last frame: {last_frame}", file=sys.stderr)
+        try:
+            remote_name = video_upload_image(last_frame, server_url)
+            uploaded_names["last_frame"] = remote_name
+            print(f"  -> {remote_name}", file=sys.stderr)
+        except Exception as e:
+            print(f"Error uploading {last_frame}: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    # Build workflow copy and inject uploaded image names
+    result_wf = json.loads(json.dumps(workflow))
+    for param_key, remote_name in uploaded_names.items():
+        spec = image_params.get(param_key)
+        if spec:
+            node_id = spec["node"]
+            field = spec.get("field", "image")
+            if node_id in result_wf:
+                result_wf[node_id]["inputs"][field] = remote_name
+            else:
+                print(f"Warning: node '{node_id}' not found for image param '{param_key}'", file=sys.stderr)
+
+    # Inject prompt and other params
+    params = {}
+    prompt_text = args.prompt or ""
+    if prompt_text:
+        params["prompt"] = prompt_text
+
+    param_list = getattr(args, "param", []) or []
+    for pv in param_list:
+        if "=" not in pv:
+            print(f"Error: --param requires key=value format, got: {pv}")
+            sys.exit(1)
+        key, value = pv.split("=", 1)
+        params[key.strip()] = value.strip()
+
+    # Calculate frames from duration and fps for video workflows
+    if "duration" in params and "frame_rate" in params:
+        try:
+            duration = int(params["duration"])
+            fps = int(params["frame_rate"])
+            params["frames"] = duration * fps
+            print(f"  Calculated frames: {params['frames']} ({duration}s * {fps}fps)", file=sys.stderr)
+        except ValueError:
+            pass
+
+    # Handle --turbo flag: switch model/LoRA for faster generation
+    turbo = getattr(args, "turbo", False)
+    if turbo:
+        print("Turbo mode enabled (distilled model)", file=sys.stderr)
+        # For i2v: turbo is controlled via LoRA strength (already in meta params)
+        if "turbo" in meta.get("params", {}):
+            params["turbo"] = meta["params"]["turbo"]["default"]  # 0.5
+        # For flf: turbo switches checkpoint model
+        turbo_cfg = meta.get("turbo_config")
+        if turbo_cfg:
+            ckpt_value = turbo_cfg.get("enabled", {}).get("ckpt_name")
+            field = turbo_cfg.get("field", "ckpt_name")
+            for node_key, node_id in turbo_cfg.get("nodes", {}).items():
+                if node_id in result_wf and ckpt_value:
+                    result_wf[node_id]["inputs"][field] = ckpt_value
+                    print(f"  Turbo: set {node_key} -> {ckpt_value}", file=sys.stderr)
+        # Turbo mode: use distilled sigma schedules
+        # Two-stage workflow: 8 + 4 steps
+        # Single-stage workflow: LTXVScheduler (15 steps) + ManualSigmas (8 steps)
+        main_sigmas_node = "4984"
+        refine_sigmas_node = "4985"
+        scheduler_node = "4966"
+        if scheduler_node in result_wf:
+            # Single-stage: LTXVScheduler with 15 steps
+            result_wf[scheduler_node]["inputs"]["steps"] = 15
+            print(f"  Turbo: scheduler set to 15 steps", file=sys.stderr)
+        elif main_sigmas_node in result_wf:
+            # Two-stage: ManualSigmas 8 steps
+            result_wf[main_sigmas_node]["inputs"]["sigmas"] = "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
+            print(f"  Turbo: main sampler set to 8 steps", file=sys.stderr)
+        if refine_sigmas_node in result_wf:
+            result_wf[refine_sigmas_node]["inputs"]["sigmas"] = "0.85, 0.7250, 0.4219, 0.0"
+            print(f"  Turbo: refine sampler set to 4 steps", file=sys.stderr)
+    else:
+        # Standard mode: disable turbo optimizations, use more steps for quality
+        if "turbo" in meta.get("params", {}):
+            # Standard mode: bypass ALL LoRA nodes by rewiring model connections
+            # from CheckpointLoader directly to Guider nodes
+            ckpt_node = "3940"  # CheckpointLoaderSimple
+            # Find all LoRA nodes in the workflow
+            lora_nodes = []
+            for nid, node in result_wf.items():
+                if isinstance(node, dict) and node.get("class_type") == "LoraLoaderModelOnly":
+                    lora_nodes.append(nid)
+            # Rewire all nodes that receive model from any LoRA
+            for nid, node in result_wf.items():
+                if not isinstance(node, dict):
+                    continue
+                for field, val in node.get("inputs", {}).items():
+                    if isinstance(val, list) and len(val) == 2 and val[0] in lora_nodes:
+                        node["inputs"][field] = [ckpt_node, 0]
+                        print(f"  Standard: bypass LoRA {val[0]}, rewired {nid} to {ckpt_node}", file=sys.stderr)
+            # Standard mode: increase steps for quality (no LoRA acceleration)
+            scheduler_node = "4966"
+            main_sigmas_node = "4984"
+            refine_sigmas_node = "4985"
+            if scheduler_node in result_wf:
+                # Single-stage: increase LTXVScheduler steps
+                result_wf[scheduler_node]["inputs"]["steps"] = 30
+                print(f"  Standard: scheduler set to 30 steps", file=sys.stderr)
+            elif main_sigmas_node in result_wf:
+                # Two-stage: increase main sampler steps
+                steps = 40
+                sigmas = ", ".join(f"{1.0 - i/(steps-1):.4f}" for i in range(steps))
+                result_wf[main_sigmas_node]["inputs"]["sigmas"] = sigmas
+                print(f"  Standard: main sampler set to {steps} steps", file=sys.stderr)
+            if refine_sigmas_node in result_wf:
+                result_wf[refine_sigmas_node]["inputs"]["sigmas"] = "0.8500, 0.7250, 0.4219, 0.0000"
+                print(f"  Standard: refine sampler set to 4 steps", file=sys.stderr)
+        turbo_cfg = meta.get("turbo_config")
+        if turbo_cfg:
+            ckpt_value = turbo_cfg.get("disabled", {}).get("ckpt_name")
+            field = turbo_cfg.get("field", "ckpt_name")
+            for node_key, node_id in turbo_cfg.get("nodes", {}).items():
+                if node_id in result_wf and ckpt_value:
+                    result_wf[node_id]["inputs"][field] = ckpt_value
+
+    for name, spec in meta.get("params", {}).items():
+        if spec.get("required") and name not in params:
+            print(f"Error: Missing required parameter '{name}'")
+            print(f"  Use: --prompt \"text\" or --param {name}=value")
+            sys.exit(1)
+
+    result_wf = inject_params(result_wf, meta, params)
+
+    output_dir = getattr(args, "output", None)
+    if output_dir:
+        cfg["video_output_dir"] = output_dir
+    output_prefix = meta.get("alias", alias)
+
+    try:
+        result = generate_video(result_wf, cfg, filename_prefix=output_prefix,
+                                prompt=prompt_text)
+        print(json.dumps(result, ensure_ascii=False))
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+def cmd_video_describe(args):
+    """Handle 'opc video-describe' command — describe a video using vision model."""
+    video_path = args.video
+    if not os.path.exists(video_path):
+        print(f"Error: Video file not found: {video_path}")
+        sys.exit(1)
+
+    cfg = load_config()
+    if args.api_url:
+        cfg["video_desc_api_url"] = args.api_url
+    if args.api_key:
+        cfg["video_desc_api_key"] = args.api_key
+    if args.model:
+        cfg["video_desc_model"] = args.model
+
+    try:
+        result = describe_video(
+            video_path,
+            prompt_text=args.prompt,
+            cfg=cfg,
+            num_frames=args.frames,
+        )
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+    except ValueError as e:
+        print(f"Config error: {e}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+def cmd_video_transcribe(args):
+    """Handle 'opc video-transcribe' command — download video and transcribe."""
+    import tempfile
+    import os
+
+    url = args.url
+    output_dir = args.output_dir or tempfile.gettempdir()
+    language = args.language
+    model_size = args.model_size or "1.7B"
+
+    try:
+        # Step 1: Download video
+        video_path = download_video(url, output_dir)
+
+        # Step 2: Extract audio
+        audio_path = extract_audio(video_path, output_dir)
+
+        # Step 3: Transcribe
+        text = transcribe_audio(audio_path, language=language, model_size=model_size)
+
+        # Step 4: Save transcript
+        transcript_path = os.path.join(output_dir, f"{os.path.splitext(os.path.basename(video_path))[0]}_transcript.txt")
+        save_transcript(text, transcript_path)
+
+        # Step 5: Summary
+        summary = summarize_text(text)
+
+        # Cleanup. yt-dlp may return the final WAV directly, in which case
+        # video_path and audio_path refer to the same file.
+        cleanup_paths = set()
+        if not args.keep_video:
+            cleanup_paths.add(video_path)
+        if not args.keep_audio:
+            cleanup_paths.add(audio_path)
+        for path in cleanup_paths:
+            if os.path.exists(path):
+                os.remove(path)
+                print(f"Removed: {path}", file=sys.stderr)
+
+        # Output result
+        result = {
+            "transcript_path": transcript_path,
+            "transcript_preview": text[:200] + "..." if len(text) > 200 else text,
+            "summary": summary,
+            "language": language or "auto-detected",
+            "model_size": model_size,
+        }
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
 def cmd_config(args):
     """Handle 'opc config' command."""
     if args.set_engine:
@@ -891,6 +1371,18 @@ def cmd_config(args):
     if args.set_vision_model:
         save_config("vision_model", args.set_vision_model)
         print(f"vision_model = {args.set_vision_model}")
+    if args.set_video_desc_api_url:
+        save_config("video_desc_api_url", args.set_video_desc_api_url)
+        print(f"video_desc_api_url = {args.set_video_desc_api_url}")
+    if args.set_video_desc_api_key:
+        save_config("video_desc_api_key", args.set_video_desc_api_key)
+        print(f"video_desc_api_key = {'*' * 8}{args.set_video_desc_api_key[-4:]}" if len(args.set_video_desc_api_key) > 4 else "video_desc_api_key = ****")
+    if args.set_video_desc_model:
+        save_config("video_desc_model", args.set_video_desc_model)
+        print(f"video_desc_model = {args.set_video_desc_model}")
+    if args.set_video_desc_max_frames:
+        save_config("video_desc_max_frames", args.set_video_desc_max_frames)
+        print(f"video_desc_max_frames = {args.set_video_desc_max_frames}")
     if args.show:
         # Show backend info alongside config
         backend = get_backend()
@@ -902,6 +1394,8 @@ def cmd_config(args):
         # Mask sensitive fields before display
         if cfg.get("vision_api_key"):
             cfg["vision_api_key"] = "****"
+        if cfg.get("video_desc_api_key"):
+            cfg["video_desc_api_key"] = "****"
         print(json.dumps(cfg, indent=2, ensure_ascii=False))
 
 
@@ -1092,6 +1586,14 @@ examples:
                         help="Set vision model API key (leave empty for local models)")
     p_conf.add_argument("--set-vision-model", metavar="NAME",
                         help="Set vision model name (e.g. qwen3.5)")
+    p_conf.add_argument("--set-video-desc-api-url", metavar="URL",
+                        help="Set video description API URL (OpenAI-compatible, fallback to vision_api_url)")
+    p_conf.add_argument("--set-video-desc-api-key", metavar="KEY",
+                        help="Set video description API key (fallback to vision_api_key)")
+    p_conf.add_argument("--set-video-desc-model", metavar="NAME",
+                        help="Set video description model name (e.g. nemotron-omni, fallback to vision_model)")
+    p_conf.add_argument("--set-video-desc-max-frames", type=int, metavar="N",
+                        help="Set max frames to extract for video description (default: 8)")
 
     # ── opc asr ──
     p_asr = subparsers.add_parser("asr", help="Speech recognition - transcribe audio to text or subtitles",
@@ -1302,6 +1804,190 @@ examples:
     p_image.add_argument("--param", "-P", action="append", help="Workflow parameter as key=value")
     p_image.add_argument("--output", "-o", help="Output directory for generated images (overrides config)")
 
+    # ── opc image-edit ──
+    p_edit = subparsers.add_parser("image-edit", help="Edit images using ComfyUI workflows",
+                                   formatter_class=argparse.RawDescriptionHelpFormatter,
+                                   epilog="""\
+examples:
+  # Edit an image with a text instruction
+  opc image-edit --image photo.png -p "add a red hat to the person"
+
+  # Edit with JSON structured prompt
+  opc image-edit --image input.jpg -p '{"subject":"add snow","style":"winter"}'
+
+  # Use a specific edit workflow
+  opc image-edit -w klein-edit --image photo.png -p "make it look like a painting"
+
+  # Edit with multiple input images
+  opc image-edit --image ref1.png --image ref2.png -p "blend these two images"
+
+  # Override parameters
+  opc image-edit --image photo.png -p "add sunset" --param steps=30 --param seed=42
+""")
+    p_edit.add_argument("--workflow", "-w", dest="alias", default="klein-edit",
+                        help="Workflow alias (default: klein-edit)")
+    p_edit.add_argument("--image", "-i", dest="images", action="append",
+                        help="Input image path (can specify multiple times)")
+    p_edit.add_argument("--prompt", "-p", required=True,
+                        help="Edit instruction prompt")
+    p_edit.add_argument("--text", action="store_true",
+                        help="Treat prompt as plain text instead of JSON")
+    p_edit.add_argument("--param", "-P", action="append",
+                        help="Workflow parameter as key=value")
+    p_edit.add_argument("--output", "-o", help="Output directory for edited images")
+
+    # ── opc video-gen ──
+    p_video = subparsers.add_parser("video-gen", help="Generate videos via ComfyUI workflows (i2v, flf)",
+                                      formatter_class=argparse.RawDescriptionHelpFormatter,
+                                      epilog="""\
+examples:
+  # Image-to-Video (i2v): animate a single image
+  opc video-gen i2v --image frame.png -p "camera slowly zooms in, dramatic lighting"
+
+  # First-Last-Frame (flf): transition between two images
+  opc video-gen flf --first-frame start.png --last-frame end.png -p "smooth camera movement"
+
+  # Turbo mode (distilled model, faster generation)
+  opc video-gen i2v --image frame.png -p "slow motion" --turbo
+
+  # Override parameters (default: 50fps, 720p, 10s)
+  opc video-gen i2v --image frame.png -p "slow motion" --param duration=5 --param frame_rate=25
+
+  # List available video workflows
+  opc image list
+""")
+    video_subparsers = p_video.add_subparsers(dest="video_action", help="Video generation mode")
+
+    # i2v subcommand
+    p_video_i2v = video_subparsers.add_parser("i2v", help="Image-to-Video: animate a single image")
+    p_video_i2v.add_argument("--workflow", "-w", dest="alias", default="ltx-i2v",
+                             help="Workflow alias (default: ltx-i2v)")
+    p_video_i2v.add_argument("--image", "-i", required=True,
+                             help="Input image path")
+    p_video_i2v.add_argument("--prompt", "-p", required=True,
+                             help="Text prompt describing the video motion")
+    p_video_i2v.add_argument("--turbo", action="store_true",
+                             help="Use distilled LoRA for faster generation (slightly lower quality)")
+    p_video_i2v.add_argument("--param", "-P", action="append",
+                             help="Workflow parameter as key=value")
+    p_video_i2v.add_argument("--output", "-o", help="Output directory for generated videos")
+
+    # flf subcommand
+    p_video_flf = video_subparsers.add_parser("flf", help="First-Last-Frame: transition between two images")
+    p_video_flf.add_argument("--workflow", "-w", dest="alias", default="ltx-flf",
+                             help="Workflow alias (default: ltx-flf)")
+    p_video_flf.add_argument("--first-frame", "-f", required=True,
+                             help="First frame image path")
+    p_video_flf.add_argument("--last-frame", "-l", required=True,
+                             help="Last frame image path")
+    p_video_flf.add_argument("--prompt", "-p", required=True,
+                             help="Text prompt describing the transition motion")
+    p_video_flf.add_argument("--turbo", action="store_true",
+                             help="Use distilled model for faster generation (slightly lower quality)")
+    p_video_flf.add_argument("--param", "-P", action="append",
+                             help="Workflow parameter as key=value")
+    p_video_flf.add_argument("--output", "-o", help="Output directory for generated videos")
+
+    # ── opc video-transcribe ──
+    p_vt = subparsers.add_parser("video-transcribe", help="Download video and transcribe to text",
+                                  formatter_class=argparse.RawDescriptionHelpFormatter,
+                                  epilog="""\
+examples:
+  # Download and transcribe a video
+  opc video-transcribe "https://www.youtube.com/watch?v=..."
+
+  # Specify language for better accuracy
+  opc video-transcribe "https://..." --language Chinese
+
+  # Use smaller model for faster processing
+  opc video-transcribe "https://..." --model-size 0.6B
+
+  # Keep downloaded video and audio files
+  opc video-transcribe "https://..." --keep-video --keep-audio
+""")
+    p_vt.add_argument("url", help="Video URL to download and transcribe")
+    p_vt.add_argument("-o", "--output-dir", default=tempfile.gettempdir(),
+                      help="Output directory for transcript (default: temp dir)")
+    p_vt.add_argument("--language", "-l",
+                      help="Language hint (e.g., Chinese, English). Auto-detect if not specified.")
+    p_vt.add_argument("--model-size", "-m", choices=["1.7B", "0.6B"], default="1.7B",
+                      help="ASR model size (default: 1.7B)")
+    p_vt.add_argument("--keep-video", action="store_true",
+                      help="Keep downloaded video file after transcription")
+    p_vt.add_argument("--keep-audio", action="store_true",
+                      help="Keep extracted audio file after transcription")
+
+    # ── opc video-describe ──
+    p_vd = subparsers.add_parser("video-describe", help="Describe a video using vision model API",
+                                  formatter_class=argparse.RawDescriptionHelpFormatter,
+                                  epilog="""\
+examples:
+  # Describe a local video file
+  opc video-describe video.mp4
+
+  # Custom prompt
+  opc video-describe video.mp4 -p "What products are shown in this video?"
+
+  # Extract more frames for better coverage
+  opc video-describe video.mp4 --frames 12
+
+  # Use a specific provider (overrides config)
+  opc video-describe video.mp4 --api-url http://127.0.0.1:5000/v1/chat/completions --model nemotron-omni
+""")
+    p_vd.add_argument("video", help="Path to video file")
+    p_vd.add_argument("--prompt", "-p", help="Custom prompt for vision model")
+    p_vd.add_argument("--frames", "-n", type=int, help="Number of frames to extract (default: from config)")
+    p_vd.add_argument("--api-url", help="Vision API URL (overrides config)")
+    p_vd.add_argument("--api-key", help="Vision API key (overrides config)")
+    p_vd.add_argument("--model", "-m", help="Vision model name (overrides config)")
+
+    # ── opc audio ──
+    p_audio = subparsers.add_parser("audio", help="Audio processing tools (compressor, analyzer)",
+                                    formatter_class=argparse.RawDescriptionHelpFormatter,
+                                    epilog="""\
+examples:
+  # Compress audio with voice preset (default parameters from DAW)
+  opc audio compress input.mp3 --preset voice
+
+  # Compress with custom parameters matching the screenshot
+  opc audio compress input.mp3 -t -20.0 -r 4.0 -a 10 --release 130
+
+  # Analyze loudness (LUFS)
+  opc audio analyze input.mp3
+
+  # List available presets
+  opc audio presets
+""")
+    audio_subparsers = p_audio.add_subparsers(dest="audio_action", help="Audio sub-commands")
+
+    # opc audio compress
+    p_audio_compress = audio_subparsers.add_parser("compress", help="Apply dynamic range compression")
+    p_audio_compress.add_argument("input", help="Input audio file path (mp3, wav, flac, etc.)")
+    p_audio_compress.add_argument("-o", "--output", help="Output file path (default: auto-generated)")
+    p_audio_compress.add_argument("--preset", choices=["voice", "music", "limiter", "punch", "gentle"],
+                                  help="Use a preset configuration")
+    p_audio_compress.add_argument("-t", "--threshold", type=float, default=-20.0,
+                                  help="Threshold in dB (default: -20.0)")
+    p_audio_compress.add_argument("-r", "--ratio", type=float, default=4.0,
+                                  help="Compression ratio (default: 4.0)")
+    p_audio_compress.add_argument("-a", "--attack", type=float, default=10.0,
+                                  help="Attack time in ms (default: 10.0)")
+    p_audio_compress.add_argument("--release", type=float, default=130.0,
+                                  help="Release time in ms (default: 130.0)")
+    p_audio_compress.add_argument("--knee", type=float, default=0.0,
+                                  help="Knee width in dB (default: 0.0)")
+    p_audio_compress.add_argument("--makeup", type=float, default=0.0,
+                                  help="Makeup gain in dB (default: 0.0)")
+    p_audio_compress.add_argument("--mix", type=float, default=1.0,
+                                  help="Wet/dry mix ratio 0-1 (default: 1.0)")
+
+    # opc audio analyze
+    p_audio_analyze = audio_subparsers.add_parser("analyze", help="Analyze audio loudness")
+    p_audio_analyze.add_argument("input", help="Input audio file path")
+
+    # opc audio presets
+    p_audio_presets = audio_subparsers.add_parser("presets", help="List available compressor presets")
+
     args = parser.parse_args()
     if not args.command:
         parser.print_help()
@@ -1330,6 +2016,16 @@ examples:
             cmd_cut(args)
     elif args.command == "image":
         cmd_image(args)
+    elif args.command == "image-edit":
+        _cmd_image_edit(args)
+    elif args.command == "video-gen":
+        cmd_video_gen(args)
+    elif args.command == "video-transcribe":
+        cmd_video_transcribe(args)
+    elif args.command == "video-describe":
+        cmd_video_describe(args)
+    elif args.command == "audio":
+        cmd_audio(args)
 
 
 if __name__ == "__main__":

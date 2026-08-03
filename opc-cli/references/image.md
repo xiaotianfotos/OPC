@@ -9,6 +9,7 @@
 - [配置 ComfyUI 连接](#配置-comfyui-连接)
 - [可用工作流](#可用工作流)
 - [图片生成](#图片生成)
+- [图片编辑](#图片编辑)
 - [JSON Prompt 格式](#json-prompt-格式)
 - [图片分析](#图片分析)
 - [Prompt 知识图谱（KG）](#prompt-知识图谱kg)
@@ -31,7 +32,7 @@ opc image list
 opc image info <alias>
 ```
 
-常用别名：`ernie-turbo`（8步快速生成）、`ernie-full`（50步高质量，中文文字渲染强）、`qwen-image`、`z-image`。
+常用别名：`ernie-turbo`（8步快速生成）、`ernie-full`（50步高质量，中文文字渲染强）、`qwen-image`、`z-image`、`klein`（Flux2-Klein-9B）、`ideogram4`（Ideogram 4）、`klein-edit`（Klein 图片编辑）。
 
 **ERNIE-Image 可用参数：**
 
@@ -53,6 +54,9 @@ opc image -w ernie-turbo -p "a cat sitting on a windowsill"
 # 自定义分辨率和种子
 opc image -w ernie-turbo -p "a cat" -P width=1376 -P height=768 -P seed=42
 
+# Ideogram 4，支持 Quality / Default / Turbo preset
+opc image -w ideogram4 --text -p "bold cinematic poster, clean typography" -P quality=Turbo
+
 # 使用 JSON 结构化 prompt（推荐）
 opc image -w ernie-full -p '{"subject":"美食摄影","style":"photography","mood":"warm","text_content":{"type":"title","content":"秋日味道","position":"top_center"}}'
 
@@ -64,6 +68,44 @@ opc image test ernie-turbo -p "test image"
 - `-w, --workflow` — 工作流别名
 - `-p, --prompt` — 提示词（纯文本或 JSON）
 - `-P, --param` — 工作流参数 `key=value`，可多次使用
+
+## 图片编辑
+
+基于 ComfyUI 工作流的图片编辑，支持单图/多图输入，默认使用 `klein-edit` 工作流。
+
+```bash
+# 基础编辑
+opc image-edit --image photo.png -p "add a red hat to the person"
+
+# 指定工作流
+opc image-edit -w klein-edit --image photo.png -p "make it look like a painting"
+
+# 多图输入（融合、对比等）
+opc image-edit --image ref1.png --image ref2.png -p "blend these two images"
+
+# JSON 结构化 prompt
+opc image-edit --image input.jpg -p '{"subject":"add snow","style":"winter"}'
+
+# 覆盖参数
+opc image-edit --image photo.png -p "add sunset" --param steps=30 --param seed=42
+```
+
+**参数：**
+- `-w, --workflow` — 工作流别名（默认 `klein-edit`）
+- `--image, -i` — 输入图片路径（可多次指定）
+- `-p, --prompt` — 编辑指令（必需）
+- `-P, --param` — 工作流参数 `key=value`
+- `--text` — 将 prompt 当作纯文本（而非 JSON）
+
+**klein-edit 可用参数：**
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `prompt` | string | (必需) | 编辑指令 |
+| `negative_prompt` | string | | 负面提示词 |
+| `steps` | int | 20 | 采样步数 |
+| `cfg` | float | 5 | CFG 引导强度 |
+| `seed` | int | -1 | 随机种子 |
 
 ## JSON Prompt 格式（默认格式）
 
@@ -439,13 +481,39 @@ templates/
 
 ## 评估系统
 
-多模型对比评估框架，结果存储在 `scripts/image/eval/`。
+多模型对比评估框架，支持增量执行和实时进度。
+
+**数据目录：** `~/.opc_cli/opc/eval/`
+- `prompts/` — 测试集（82 个 JSON prompt 文件）
+- `results/<alias>/` — 每个模型的生成结果和 `results.json`
+
+### 命令行
 
 ```bash
-# Dashboard 可视化对比：访问 /evaluate
+# 查看状态
+uv run --project ~/.claude/skills/opc-cli python scripts/image/eval_runner.py --list
+
+# 跑缺失的测试（所有模型）
+uv run --project ~/.claude/skills/opc-cli python scripts/image/eval_runner.py
+
+# 只跑某个模型
+uv run --project ~/.claude/skills/opc-cli python scripts/image/eval_runner.py --model klein
+
+# 重跑特定 prompt（子串匹配）
+uv run --project ~/.claude/skills/opc-cli python scripts/image/eval_runner.py --rerun xian_food
+
+# 重跑所有失败的
+uv run --project ~/.claude/skills/opc-cli python scripts/image/eval_runner.py --rerun
+
+# 全部重跑
+uv run --project ~/.claude/skills/opc-cli python scripts/image/eval_runner.py --rerun-all
+
+# 覆盖分辨率
+uv run --project ~/.claude/skills/opc-cli python scripts/image/eval_runner.py --model klein --resolution 1024x1344
 ```
 
-**API 端点：**
-- `GET /api/eval/results/:alias` — 获取评估结果
-- `GET /api/eval/image/:alias/:filename` — 获取评估图片
-- `GET /api/eval/prompts` — 获取评估 prompt 列表
+**参数：** `--model/-m` 指定模型、`--list/-l` 状态汇总、`--rerun/-r [PROMPT]` 重跑、`--rerun-all` 全部重跑、`--resolution/-R WxH` 覆盖分辨率
+
+### Dashboard 对比
+
+访问 `/evaluate` 可视化对比各模型结果，支持选择最多 3 个工作流。

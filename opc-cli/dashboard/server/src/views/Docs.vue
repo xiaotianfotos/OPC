@@ -92,6 +92,48 @@
               </li>
             </ul>
           </div>
+
+          <div class="nav-section">
+            <div class="nav-title">Image 命令</div>
+            <ul class="nav-list">
+              <li class="nav-item">
+                <a href="#image" @click.prevent="scrollToSection">
+                  <span class="command">opc image</span>
+                  <span class="desc">AI 图片生成</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#image-kg" @click.prevent="scrollToSection">
+                  <span class="command">opc image kg</span>
+                  <span class="desc">Prompt 知识图谱</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#image-edit" @click.prevent="scrollToSection">
+                  <span class="command">opc image-edit</span>
+                  <span class="desc">图片编辑</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-title">Audio 命令</div>
+            <ul class="nav-list">
+              <li class="nav-item">
+                <a href="#audio-compress" @click.prevent="scrollToSection">
+                  <span class="command">opc audio compress</span>
+                  <span class="desc">音频压缩</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#audio-analyze" @click.prevent="scrollToSection">
+                  <span class="command">opc audio analyze</span>
+                  <span class="desc">响度分析</span>
+                </a>
+              </li>
+            </ul>
+          </div>
         </nav>
       </aside>
 
@@ -815,6 +857,411 @@ Cloud Code,Claude Code
           </div>
         </div>
 
+        <!-- opc image -->
+        <h2 id="image">opc image</h2>
+        <p>AI 图片生成与管理工作流。通过 ComfyUI 驱动多模型生成图片，支持 JSON 结构化 Prompt、知识图谱和画廊管理。</p>
+
+        <h3>子命令</h3>
+        <table>
+          <thead>
+            <tr><th>命令</th><th>说明</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>opc image list</code></td><td>列出可用工作流</td></tr>
+            <tr><td><code>opc image info &lt;alias&gt;</code></td><td>查看工作流参数详情</td></tr>
+            <tr><td><code>opc image import &lt;file&gt; --name &lt;alias&gt;</code></td><td>导入工作流 JSON</td></tr>
+            <tr><td><code>opc image test &lt;alias&gt; --prompt &lt;text&gt;</code></td><td>测试工作流连通性</td></tr>
+            <tr><td><code>opc image analyze &lt;file&gt;</code></td><td>分析工作流或描述图片</td></tr>
+            <tr><td><code>opc image -w &lt;alias&gt; -p &lt;prompt&gt;</code></td><td>生成图片（默认操作）</td></tr>
+          </tbody>
+        </table>
+
+        <h3>用法 — 生成图片</h3>
+        <pre><code>opc image <span class="code-flag">-w</span> <span class="code-arg">&lt;workflow&gt;</span> <span class="code-flag">-p</span> <span class="code-arg">&lt;prompt&gt;</span> [<span class="code-flag">options</span>]</code></pre>
+
+        <h3>参数</h3>
+        <div class="param-list">
+          <div class="param-item">
+            <div>
+              <div class="param-name">-w, --workflow</div>
+              <div class="param-meta"><span class="tag tag-required">必需</span></div>
+            </div>
+            <div class="param-desc">工作流别名</div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">-p, --prompt</div>
+              <div class="param-meta"><span class="tag tag-required">必需</span></div>
+            </div>
+            <div>
+              <div class="param-desc">Prompt，默认 JSON 结构化格式。使用 <code>--text</code> 切换纯文本模式</div>
+            </div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">--text</div>
+              <div class="param-meta"><span class="tag tag-optional">可选</span></div>
+            </div>
+            <div class="param-desc">将 prompt 视为纯文本（不解析 JSON）</div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">-P, --param</div>
+              <div class="param-meta"><span class="tag tag-optional">可选</span></div>
+            </div>
+            <div class="param-desc">覆盖工作流参数，格式 <code>key=value</code></div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">-o, --output</div>
+              <div class="param-meta"><span class="tag tag-optional">可选</span></div>
+            </div>
+            <div class="param-desc">输出目录（覆盖配置）</div>
+          </div>
+        </div>
+
+        <h3>示例</h3>
+        <div class="command-block">
+          <div class="command-header">
+            <div class="command-dot" style="background: var(--accent-cyan);"></div>
+            <span class="command-title">列出工作流</span>
+          </div>
+          <div class="command-body">
+            <div class="command-line">
+              <span class="command-prompt">$</span>
+              <span class="command-text">opc image list</span>
+            </div>
+            <div class="command-output">ernie-turbo          ERNIE-Image 快速模式<br>ernie-full           ERNIE-Image 完整模式<br>klein                Klein 超分辨率</div>
+          </div>
+        </div>
+
+        <div class="command-block">
+          <div class="command-header">
+            <div class="command-dot" style="background: var(--accent-purple);"></div>
+            <span class="command-title">JSON 结构化 Prompt 生成</span>
+          </div>
+          <div class="command-body">
+            <div class="command-line">
+              <span class="command-prompt">$</span>
+              <span class="command-text">opc image -w ernie-turbo -p '{"subject":"美食摄影","style":"photography"}'</span>
+            </div>
+            <div class="command-output">Generated: ernie-turbo_001.png</div>
+          </div>
+        </div>
+
+        <div class="command-block">
+          <div class="command-header">
+            <div class="command-dot" style="background: var(--accent-pink);"></div>
+            <span class="command-title">分析图片</span>
+          </div>
+          <div class="command-body">
+            <div class="command-line">
+              <span class="command-prompt">$</span>
+              <span class="command-text">opc image analyze output.png --describe</span>
+            </div>
+            <div class="command-output">Analyzing image with vision model...<br>{"description": "A digital art piece featuring..."}</div>
+          </div>
+        </div>
+
+        <div class="note">
+          <div class="note-title">JSON Prompt 优势</div>
+          <p>JSON 结构化 Prompt 相比纯文本可提升 8-15% CLIP 得分、降低 20-30% FID。支持自动注入 negative prompt、语义 token 权重和多主体隔离。</p>
+        </div>
+
+        <!-- opc image kg -->
+        <h2 id="image-kg">opc image kg</h2>
+        <p>Prompt 知识图谱引擎。涵盖风格、主体、光线等 8 大分类，支持搜索、搭配推荐和 Prompt 骨架生成。</p>
+
+        <h3>子命令</h3>
+        <table>
+          <thead>
+            <tr><th>命令</th><th>说明</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>opc image kg list [--category CAT]</code></td><td>列出所有实体分类</td></tr>
+            <tr><td><code>opc image kg info &lt;entity&gt;</code></td><td>实体详情与关联</td></tr>
+            <tr><td><code>opc image kg search &lt;keyword&gt;</code></td><td>模糊搜索实体</td></tr>
+            <tr><td><code>opc image kg query &lt;entity&gt;</code></td><td>查询搭配推荐</td></tr>
+            <tr><td><code>opc image kg skeleton &lt;e1&gt; [e2] ...</code></td><td>生成 Prompt 骨架</td></tr>
+            <tr><td><code>opc image kg validate &lt;e1&gt; &lt;e2&gt; ...</code></td><td>验证实体组合</td></tr>
+            <tr><td><code>opc image kg similar &lt;e1&gt; [e2] ...</code></td><td>查找相似 Prompt</td></tr>
+            <tr><td><code>opc image kg templates [--entity E]</code></td><td>列出模板或按实体查找</td></tr>
+          </tbody>
+        </table>
+
+        <h3>示例</h3>
+        <div class="command-block">
+          <div class="command-header">
+            <div class="command-dot" style="background: var(--accent-cyan);"></div>
+            <span class="command-title">生成 Prompt 骨架</span>
+          </div>
+          <div class="command-body">
+            <div class="command-line">
+              <span class="command-prompt">$</span>
+              <span class="command-text">opc image kg skeleton subject:food lighting:neon</span>
+            </div>
+            <div class="command-output">{"subject": "food", "lighting": "neon", "style": "photography", ...}</div>
+          </div>
+        </div>
+
+        <div class="command-block">
+          <div class="command-header">
+            <div class="command-dot" style="background: var(--accent-purple);"></div>
+            <span class="command-title">查询搭配推荐</span>
+          </div>
+          <div class="command-body">
+            <div class="command-line">
+              <span class="command-prompt">$</span>
+              <span class="command-text">opc image kg query style:cyberpunk</span>
+            </div>
+            <div class="command-output">[{"entity": "lighting:neon", "count": 45}, {"entity": "mood:dystopian", "count": 32}]</div>
+          </div>
+        </div>
+
+        <!-- opc image-edit -->
+        <h2 id="image-edit">opc image-edit</h2>
+        <p>AI 图片编辑。通过 ComfyUI 工作流实现图片修改，支持局部编辑、风格迁移和多图混合。</p>
+
+        <h3>用法</h3>
+        <pre><code>opc image-edit <span class="code-flag">--image</span> <span class="code-arg">&lt;path&gt;</span> <span class="code-flag">-p</span> <span class="code-arg">&lt;instruction&gt;</span> [<span class="code-flag">options</span>]</code></pre>
+
+        <h3>参数</h3>
+        <div class="param-list">
+          <div class="param-item">
+            <div>
+              <div class="param-name">--image, -i</div>
+              <div class="param-meta"><span class="tag tag-required">必需</span></div>
+            </div>
+            <div class="param-desc">输入图片路径（可多次指定）</div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">-p, --prompt</div>
+              <div class="param-meta"><span class="tag tag-required">必需</span></div>
+            </div>
+            <div class="param-desc">编辑指令描述</div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">-w, --workflow</div>
+              <div class="param-meta"><span class="tag tag-optional">可选</span></div>
+            </div>
+            <div>
+              <div class="param-desc">工作流别名</div>
+              <div class="param-default">默认: klein-edit</div>
+            </div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">--text</div>
+              <div class="param-meta"><span class="tag tag-optional">可选</span></div>
+            </div>
+            <div class="param-desc">将 prompt 视为纯文本</div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">-P, --param</div>
+              <div class="param-meta"><span class="tag tag-optional">可选</span></div>
+            </div>
+            <div class="param-desc">覆盖工作流参数 key=value</div>
+          </div>
+        </div>
+
+        <h3>示例</h3>
+        <div class="command-block">
+          <div class="command-header">
+            <div class="command-dot" style="background: var(--accent-cyan);"></div>
+            <span class="command-title">基础编辑</span>
+          </div>
+          <div class="command-body">
+            <div class="command-line">
+              <span class="command-prompt">$</span>
+              <span class="command-text">opc image-edit --image photo.png -p "add a red hat to the person"</span>
+            </div>
+            <div class="command-output">Uploading image 1/1: photo.png → input_photo.png<br>Generated: klein-edit_001.png</div>
+          </div>
+        </div>
+
+        <div class="command-block">
+          <div class="command-header">
+            <div class="command-dot" style="background: var(--accent-purple);"></div>
+            <span class="command-title">多图混合</span>
+          </div>
+          <div class="command-body">
+            <div class="command-line">
+              <span class="command-prompt">$</span>
+              <span class="command-text">opc image-edit --image ref1.png --image ref2.png -p "blend these two images"</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- opc audio compress -->
+        <h2 id="audio-compress">opc audio compress</h2>
+        <p>音频动态范围压缩。基于 ffmpeg acompressor 滤镜，支持专业级参数控制和内置预设。</p>
+
+        <h3>用法</h3>
+        <pre><code>opc audio compress <span class="code-arg">&lt;input&gt;</span> [<span class="code-flag">options</span>]</code></pre>
+
+        <h3>参数</h3>
+        <div class="param-list">
+          <div class="param-item">
+            <div>
+              <div class="param-name">input</div>
+              <div class="param-meta"><span class="tag tag-required">必需</span></div>
+            </div>
+            <div class="param-desc">输入音频文件 (mp3, wav, flac 等)</div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">-o, --output</div>
+              <div class="param-meta"><span class="tag tag-optional">可选</span></div>
+            </div>
+            <div class="param-desc">输出文件路径（默认自动生成）</div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">--preset</div>
+              <div class="param-meta"><span class="tag tag-optional">可选</span></div>
+            </div>
+            <div>
+              <div class="param-desc">预设: <code>voice</code> | <code>music</code> | <code>limiter</code> | <code>punch</code> | <code>gentle</code></div>
+            </div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">-t, --threshold</div>
+              <div class="param-meta"><span class="tag tag-optional">可选</span></div>
+            </div>
+            <div>
+              <div class="param-desc">阈值 (dB)</div>
+              <div class="param-default">默认: -20.0</div>
+            </div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">-r, --ratio</div>
+              <div class="param-meta"><span class="tag tag-optional">可选</span></div>
+            </div>
+            <div>
+              <div class="param-desc">压缩比</div>
+              <div class="param-default">默认: 4.0</div>
+            </div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">-a, --attack</div>
+              <div class="param-meta"><span class="tag tag-optional">可选</span></div>
+            </div>
+            <div>
+              <div class="param-desc">启动时间 (ms)</div>
+              <div class="param-default">默认: 10.0</div>
+            </div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">--release</div>
+              <div class="param-meta"><span class="tag tag-optional">可选</span></div>
+            </div>
+            <div>
+              <div class="param-desc">释放时间 (ms)</div>
+              <div class="param-default">默认: 130.0</div>
+            </div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">--knee</div>
+              <div class="param-meta"><span class="tag tag-optional">可选</span></div>
+            </div>
+            <div>
+              <div class="param-desc">拐点宽度 (dB)</div>
+              <div class="param-default">默认: 0.0</div>
+            </div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">--makeup</div>
+              <div class="param-meta"><span class="tag tag-optional">可选</span></div>
+            </div>
+            <div>
+              <div class="param-desc">补偿增益 (dB)</div>
+              <div class="param-default">默认: 0.0</div>
+            </div>
+          </div>
+          <div class="param-item">
+            <div>
+              <div class="param-name">--mix</div>
+              <div class="param-meta"><span class="tag tag-optional">可选</span></div>
+            </div>
+            <div>
+              <div class="param-desc">干湿混合比 (0-1)</div>
+              <div class="param-default">默认: 1.0</div>
+            </div>
+          </div>
+        </div>
+
+        <h3>预设说明</h3>
+        <table>
+          <thead>
+            <tr><th>预设</th><th>说明</th><th>阈值</th><th>比例</th><th>启动</th><th>释放</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>voice</code></td><td>人声优化</td><td>-20 dB</td><td>4:1</td><td>10ms</td><td>130ms</td></tr>
+            <tr><td><code>music</code></td><td>音乐轻压缩</td><td>-18 dB</td><td>2.5:1</td><td>15ms</td><td>200ms</td></tr>
+            <tr><td><code>limiter</code></td><td>硬限制器</td><td>-6 dB</td><td>20:1</td><td>1ms</td><td>50ms</td></tr>
+            <tr><td><code>punch</code></td><td>打击乐冲击</td><td>-12 dB</td><td>6:1</td><td>3ms</td><td>80ms</td></tr>
+            <tr><td><code>gentle</code></td><td>极轻压缩</td><td>-24 dB</td><td>1.8:1</td><td>30ms</td><td>300ms</td></tr>
+          </tbody>
+        </table>
+
+        <h3>示例</h3>
+        <div class="command-block">
+          <div class="command-header">
+            <div class="command-dot" style="background: var(--accent-cyan);"></div>
+            <span class="command-title">使用预设</span>
+          </div>
+          <div class="command-body">
+            <div class="command-line">
+              <span class="command-prompt">$</span>
+              <span class="command-text">opc audio compress podcast.mp3 --preset voice</span>
+            </div>
+            <div class="command-output">Using preset: voice<br>Parameters: threshold=-20.0dB, ratio=4.0:1, attack=10.0ms, release=130.0ms<br>Compressed: podcast_compressed.mp3</div>
+          </div>
+        </div>
+
+        <div class="command-block">
+          <div class="command-header">
+            <div class="command-dot" style="background: var(--accent-purple);"></div>
+            <span class="command-title">自定义参数</span>
+          </div>
+          <div class="command-body">
+            <div class="command-line">
+              <span class="command-prompt">$</span>
+              <span class="command-text">opc audio compress input.mp3 -t -18 -r 3 -a 15 --release 200 --knee 3</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- opc audio analyze -->
+        <h2 id="audio-analyze">opc audio analyze</h2>
+        <p>分析音频响度指标。使用 ffmpeg ebur128 滤镜测量 LUFS 响度和动态范围。</p>
+
+        <h3>用法</h3>
+        <pre><code>opc audio analyze <span class="code-arg">&lt;input&gt;</span></code></pre>
+
+        <div class="command-block">
+          <div class="command-header">
+            <div class="command-dot" style="background: var(--accent-cyan);"></div>
+            <span class="command-title">示例</span>
+          </div>
+          <div class="command-body">
+            <div class="command-line">
+              <span class="command-prompt">$</span>
+              <span class="command-text">opc audio analyze podcast.mp3</span>
+            </div>
+            <div class="command-output">Analyzing: podcast.mp3<br>  Integrated loudness: -18.1 LUFS<br>  Loudness range:      10.5 LU<br>  True peak:           -1.2 dB</div>
+          </div>
+        </div>
+
         <!-- opc config -->
         <h2 id="config-cmd">opc config</h2>
         <p>查看和管理配置。</p>
@@ -880,6 +1327,17 @@ Cloud Code,Claude Code
             <tr><td><code>--set-asr-model-size</code></td><td>设置 ASR 模型大小</td></tr>
             <tr><td><code>--set-asr-language</code></td><td>设置 ASR 默认语言</td></tr>
             <tr><td><code>--set-workspace</code></td><td>设置工作目录</td></tr>
+            <tr><td><code>--set-format</code></td><td>设置默认输出格式 (mp3/wav)</td></tr>
+            <tr><td><code>--set-language</code></td><td>设置默认语言</td></tr>
+            <tr><td><code>--set-comfyui-host</code></td><td>设置 ComfyUI 服务器地址</td></tr>
+            <tr><td><code>--set-comfyui-port</code></td><td>设置 ComfyUI 端口</td></tr>
+            <tr><td><code>--set-image-output-dir</code></td><td>设置图片输出目录</td></tr>
+            <tr><td><code>--set-vision-api-url</code></td><td>设置视觉模型 API URL</td></tr>
+            <tr><td><code>--set-vision-model</code></td><td>设置视觉模型名称</td></tr>
+            <tr><td><code>--set-dashboard-host</code></td><td>设置 Dashboard 监听地址</td></tr>
+            <tr><td><code>--set-dashboard-port</code></td><td>设置 Dashboard 端口</td></tr>
+            <tr><td><code>--set-backend</code></td><td>强制计算后端 (cuda/mlx)</td></tr>
+            <tr><td><code>--set-model-source</code></td><td>设置模型下载源</td></tr>
           </tbody>
         </table>
 

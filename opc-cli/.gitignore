@@ -17,7 +17,9 @@ node_modules/
 test_*.py
 
 # Data directories — loaded from ~/.opc_cli/opc/ at runtime
-scripts/image/workflows/
+scripts/image/workflows/*
+!scripts/image/workflows/image_ideogram4_t2i.json
+!scripts/image/workflows/image_ideogram4_t2i.meta.json
 scripts/image/templates/
 scripts/image/examples/
 scripts/image/eval/prompts/

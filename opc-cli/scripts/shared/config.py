@@ -53,6 +53,11 @@ DEFAULT_CONFIG = {
     "vision_api_url": "",
     "vision_api_key": "",  # leave empty for local models
     "vision_model": "",
+    # video description model (can reuse vision API or use a separate provider)
+    "video_desc_api_url": "",  # fallback to vision_api_url if not set
+    "video_desc_api_key": "",  # fallback to vision_api_key if not set
+    "video_desc_model": "",    # fallback to vision_model if not set
+    "video_desc_max_frames": 8,
 }
 
 

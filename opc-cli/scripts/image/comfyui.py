@@ -100,6 +100,42 @@ def download_images(history_result, server_url, output_dir, filename_prefix="opc
     return saved
 
 
+def upload_image(image_path, server_url, overwrite=True):
+    """Upload a local image file to ComfyUI's input directory.
+
+    Returns the filename as stored in ComfyUI's input folder.
+    """
+    import mimetypes
+    path = Path(image_path)
+    if not path.exists():
+        raise FileNotFoundError(f"Image not found: {image_path}")
+
+    filename = path.name
+    mime = mimetypes.guess_type(str(path))[0] or "image/png"
+
+    boundary = "----FormBoundary7MA4YWxkTrZu0gW"
+    body_parts = []
+    body_parts.append(f"--{boundary}\r\n"
+                      f"Content-Disposition: form-data; name=\"image\"; filename=\"{filename}\"\r\n"
+                      f"Content-Type: {mime}\r\n\r\n".encode("utf-8"))
+    body_parts.append(path.read_bytes())
+    body_parts.append(f"\r\n--{boundary}\r\n"
+                      f"Content-Disposition: form-data; name=\"overwrite\"\r\n\r\n"
+                      f"{'true' if overwrite else 'false'}\r\n"
+                      f"--{boundary}--\r\n".encode("utf-8"))
+
+    data = b"".join(body_parts)
+    req = urllib.request.Request(
+        f"{server_url}/upload/image",
+        data=data,
+        headers={"Content-Type": f"multipart/form-data; boundary={boundary}"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req) as resp:
+        result = json.loads(resp.read().decode("utf-8"))
+    return result.get("name", filename)
+
+
 def generate_image(workflow, cfg, filename_prefix="opc_image", prompt="",
                    register_gallery=True):
     server_url = get_server_url(cfg)

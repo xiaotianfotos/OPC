@@ -1,6 +1,6 @@
-# opc - TTS & ASR 语音工具
+# opc - 多模态 AI 创作 CLI
 
-**描述:** 多引擎 TTS 命令行工具，支持 edge-tts（微软在线）和 Qwen3-TTS（本地模型）。支持 AirPlay 和 DLNA 设备播放。
+**描述:** 集成 TTS、ASR、音频处理、ComfyUI 图片生成/编辑、图生视频、视频理解与剪辑的多模态命令行工具。
 **ASR 功能:** 基于 Qwen3-ASR 的语音识别与强制对齐，4 阶段 Pipeline 架构生成 SRT/ASS 卡拉 OK 字幕。
 **跨平台:** Linux 用 CUDA (NVIDIA GPU)，macOS 用 MLX (Apple Silicon)，命令行完全一致。
 
@@ -48,6 +48,12 @@ uv run python scripts/opc.py say "你好，世界！"
 
 # 查看配置
 uv run python scripts/opc.py config --show
+
+# 查看本机图片/视频工作流
+uv run python scripts/opc.py image list
+
+# LTX 图生视频（需要对应 ComfyUI 工作流）
+uv run python scripts/opc.py video-gen i2v --image frame.png -p "slow camera push-in"
 ```
 
 ## TTS 命令

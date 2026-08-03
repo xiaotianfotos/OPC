@@ -27,6 +27,10 @@ function resolveOutputDir() {
   return os.tmpdir();
 }
 
+function resolveEvalResultsDir() {
+  return path.join(GALLERY_DIR, 'eval', 'results');
+}
+
 function ensureGalleryFile() {
   if (!fs.existsSync(GALLERY_DIR)) {
     fs.mkdirSync(GALLERY_DIR, { recursive: true });
@@ -62,6 +66,12 @@ function readPngDimensions(filepath) {
 }
 
 function resolveImagePath(entry) {
+  if (entry.filepath && path.isAbsolute(entry.filepath)) {
+    return entry.filepath;
+  }
+  if (entry.base_dir && entry.filepath) {
+    return path.join(entry.base_dir, entry.filepath);
+  }
   const outputDir = resolveOutputDir();
   return path.join(outputDir, entry.filepath);
 }
@@ -132,38 +142,44 @@ router.get('/image/:id', (req, res) => {
 // POST /api/gallery/scan — scan output dir for new images
 router.post('/scan', (req, res) => {
   const outputDir = resolveOutputDir();
-  if (!fs.existsSync(outputDir)) {
+  const evalResultsDir = resolveEvalResultsDir();
+  if (!fs.existsSync(outputDir) && !fs.existsSync(evalResultsDir)) {
     return res.json({ added: 0, total: 0, error: 'Output directory not found' });
   }
 
   const data = readGallery();
-  const existing = new Set(data.images.map(img => img.filename));
+  const existingPaths = new Set(data.images.map(img => path.resolve(resolveImagePath(img))));
+  const existingFilenames = new Set(data.images.map(img => img.filename));
 
   const exts = new Set(['.png', '.jpg', '.jpeg', '.webp']);
   let added = 0;
 
-  const files = fs.readdirSync(outputDir).sort();
-  for (const fname of files) {
+  function addImage(fullPath, defaults = {}) {
+    const fname = path.basename(fullPath);
     const ext = path.extname(fname).toLowerCase();
-    if (!exts.has(ext)) continue;
-    if (existing.has(fname)) continue;
+    if (!exts.has(ext)) return;
+    const resolved = path.resolve(fullPath);
+    if (existingPaths.has(resolved)) return;
+    if (!defaults.base_dir && existingFilenames.has(fname)) return;
 
-    const fullPath = path.join(outputDir, fname);
     const stat = fs.statSync(fullPath);
-    if (!stat.isFile()) continue;
+    if (!stat.isFile()) return;
 
     const parts = path.basename(fname, ext).split('_');
-    const alias = parts.length > 1 ? parts[0] : '';
+    const alias = defaults.alias || (parts.length > 1 ? parts[0] : '');
 
     const entry = {
       id: `g_${uuidv4().replace(/-/g, '').slice(0, 12)}`,
       filename: fname,
-      filepath: fname,
-      prompt: '',
+      filepath: defaults.filepath || fname,
+      prompt: defaults.prompt || '',
       alias,
+      source: defaults.source || 'output',
+      base_dir: defaults.base_dir,
       created_at: stat.mtime.toISOString(),
       file_size: stat.size,
     };
+    if (!entry.base_dir) delete entry.base_dir;
 
     const dims = readPngDimensions(fullPath);
     if (dims) {
@@ -172,7 +188,48 @@ router.post('/scan', (req, res) => {
     }
 
     data.images.push(entry);
+    existingPaths.add(resolved);
+    existingFilenames.add(fname);
     added++;
+  }
+
+  if (fs.existsSync(outputDir)) {
+    const files = fs.readdirSync(outputDir).sort();
+    for (const fname of files) {
+      addImage(path.join(outputDir, fname));
+    }
+  }
+
+  if (fs.existsSync(evalResultsDir)) {
+    for (const alias of fs.readdirSync(evalResultsDir).sort()) {
+      const modelDir = path.join(evalResultsDir, alias);
+      if (!fs.statSync(modelDir).isDirectory()) continue;
+
+      const resultsPath = path.join(modelDir, 'results.json');
+      const promptByFile = {};
+      if (fs.existsSync(resultsPath)) {
+        try {
+          const resultsData = JSON.parse(fs.readFileSync(resultsPath, 'utf-8'));
+          for (const item of resultsData.results || []) {
+            if (item.file && item.status === 'ok') {
+              promptByFile[item.file] = item.positive_preview || item.prompt || item.prompt_id || '';
+            }
+          }
+        } catch (e) { /* ignore invalid eval metadata */ }
+      }
+
+      for (const fname of fs.readdirSync(modelDir).sort()) {
+        const fullPath = path.join(modelDir, fname);
+        if (!fs.statSync(fullPath).isFile()) continue;
+        addImage(fullPath, {
+          alias,
+          source: 'eval',
+          base_dir: modelDir,
+          filepath: fname,
+          prompt: promptByFile[fname] || '',
+        });
+      }
+    }
   }
 
   if (added) writeGallery(data);

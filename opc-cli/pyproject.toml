@@ -15,6 +15,7 @@ dependencies = [
     "flask-cors",
     "modelscope",
     "huggingface_hub",
+    "yt-dlp",
 
     # ── Linux + NVIDIA GPU (CUDA 12.4) ──
     "torch>=2.5.0,<2.10.0; sys_platform == 'linux'",
@@ -33,8 +34,15 @@ opc = "scripts.opc:main"
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = ["scripts"]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["scripts*"]
+
+[tool.setuptools.package-data]
+"scripts.image" = [
+    "workflows/image_ideogram4_t2i.json",
+    "workflows/image_ideogram4_t2i.meta.json",
+]
 
 [tool.setuptools.exclude-package-data]
 "scripts.cut" = ["test_*.py"]
