@@ -44,6 +44,10 @@ DEFAULT_CONFIG = {
     # cut defaults
     "cut_video": "",
     "cut_json": "",
+    # comfyui / video defaults
+    "comfyui_host": "127.0.0.1",
+    "comfyui_port": 8188,
+    "video_output_dir": "",  # empty = reuse output_dir
 }
 
 

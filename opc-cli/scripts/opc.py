@@ -24,6 +24,8 @@ from tts.qwen_engine import tts_qwen, QWEN_MODELS, QWEN_SPEAKERS, QWEN_SPEAKER_I
 from asr.qwen_asr_engine import asr_transcribe, asr_align, result_to_dict, ASR_MODELS
 from asr.subtitle_gen import generate_srt, generate_ass_karaoke
 from asr.pipeline import run_pipeline, split_line_after, _load_lines, _save_lines, stage_check
+from video.comfyui import check_connection, generate_video, get_server_url, upload_file
+from video.h3 import WORKFLOWS as VIDEO_WORKFLOWS, build_h3_workflow, duration_to_frames
 
 
 # ── CLI Commands ──────────────────────────────────────────────────
@@ -379,6 +381,135 @@ def cmd_cut_start_server(args):
     cmd_cut(args)
 
 
+def cmd_video(args):
+    """Handle local ComfyUI video generation workflows."""
+    action = getattr(args, "video_action", None)
+    if action == "list":
+        for alias, meta in VIDEO_WORKFLOWS.items():
+            print(f"  {alias:20s} {meta['description']}")
+        print(f"\n{len(VIDEO_WORKFLOWS)} workflow(s) available.")
+        return
+    if action == "info":
+        meta = VIDEO_WORKFLOWS.get(args.alias)
+        if not meta:
+            print(f"Error: Unknown video workflow '{args.alias}'", file=sys.stderr)
+            sys.exit(1)
+        print(f"Alias: {args.alias}")
+        print(f"Description: {meta['description']}")
+        print(f"Inputs: {meta['inputs']}")
+        print("Defaults: 864x480, 5 seconds, 20 steps, 24 fps")
+        return
+    _cmd_video_generate(args)
+
+
+def _cmd_video_generate(args):
+    cfg = load_config()
+    alias = getattr(args, "alias", None)
+    if not alias:
+        print("Error: Specify --workflow. Use 'opc video list' for aliases.", file=sys.stderr)
+        sys.exit(1)
+
+    prompt = getattr(args, "prompt", None)
+    if getattr(args, "prompt_file", None):
+        try:
+            with open(args.prompt_file, "r", encoding="utf-8") as prompt_file:
+                prompt = prompt_file.read().strip()
+        except OSError as error:
+            print(f"Error: {error}", file=sys.stderr)
+            sys.exit(1)
+    if getattr(args, "stdin", False):
+        prompt = sys.stdin.read().strip()
+    if not prompt:
+        print("Error: Provide --prompt, --prompt-file, or --stdin.", file=sys.stderr)
+        sys.exit(1)
+
+    media_args = []
+    if getattr(args, "first_frame", None):
+        media_args.append(("first_frame", args.first_frame))
+    if getattr(args, "last_frame", None):
+        media_args.append(("last_frame", args.last_frame))
+    media_args.extend(
+        ("reference_image", path)
+        for path in (getattr(args, "reference_image", None) or [])
+    )
+    media_args.extend(
+        ("reference_video", path)
+        for path in (getattr(args, "reference_video", None) or [])
+    )
+    media_args.extend(
+        ("reference_audio", path)
+        for path in (getattr(args, "reference_audio", None) or [])
+    )
+    for _, media_path in media_args:
+        if not os.path.isfile(media_path):
+            print(f"Error: Input file not found: {media_path}", file=sys.stderr)
+            sys.exit(1)
+
+    try:
+        if args.dry_run:
+            uploaded = {}
+            for key, media_path in media_args:
+                if key.startswith("reference_"):
+                    uploaded.setdefault(key, []).append(Path(media_path).name)
+                else:
+                    uploaded[key] = Path(media_path).name
+        else:
+            if not check_connection(cfg):
+                raise ConnectionError(f"Cannot connect to ComfyUI at {get_server_url(cfg)}")
+            uploaded = {}
+            for key, media_path in media_args:
+                remote_name = upload_file(media_path, get_server_url(cfg))
+                if key.startswith("reference_"):
+                    uploaded.setdefault(key, []).append(remote_name)
+                else:
+                    uploaded[key] = remote_name
+
+        workflow = build_h3_workflow(
+            alias=alias,
+            prompt=prompt,
+            width=args.width,
+            height=args.height,
+            duration=args.duration,
+            steps=args.steps,
+            seed=args.seed,
+            first_frame=uploaded.get("first_frame"),
+            last_frame=uploaded.get("last_frame"),
+            reference_images=uploaded.get("reference_image", []),
+            reference_videos=uploaded.get("reference_video", []),
+            reference_audios=uploaded.get("reference_audio", []),
+            include_reference_video_audio=args.reference_video_audio,
+            ref_image_size=args.ref_image_size,
+            upscale=args.upscale,
+            upscale_factor=args.upscale_factor,
+        )
+        if args.dry_run:
+            print(json.dumps(workflow, indent=2, ensure_ascii=False))
+            return
+
+        result = generate_video(
+            workflow,
+            cfg,
+            filename_prefix=alias.replace("-", "_"),
+            output_dir=args.output,
+        )
+        result.update({
+            "workflow": alias,
+            "resolution": f"{args.width}x{args.height}",
+            "duration_seconds": args.duration,
+            "frames": duration_to_frames(args.duration),
+            "steps": args.steps,
+        })
+        if args.upscale or alias == "h3-t2v-upscale":
+            result["upscaled_resolution"] = (
+                f"{int(args.width * args.upscale_factor)}x"
+                f"{int(args.height * args.upscale_factor)}"
+            )
+        print(json.dumps(result, ensure_ascii=False))
+    except (OSError, ValueError, RuntimeError, ConnectionError) as error:
+        print(f"Error: {error}", file=sys.stderr)
+        sys.exit(1)
+
+
 def cmd_config(args):
     """Handle 'opc config' command."""
     if args.set_engine:
@@ -441,6 +572,15 @@ def cmd_config(args):
     if args.set_model_cache_dir:
         save_config("model_cache_dir", args.set_model_cache_dir)
         print(f"model_cache_dir = {args.set_model_cache_dir}")
+    if args.set_comfyui_host:
+        save_config("comfyui_host", args.set_comfyui_host)
+        print(f"comfyui_host = {args.set_comfyui_host}")
+    if args.set_comfyui_port:
+        save_config("comfyui_port", args.set_comfyui_port)
+        print(f"comfyui_port = {args.set_comfyui_port}")
+    if args.set_video_output_dir:
+        save_config("video_output_dir", args.set_video_output_dir)
+        print(f"video_output_dir = {args.set_video_output_dir}")
     if args.show:
         # Show backend info alongside config
         backend = get_backend()
@@ -627,6 +767,12 @@ examples:
                         help="Model download source. (default: modelscope)")
     p_conf.add_argument("--set-model-cache-dir", metavar="PATH",
                         help="Model cache directory for downloads. Leave empty for default.")
+    p_conf.add_argument("--set-comfyui-host", metavar="HOST",
+                        help="Set ComfyUI server host (default: 127.0.0.1)")
+    p_conf.add_argument("--set-comfyui-port", type=int, metavar="PORT",
+                        help="Set ComfyUI server port (default: 8188)")
+    p_conf.add_argument("--set-video-output-dir", metavar="PATH",
+                        help="Set video output directory (empty = reuse output_dir)")
 
     # ── opc asr ──
     p_asr = subparsers.add_parser("asr", help="Speech recognition - transcribe audio to text or subtitles",
@@ -737,6 +883,78 @@ examples:
     p_cut_start.add_argument("--host", "-H", default=None, help="Server host")
     p_cut_start.add_argument("--no-browser", action="store_true", help="Do not open browser")
 
+    # ── opc video ──
+    p_video = subparsers.add_parser(
+        "video",
+        help="Generate videos with local ComfyUI workflows",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""\
+examples:
+  opc video list
+  opc video -w h3-t2v -p "A cinematic lake at sunrise" --width 864 --height 480 --duration 5
+  opc video -w h3-i2v -p "The camera pushes in" --first-frame first.png --last-frame last.png
+  opc video -w h3-r2v -p "Preserve the subject" --reference-image subject.png
+  opc video -w h3-r2v -p "Use <Video 1> motion and sound" --reference-video clip.mp4
+  opc video -w h3-r2v -p "Preserve the subject" --reference-image subject.png --upscale --upscale-factor 2
+""",
+    )
+    video_subparsers = p_video.add_subparsers(dest="video_action", help="Video sub-commands")
+    video_subparsers.add_parser("list", help="List available video workflows")
+    p_video_info = video_subparsers.add_parser("info", help="Show video workflow details")
+    p_video_info.add_argument("alias", help="Workflow alias name")
+    p_video.add_argument("--workflow", "-w", dest="alias", choices=sorted(VIDEO_WORKFLOWS))
+    p_video.add_argument("--prompt", "-p", help="Video prompt text")
+    p_video.add_argument("--prompt-file", help="Read the video prompt from a UTF-8 text file")
+    p_video.add_argument("--stdin", action="store_true", help="Read the video prompt from stdin")
+    p_video.add_argument("--width", type=int, default=864, help="Base width, multiple of 32 (default: 864)")
+    p_video.add_argument("--height", type=int, default=480, help="Base height, multiple of 32 (default: 480)")
+    p_video.add_argument("--duration", type=float, default=5, help="Duration in seconds, 5-15 (default: 5)")
+    p_video.add_argument("--steps", type=int, default=20, help="H3 sampling steps (default: 20)")
+    p_video.add_argument("--seed", type=int, default=-1, help="Seed; -1 selects a random seed")
+    p_video.add_argument("--first-frame", help="First frame image for h3-i2v")
+    p_video.add_argument("--last-frame", help="Optional last frame image for h3-i2v")
+    p_video.add_argument(
+        "--reference-image",
+        action="append",
+        help="Reference image for h3-r2v; repeat up to nine times",
+    )
+    p_video.add_argument(
+        "--reference-video",
+        action="append",
+        help="Reference video for h3-r2v; repeat up to three times (recommended: 2-15s at 24 fps)",
+    )
+    p_video.add_argument(
+        "--reference-audio",
+        action="append",
+        help="Standalone reference audio for h3-r2v; repeat up to three times",
+    )
+    p_video.add_argument(
+        "--reference-video-audio",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Use each reference video's soundtrack (default: enabled)",
+    )
+    p_video.add_argument(
+        "--ref-image-size",
+        choices=["match", "max"],
+        default="match",
+        help="Reference sizing: match is faster; max improves identity fidelity",
+    )
+    p_video.add_argument(
+        "--upscale",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Enable or disable SeedVR2 restoration/upscale (default: disabled)",
+    )
+    p_video.add_argument(
+        "--upscale-factor",
+        type=float,
+        default=2.0,
+        help="SeedVR2 scale factor, greater than 1 and at most 4 (default: 2)",
+    )
+    p_video.add_argument("--output", "-o", help="Directory for the downloaded MP4")
+    p_video.add_argument("--dry-run", action="store_true", help="Print the ComfyUI API workflow without running it")
+
     args = parser.parse_args()
     if not args.command:
         parser.print_help()
@@ -763,6 +981,8 @@ examples:
         else:
             # Direct call to cmd_cut (new behavior)
             cmd_cut(args)
+    elif args.command == "video":
+        cmd_video(args)
 
 
 if __name__ == "__main__":
