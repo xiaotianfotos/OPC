@@ -24,6 +24,10 @@ by the standard workflow.
 The safe test preset is `864x480`, 5 seconds, 20 steps. H3 converts five
 seconds to 124 frames on its required `17k+5` frame grid.
 
+EasyCache is enabled by default for every H3 workflow. The conservative
+default uses a `0.05` reuse threshold between 20% and 90% of the sampling
+schedule. Disable it for exact baseline comparisons with `--no-easy-cache`.
+
 ```bash
 opc config --set-comfyui-host 192.168.100.10
 opc config --set-comfyui-port 8188
@@ -32,6 +36,9 @@ opc config --set-video-output-dir /vol2/1000/temp/opc-video
 opc video -w h3-t2v \
   -p "A five-second continuous cinematic shot of a violinist in a rainy neon alley." \
   --width 864 --height 480 --duration 5 --steps 20
+
+opc video -w h3-t2v -p "The same shot without model-step caching." \
+  --no-easy-cache
 
 opc video -w h3-i2v -p "A smooth continuous camera push-in." \
   --first-frame first.png --last-frame last.png
@@ -51,6 +58,21 @@ upscaling disabled by default. Add `--upscale` to run SeedVR2 after H3, set
 the multiplier with `--upscale-factor` (`>1` through `4`), or explicitly use
 `--no-upscale` in reusable scripts.
 
+EasyCache replaces selected full H3 model evaluations with cached video and
+audio transformation vectors. Increase `--easy-cache-threshold` for more
+aggressive reuse or reduce it for higher fidelity. The available controls are:
+
+```text
+--easy-cache / --no-easy-cache
+--easy-cache-threshold 0.05
+--easy-cache-start-percent 0.20
+--easy-cache-end-percent 0.90
+--easy-cache-verbose
+```
+
+Use `--easy-cache-verbose` while benchmarking. ComfyUI then reports the number
+of skipped model evaluations and the model-step speedup in its server log.
+
 `--ref-image-size match` is the practical default. `max` keeps more reference
 detail but can be several times slower. The upscale workflow uses temporal
 chunking in automatic mode to avoid retaining the full restored video in the
@@ -64,9 +86,11 @@ the next audio ordinal after soundtracks attached to reference videos.
 
 ## Verified Results
 
-Measured on the local RTX PRO 6000 with ComfyUI 0.30.0. Server execution time
-excludes queue wait. Every test used 20 H3 steps, 864x480 input, five seconds
-(124 frames), and the same adapted open-repository prompt.
+Measured before EasyCache was enabled by default on the local RTX PRO 6000
+with ComfyUI 0.30.0. Server execution time excludes queue wait. Every test
+used 20 H3 steps, 864x480 input, five seconds (124 frames), and the same
+adapted open-repository prompt. Reproduce these baselines with
+`--no-easy-cache`.
 
 | Workflow | Server time | Verified output |
 |---|---:|---|

@@ -229,7 +229,12 @@ opc video -w h3-t2v -p "..." --width 864 --height 480 --duration 5
 opc video -w h3-i2v -p "..." --first-frame first.png --last-frame last.png
 opc video -w h3-r2v -p "..." --reference-image subject.png
 opc video -w h3-t2v-upscale -p "..." --upscale-factor 2
+opc video -w h3-t2v -p "..." --no-easy-cache  # 精确原版基线
 ```
+
+H3 默认启用原生 EasyCache，保守阈值为 `0.05`。可通过
+`--easy-cache-threshold` 调整速度/质量权衡，并用
+`--easy-cache-verbose` 输出实际跳过的模型步数。
 
 ## Dashboard
 

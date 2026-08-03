@@ -14,7 +14,7 @@ SEEDVR2_VAE = "seedvr2_ema_vae_fp16.safetensors"
 WORKFLOWS = {
     "h3-t2v": {
         "description": "MiniMax H3 text-to-video with native stereo audio",
-        "inputs": "prompt; optional --upscale and --upscale-factor",
+        "inputs": "prompt; EasyCache enabled by default; optional --upscale",
     },
     "h3-i2v": {
         "description": "MiniMax H3 first/last-frame image-to-video with native audio",
@@ -37,7 +37,19 @@ def duration_to_frames(duration):
     return frame_count + (5 - frame_count % 17) % 17
 
 
-def _validate(alias, prompt, width, height, duration, steps, upscale, upscale_factor):
+def _validate(
+    alias,
+    prompt,
+    width,
+    height,
+    duration,
+    steps,
+    upscale,
+    upscale_factor,
+    easy_cache_threshold,
+    easy_cache_start_percent,
+    easy_cache_end_percent,
+):
     if alias not in WORKFLOWS:
         raise ValueError(f"Unknown H3 workflow: {alias}")
     if not prompt or not prompt.strip():
@@ -50,10 +62,26 @@ def _validate(alias, prompt, width, height, duration, steps, upscale, upscale_fa
         raise ValueError("Steps must be between 1 and 100")
     if upscale and not 1 < float(upscale_factor) <= 4:
         raise ValueError("Upscale factor must be greater than 1 and at most 4")
+    if not 0 <= float(easy_cache_threshold) <= 3:
+        raise ValueError("EasyCache threshold must be between 0 and 3")
+    if not 0 <= float(easy_cache_start_percent) < float(easy_cache_end_percent) <= 1:
+        raise ValueError("EasyCache start/end must satisfy 0 <= start < end <= 1")
 
 
-def _base_workflow(model_name, conditioning_node, steps, seed, output_node="14"):
-    return {
+def _base_workflow(
+    model_name,
+    conditioning_node,
+    steps,
+    seed,
+    output_node="14",
+    easy_cache=True,
+    easy_cache_threshold=0.05,
+    easy_cache_start_percent=0.20,
+    easy_cache_end_percent=0.90,
+    easy_cache_verbose=False,
+):
+    model_link = ["28", 0] if easy_cache else ["1", 0]
+    workflow = {
         "1": {
             "class_type": "UNETLoader",
             "inputs": {"unet_name": model_name, "weight_dtype": "default"},
@@ -76,12 +104,12 @@ def _base_workflow(model_name, conditioning_node, steps, seed, output_node="14")
         },
         "6": {
             "class_type": "BasicGuider",
-            "inputs": {"model": ["1", 0], "conditioning": [conditioning_node, 0]},
+            "inputs": {"model": model_link, "conditioning": [conditioning_node, 0]},
         },
         "7": {
             "class_type": "BasicScheduler",
             "inputs": {
-                "model": ["1", 0],
+                "model": model_link,
                 "scheduler": "simple",
                 "steps": int(steps),
                 "denoise": 1.0,
@@ -132,6 +160,18 @@ def _base_workflow(model_name, conditioning_node, steps, seed, output_node="14")
             },
         },
     }
+    if easy_cache:
+        workflow["28"] = {
+            "class_type": "EasyCache",
+            "inputs": {
+                "model": ["1", 0],
+                "reuse_threshold": float(easy_cache_threshold),
+                "start_percent": float(easy_cache_start_percent),
+                "end_percent": float(easy_cache_end_percent),
+                "verbose": bool(easy_cache_verbose),
+            },
+        }
+    return workflow
 
 
 def _add_seedvr2(workflow, factor, seed):
@@ -257,12 +297,29 @@ def build_h3_workflow(
     ref_image_size="match",
     upscale=False,
     upscale_factor=2.0,
+    easy_cache=True,
+    easy_cache_threshold=0.05,
+    easy_cache_start_percent=0.20,
+    easy_cache_end_percent=0.90,
+    easy_cache_verbose=False,
 ):
     """Build a ComfyUI API workflow for a MiniMax H3 CLI alias."""
     legacy_upscale_alias = alias == "h3-t2v-upscale"
     base_alias = "h3-t2v" if legacy_upscale_alias else alias
     upscale = bool(upscale or legacy_upscale_alias)
-    _validate(alias, prompt, width, height, duration, steps, upscale, upscale_factor)
+    _validate(
+        alias,
+        prompt,
+        width,
+        height,
+        duration,
+        steps,
+        upscale,
+        upscale_factor,
+        easy_cache_threshold,
+        easy_cache_start_percent,
+        easy_cache_end_percent,
+    )
     reference_images = list(reference_images or [])
     reference_videos = list(reference_videos or [])
     reference_audios = list(reference_audios or [])
@@ -288,7 +345,17 @@ def build_h3_workflow(
         seed = random.SystemRandom().randrange(0, 2**63)
     frames = duration_to_frames(duration)
     model_name = H3_REF2VA_MODEL if base_alias == "h3-r2v" else H3_FL2VA_MODEL
-    workflow = _base_workflow(model_name, "5", steps, seed)
+    workflow = _base_workflow(
+        model_name,
+        "5",
+        steps,
+        seed,
+        easy_cache=easy_cache,
+        easy_cache_threshold=easy_cache_threshold,
+        easy_cache_start_percent=easy_cache_start_percent,
+        easy_cache_end_percent=easy_cache_end_percent,
+        easy_cache_verbose=easy_cache_verbose,
+    )
 
     if base_alias == "h3-r2v":
         inputs = {

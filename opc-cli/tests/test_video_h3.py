@@ -25,6 +25,39 @@ class H3WorkflowTests(unittest.TestCase):
         self.assertEqual(workflow["13"]["inputs"]["audio"], ["12", 0])
         self.assertEqual(workflow["14"]["inputs"]["format"], "mp4")
 
+    def test_easycache_is_enabled_conservatively_by_default(self):
+        workflow = build_h3_workflow("h3-t2v", "test", seed=42)
+        self.assertEqual(workflow["28"]["class_type"], "EasyCache")
+        self.assertEqual(workflow["28"]["inputs"], {
+            "model": ["1", 0],
+            "reuse_threshold": 0.05,
+            "start_percent": 0.20,
+            "end_percent": 0.90,
+            "verbose": False,
+        })
+        self.assertEqual(workflow["6"]["inputs"]["model"], ["28", 0])
+        self.assertEqual(workflow["7"]["inputs"]["model"], ["28", 0])
+
+    def test_easycache_can_be_tuned_or_disabled(self):
+        tuned = build_h3_workflow(
+            "h3-t2v",
+            "test",
+            seed=42,
+            easy_cache_threshold=0.1,
+            easy_cache_start_percent=0.15,
+            easy_cache_end_percent=0.95,
+            easy_cache_verbose=True,
+        )
+        self.assertEqual(tuned["28"]["inputs"]["reuse_threshold"], 0.1)
+        self.assertTrue(tuned["28"]["inputs"]["verbose"])
+
+        disabled = build_h3_workflow(
+            "h3-t2v", "test", seed=42, easy_cache=False
+        )
+        self.assertNotIn("28", disabled)
+        self.assertEqual(disabled["6"]["inputs"]["model"], ["1", 0])
+        self.assertEqual(disabled["7"]["inputs"]["model"], ["1", 0])
+
     def test_first_last_frame_nodes_are_connected(self):
         workflow = build_h3_workflow(
             "h3-i2v",
@@ -136,6 +169,15 @@ class H3WorkflowTests(unittest.TestCase):
             build_h3_workflow("h3-t2v", "test", first_frame="first.png")
         with self.assertRaisesRegex(ValueError, "greater than 1"):
             build_h3_workflow("h3-t2v", "test", upscale=True, upscale_factor=1)
+        with self.assertRaisesRegex(ValueError, "threshold"):
+            build_h3_workflow("h3-t2v", "test", easy_cache_threshold=3.1)
+        with self.assertRaisesRegex(ValueError, "start/end"):
+            build_h3_workflow(
+                "h3-t2v",
+                "test",
+                easy_cache_start_percent=0.9,
+                easy_cache_end_percent=0.2,
+            )
 
     def test_queue_and_execution_timing_are_separate(self):
         history = {

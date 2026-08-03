@@ -1019,6 +1019,11 @@ def _cmd_video_generate(args):
             ref_image_size=args.ref_image_size,
             upscale=args.upscale,
             upscale_factor=args.upscale_factor,
+            easy_cache=args.easy_cache,
+            easy_cache_threshold=args.easy_cache_threshold,
+            easy_cache_start_percent=args.easy_cache_start_percent,
+            easy_cache_end_percent=args.easy_cache_end_percent,
+            easy_cache_verbose=args.easy_cache_verbose,
         )
         if args.dry_run:
             print(json.dumps(workflow, indent=2, ensure_ascii=False))
@@ -1036,6 +1041,7 @@ def _cmd_video_generate(args):
             "duration_seconds": args.duration,
             "frames": duration_to_frames(args.duration),
             "steps": args.steps,
+            "easy_cache": args.easy_cache,
         })
         if args.upscale or alias == "h3-t2v-upscale":
             result["upscaled_resolution"] = (
@@ -1975,6 +1981,36 @@ examples:
     p_video.add_argument("--duration", type=float, default=5, help="Duration in seconds, 5-15 (default: 5)")
     p_video.add_argument("--steps", type=int, default=20, help="H3 sampling steps (default: 20)")
     p_video.add_argument("--seed", type=int, default=-1, help="Seed; -1 selects a random seed")
+    p_video.add_argument(
+        "--easy-cache",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Enable or disable EasyCache model-step reuse (default: enabled)",
+    )
+    p_video.add_argument(
+        "--easy-cache-threshold",
+        type=float,
+        default=0.05,
+        help="EasyCache reuse threshold; larger is faster but less conservative (default: 0.05)",
+    )
+    p_video.add_argument(
+        "--easy-cache-start-percent",
+        type=float,
+        default=0.20,
+        help="Sampling fraction at which EasyCache starts (default: 0.20)",
+    )
+    p_video.add_argument(
+        "--easy-cache-end-percent",
+        type=float,
+        default=0.90,
+        help="Sampling fraction at which EasyCache stops (default: 0.90)",
+    )
+    p_video.add_argument(
+        "--easy-cache-verbose",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Log EasyCache per-step reuse decisions (default: disabled)",
+    )
     p_video.add_argument("--first-frame", help="First frame image for h3-i2v")
     p_video.add_argument("--last-frame", help="Optional last frame image for h3-i2v")
     p_video.add_argument(
