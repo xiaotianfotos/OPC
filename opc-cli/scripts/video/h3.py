@@ -3,7 +3,7 @@
 import random
 
 
-H3_FL2VA_MODEL = "minimax_h3_fl2va_pruned_int8_convrot.safetensors"
+H3_FL2VA_MODEL = "minimax_h3_fl2va_int8_convrot.safetensors"
 H3_REF2VA_MODEL = "minimax_h3_ref2va_pruned_int8_convrot.safetensors"
 H3_TEXT_ENCODER = "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"
 H3_VIDEO_VAE = "minimax_h3_video_vae_fp16.safetensors"
