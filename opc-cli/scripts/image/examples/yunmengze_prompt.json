@@ -1,0 +1,71 @@
+{
+  "subject": {
+    "main": "Vertical Chinese educational infographic poster about ancient Yunmeng Ze marshland",
+    "details": "Central wetland landscape illustration showing vast marshland with reeds, water birds (egrets, herons, ducks), small wooden fishing boats, traditional Chinese pavilions and pagodas on distant shores, misty mountains in background, fish jumping from water, lotus flowers. Left sidebar has 4 rectangular info boxes each with a descriptive icon illustration. Right sidebar has 4 circular icon frames each containing a symbolic illustration."
+  },
+  "style": {
+    "medium": "Vintage hand-drawn illustration, traditional Chinese painting style mixed with modern infographic design",
+    "techniques": ["Hand-drawn ink lines", "Watercolor wash", "Parchment texture", "Ornate decorative borders", "Chinese calligraphy style text"],
+    "references": "Traditional Chinese landscape painting (山水画) combined with educational infographic poster layout"
+  },
+  "composition": {
+    "framing": "Vertical portrait 3:4 with ornate decorative border frame around entire poster",
+    "angle": "Bird's eye panoramic view for center illustration"
+  },
+  "lighting": {
+    "type": "Soft natural daylight",
+    "quality": "Warm, gentle, vintage aesthetic with no harsh shadows"
+  },
+  "background": {
+    "setting": "Textured beige aged parchment paper with darker edges and subtle foxing marks",
+    "details": "Ornate traditional Chinese dragon and cloud motifs in the four corners, decorative scrollwork border framing the entire poster"
+  },
+  "color_palette": {
+    "dominant": ["Beige", "Sepia", "Warm brown"],
+    "accent": ["Muted sage green", "Pale blue", "Dusty rose", "Gold"],
+    "mood": "Historical, warm, nostalgic, scholarly"
+  },
+  "text_content": {
+    "visible_text": [
+      "云梦泽", "古代大泽",
+      "核心特征", "地理位置", "湖北江汉平原",
+      "古代面积", "古代约4万平方公里",
+      "现存状态", "已干涸成陆",
+      "历史时期", "先秦至明清",
+      "基本信息", "类型", "淡水湖泊湿地",
+      "成因", "泥沙淤积、围垦",
+      "文献记载", "楚辞、史记",
+      "遗迹", "洪湖、梁子湖",
+      "地理变迁"
+    ],
+    "language": "zh"
+  },
+  "layout": {
+    "elements": [
+      {"role": "title_frame", "text": "云梦泽", "position": "top-center in decorative rectangular frame with ornate corners"},
+      {"role": "subtitle", "text": "古代大泽", "position": "inside title frame below 云梦泽"},
+      {"role": "section_header", "text": "核心特征", "position": "left sidebar header"},
+      {"role": "info_box_1", "text": "地理位置\n湖北江汉平原", "position": "left sidebar box 1 with small map icon"},
+      {"role": "info_box_2", "text": "古代面积\n古代约4万平方公里", "position": "left sidebar box 2 with area/number icon"},
+      {"role": "info_box_3", "text": "现存状态\n已干涸成陆", "position": "left sidebar box 3 with dry land illustration"},
+      {"role": "info_box_4", "text": "历史时期\n先秦至明清", "position": "left sidebar box 4 with timeline/calendar icon"},
+      {"role": "section_header", "text": "基本信息", "position": "right sidebar header"},
+      {"role": "circle_icon_1", "text": "类型\n淡水湖泊湿地", "position": "right sidebar circle 1 with water drop icon"},
+      {"role": "circle_icon_2", "text": "成因\n泥沙淤积、围垦", "position": "right sidebar circle 2 with sediment icon"},
+      {"role": "circle_icon_3", "text": "文献记载\n楚辞、史记", "position": "right sidebar circle 3 with scroll/book icon"},
+      {"role": "circle_icon_4", "text": "遗迹\n洪湖、梁子湖", "position": "right sidebar circle 4 with lake icon"},
+      {"role": "bottom_section_title", "text": "地理变迁", "position": "bottom center inside decorative banner frame"},
+      {"role": "body_text", "text": "云梦泽曾是中国最大的淡水湖泊湿地系统之一，古时位于现今湖北省，覆盖面积约四万平方公里。据《史记》和《楚辞》等历史文献记载，它曾是一片浩瀚的湿地，鱼虾众多，水鸟云集，生态丰富。千百年来，随着长江泥沙的不断淤积，加上人类长期的围垦造田活动，云梦泽逐渐演变成陆地和农田。至明清时期，大部分已干涸，如今仅剩洪湖、梁子湖等零星湖泊作为遗迹。这一地理变迁深刻反映了自然沉积作用和人类活动共同导致的巨大环境变化。", "position": "bottom paragraph inside decorative bordered frame"}
+    ],
+    "typography": {"font_style": "Traditional Chinese serif, calligraphy inspired", "color": "Dark brown ink on beige parchment"},
+    "connectors": [
+      "Decorative rectangular frame around title 云梦泽 and subtitle 古代大泽",
+      "Ornate bordered banner frame around 地理变迁 section at bottom",
+      "Rectangular bordered boxes for left sidebar items",
+      "Circular icon frames for right sidebar items",
+      "Scrollwork dividers between sections"
+    ]
+  },
+  "mood": "Informative, historical, scholarly, serene",
+  "negative_constraints": ["modern technology", "bright neon colors", "Western fonts", "photorealistic", "3D render", "cartoon style"]
+}

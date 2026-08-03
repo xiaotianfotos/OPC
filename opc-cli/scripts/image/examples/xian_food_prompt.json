@@ -1,0 +1,71 @@
+{
+  "subject": {
+    "main": "Vertical Chinese educational infographic poster about Xi'an famous foods and Muslim Quarter street food culture",
+    "details": "Central street scene illustration showing Huimin Jie (回民街) bustling with food stalls, smoke rising from charcoal grills, red lanterns hanging overhead, traditional Chinese Islamic architecture storefronts with green tile details, crowds of people eating at small tables, vendors cooking on large iron woks and grills, skewers of lamb meat on display, steaming bamboo baskets. Left sidebar has 4 rectangular info boxes each with a detailed food illustration. Right sidebar has 4 circular icon frames each containing a symbolic illustration."
+  },
+  "style": {
+    "medium": "Vintage hand-drawn illustration, traditional Chinese painting style mixed with modern infographic design",
+    "techniques": ["Hand-drawn ink lines", "Watercolor wash", "Parchment texture", "Ornate decorative borders", "Chinese calligraphy style text"],
+    "references": "Traditional Chinese food illustration combined with educational infographic poster layout"
+  },
+  "composition": {
+    "framing": "Vertical portrait 3:4 with ornate decorative border frame around entire poster",
+    "angle": "Street-level perspective view for center illustration"
+  },
+  "lighting": {
+    "type": "Warm evening glow with red lantern light",
+    "quality": "Warm, inviting, lively atmosphere with soft shadows"
+  },
+  "background": {
+    "setting": "Textured beige aged parchment paper with darker edges and subtle foxing marks",
+    "details": "Ornate traditional Chinese cloud and food motifs in the four corners, decorative scrollwork border framing the entire poster"
+  },
+  "color_palette": {
+    "dominant": ["Beige", "Sepia", "Warm brown"],
+    "accent": ["Vermillion red", "Golden yellow", "Jade green", "Warm orange"],
+    "mood": "Warm, appetizing, lively, cultural"
+  },
+  "text_content": {
+    "visible_text": [
+      "西安美食", "千年古都味觉记忆",
+      "招牌美食", "代表菜品", "羊肉泡馍",
+      "必吃小吃", "肉夹馍", "凉皮", "biangbiang面",
+      "美食街区", "地标", "回民街",
+      "历史渊源", "千年传承",
+      "特色饮品", "酸梅汤", "石榴汁",
+      "文化背景"
+    ],
+    "language": "zh"
+  },
+  "layout": {
+    "elements": [
+      {"role": "title_frame", "text": "西安美食", "position": "top-center in decorative rectangular frame with ornate corners"},
+      {"role": "subtitle", "text": "千年古都味觉记忆", "position": "inside title frame below 西安美食"},
+
+      {"role": "section_header", "text": "招牌美食", "position": "left sidebar header"},
+      {"role": "info_box_1", "text": "代表菜品\n羊肉泡馍", "position": "left sidebar box 1", "illustration": "一个白瓷大碗盛着浓白的羊肉汤，碗里是手工掰碎的白吉馍块和炖烂的羊肉，碗边撒着翠绿的香菜和葱花，汤面飘着油花"},
+      {"role": "info_box_2", "text": "必吃小吃\n肉夹馍", "position": "left sidebar box 2", "illustration": "一个白吉馍从中间切开，里面夹满剁碎的腊汁肉，馍皮金黄酥脆有焦色烤痕，肉汁从侧面微微溢出，馍是圆形扁平面饼"},
+      {"role": "info_box_3", "text": "经典面食\nbiangbiang面", "position": "left sidebar box 3", "illustration": "一个大白碗中盛着一根极宽的手工面条，面条宽如裤带，上面浇着红油泼辣子、西红柿鸡蛋、烫熟的青菜和黄豆芽，辣油鲜红发亮"},
+      {"role": "info_box_4", "text": "清凉小吃\n凉皮", "position": "left sidebar box 4", "illustration": "一盘晶莹透亮的白色凉皮切成宽条，上面铺着黄瓜丝和面筋块，浇上红油辣子和芝麻酱，拌着蒜水和香醋"},
+
+      {"role": "section_header", "text": "美食街区", "position": "right sidebar header"},
+      {"role": "circle_icon_1", "text": "地标\n回民街", "position": "right sidebar circle 1", "illustration": "一座中式牌坊大门，匾额上写着回民街三个字，门两侧挂着红灯笼，街道两旁是青砖灰瓦的老店铺"},
+      {"role": "circle_icon_2", "text": "历史渊源\n千年传承", "position": "right sidebar circle 2", "illustration": "一卷展开的古代竹简或线装古籍，旁边有一只毛笔和一方砚台"},
+      {"role": "circle_icon_3", "text": "特色饮品\n酸梅汤 石榴汁", "position": "right sidebar circle 3", "illustration": "一杯深紫红色的酸梅汤和一个切开露出红宝石般籽粒的大石榴"},
+      {"role": "circle_icon_4", "text": "文化背景\n丝路交汇", "position": "right sidebar circle 4", "illustration": "一队骆驼行走在丝绸之路上，远处是西安城墙和大雁塔的剪影"},
+
+      {"role": "bottom_section_title", "text": "文化背景", "position": "bottom center inside decorative banner frame"},
+      {"role": "body_text", "text": "西安作为十三朝古都，饮食文化源远流长。回民街是西安最著名的美食街区，汇聚了羊肉泡馍、肉夹馍、凉皮、biangbiang面等经典小吃。羊肉泡馍源于唐代，以浓汤炖煮的羊肉配手工掰碎的馍，汤浓肉烂。肉夹馍被称为中国汉堡，外酥里嫩。凉皮爽滑酸辣，是夏日消暑佳品。biangbiang面宽如腰带，一根面就是一碗，配上油泼辣子，香气扑鼻。回民街的美食融合了汉族与回族饮食精华，是古丝绸之路多元文化交汇的味觉见证。", "position": "bottom paragraph inside decorative bordered frame"}
+    ],
+    "typography": {"font_style": "Traditional Chinese serif, calligraphy inspired", "color": "Dark brown ink on beige parchment"},
+    "connectors": [
+      "Decorative rectangular frame around title 西安美食 and subtitle 千年古都味觉记忆",
+      "Ornate bordered banner frame around 文化背景 section at bottom",
+      "Rectangular bordered boxes for left sidebar items",
+      "Circular icon frames for right sidebar items",
+      "Scrollwork dividers between sections"
+    ]
+  },
+  "mood": "Appetizing, cultural, warm, lively",
+  "negative_constraints": ["modern technology", "bright neon colors", "Western fonts", "photorealistic", "3D render"]
+}

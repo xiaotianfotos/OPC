@@ -1,0 +1,66 @@
+{
+  "meta": {
+    "format": "opc_image_prompt_v1",
+    "version": "1.0",
+    "source": "KG match: poster + architecture + flat_design + nostalgic + text knockout",
+    "note": "V2 - text knockout with clipping mask. Photo shows through O and M letters."
+  },
+  "subject": {
+    "main": "a travel poster design with knockout text effect featuring the Roman Colosseum",
+    "details": "massive ultra-condensed sans-serif letters R O M E in vibrant emerald green filling 70 percent of the canvas height, the letters O and M act as clipping masks with the black and white Colosseum photograph visible ONLY inside their letter shapes, the letters R and E remain solid pure emerald green with no photograph, the ancient amphitheater is precisely cropped to the exact outlines of O and M, text knockout effect, stencil mask, photo cropped to letterforms, two seagulls in realistic photographic finish, one seagull gliding downward on the left side near the letter R, one seagull flying upward with wings spread on the right side crossing the letter E, wide cobblestone path leading toward the structure creating strong leading lines, weathered stone textures, visible tiers of arches and ruined masonry, the Colosseum photograph is a low angle shot from cobblestone ground level looking up"
+  },
+  "style": {
+    "medium": "digital graphic design poster",
+    "techniques": ["Brutalist graphic design", "Editorial Design", "Travel Poster", "Mixed Media Collage", "Typography Art", "text knockout effect", "clipping mask"],
+    "era": "vintage newspaper aesthetic combined with modern brutalist design"
+  },
+  "composition": {
+    "framing": "full frame poster layout",
+    "angle": "low angle shot of the Colosseum from cobblestone ground level looking up",
+    "focus": "sharp focus on the typography and photographic elements"
+  },
+  "lighting": {
+    "type": "natural daylight for the photograph",
+    "quality": "high contrast with deep shadows in the arches"
+  },
+  "background": {
+    "setting": "abstract paper texture",
+    "environment": "crumpled white paper with visible creases folds and tactile grain simulating an aged flyer or unfolded map",
+    "depth": "flat graphic design with layered collage elements creating 3D depth effect"
+  },
+  "color_palette": {
+    "dominant": ["#00C055", "#000000", "#F5F5DC"],
+    "scheme": "high contrast complementary"
+  },
+  "mood": "nostalgic vintage European travel bold adventurous editorial",
+  "text_content": {
+    "visible_text": [
+      "SPECIAL EDITION",
+      "Explore the World",
+      "Rome Italy",
+      "51.5074 N 0.1278 W",
+      "The Eternal City",
+      "ROME",
+      "R",
+      "Rome the Eternal City is a breathtaking blend of ancient history and modern culture Home to iconic landmarks like the Colosseum the Vatican and the Pantheon",
+      "From its vibrant piazzas to its renowned cuisine Rome is a city of passion art and unforgettable experiences Wander through its cobblestone streets",
+      "Whether you are exploring ancient ruins or enjoying a peaceful moment in its beautiful tranquil gardens Rome captivates visitors with its timeless beauty"
+    ],
+    "typography": "top banner uses Gothic Blackletter Old English font for Explore the World with a circular stamp containing the between the words corner boxes use serif uppercase font for SPECIAL EDITION info strip uses serif font massive ROME uses ultra-condensed sans-serif Impact-like drop cap uses white Old English letter R inside a black square box bottom text uses small serif font in three-column newspaper layout with justified alignment",
+    "language": "English"
+  },
+  "technical_specs": {
+    "quality": "high resolution print-ready sharp edges",
+    "render_engine": "vector-like flat graphic design with photographic elements"
+  },
+  "negative_constraints": [
+    "blurry",
+    "low quality",
+    "modern UI elements",
+    "watermarks",
+    "photorealistic skin textures",
+    "3D render look",
+    "photo bleeding outside letters",
+    "photo showing through R and E letters"
+  ]
+}

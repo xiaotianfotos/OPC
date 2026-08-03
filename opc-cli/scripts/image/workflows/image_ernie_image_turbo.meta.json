@@ -1,0 +1,56 @@
+{
+  "alias": "ernie-turbo",
+  "description": "Ernie-Image-Turbo text-to-image. Accepts structured JSON prompts (auto-converted to text) or plain text. Prompt enhancement disabled.",
+  "params": {
+    "prompt": {
+      "node": "88:94",
+      "field": "value",
+      "type": "string",
+      "required": true,
+      "description": "Text prompt for image generation"
+    },
+    "width": {
+      "node": "88:71",
+      "field": "width",
+      "type": "int",
+      "default": 1024
+    },
+    "height": {
+      "node": "88:71",
+      "field": "height",
+      "type": "int",
+      "default": 1024
+    },
+    "steps": {
+      "node": "88:70",
+      "field": "steps",
+      "type": "int",
+      "default": 8
+    },
+    "seed": {
+      "node": "88:70",
+      "field": "seed",
+      "type": "int",
+      "default": -1,
+      "description": "-1 = random seed"
+    },
+    "enhance_prompt": {
+      "node": "88:96",
+      "field": "value",
+      "type": "bool",
+      "default": false,
+      "description": "Enable prompt enhancement via built-in TextGenerate model"
+    },
+    "batch_size": {
+      "node": "88:71",
+      "field": "batch_size",
+      "type": "int",
+      "default": 1,
+      "description": "Number of images to generate per batch"
+    }
+  },
+  "output_prefix": {
+    "node": "73",
+    "field": "filename_prefix"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "alias": "qwen-image",
+  "description": "Qwen-Image-2512 text-to-image. qwen_image clip, qwen_image_vae, AuraFlow sampling. Supports 50-step standard mode or 4-step Lightning LoRA fast mode. Supports structured JSON prompts and negative prompts.",
+  "params": {
+    "prompt": {
+      "node": "238:227",
+      "field": "text",
+      "type": "string",
+      "required": true,
+      "description": "Text or JSON prompt for image generation"
+    },
+    "negative_prompt": {
+      "node": "238:228",
+      "field": "text",
+      "type": "string",
+      "default": "",
+      "description": "Negative prompt — things to avoid in the image"
+    },
+    "width": {
+      "node": "238:232",
+      "field": "width",
+      "type": "int",
+      "default": 1024
+    },
+    "height": {
+      "node": "238:232",
+      "field": "height",
+      "type": "int",
+      "default": 1024
+    },
+    "seed": {
+      "node": "238:230",
+      "field": "seed",
+      "type": "int",
+      "default": -1,
+      "description": "-1 = random seed"
+    },
+    "enable_lightning": {
+      "node": "238:229",
+      "field": "value",
+      "type": "bool",
+      "default": false,
+      "description": "Enable 4-step Lightning LoRA for ultra-fast generation (4 steps, cfg=1 instead of 50 steps, cfg=4)"
+    },
+    "shift": {
+      "node": "238:222",
+      "field": "shift",
+      "type": "float",
+      "default": 3.1,
+      "description": "AuraFlow sampling shift parameter"
+    },
+    "batch_size": {
+      "node": "238:232",
+      "field": "batch_size",
+      "type": "int",
+      "default": 1,
+      "description": "Number of images to generate per batch"
+    }
+  },
+  "output_prefix": {
+    "node": "60",
+    "field": "filename_prefix"
+  }
+}

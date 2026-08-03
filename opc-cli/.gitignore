@@ -14,3 +14,7 @@ node_modules/
 
 # Test files (do not release)
 test_*.py
+
+# Eval prompts and results (copyrighted content, do not release)
+scripts/image/eval/prompts/
+scripts/image/eval/results/

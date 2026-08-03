@@ -1,0 +1,40 @@
+{
+  "name": "vintage_ledger",
+  "description": "复古手绘绘本风格 PPT 模板。莫兰迪色调、墨水线条勾勒、Q版卡通人物、做旧纸张质感。适合个人成长、知识科普、教育培训类信息可视化。文字能力强，80字以内中文稳定正确。",
+  "version": "1.0",
+  "source": "PromptKG 推荐: style:hand_drawn + style:vintage_ledger + mood:nostalgic",
+  "resolution": { "width": 1344, "height": 768 },
+  "style_prefix": "复古手绘绘本风格，莫兰迪色调（灰粉、豆绿、雾霾蓝、暖桃、薰衣草），细腻黑色墨水线条勾勒略带抖动感，Q版卡通人物头大身小，做旧米白纸张质感背景带淡淡方格线，手写体文字，",
+  "scenes": {
+    "title": {
+      "desc": "标题/封面页",
+      "template": "横版16:9布局。左侧一个不规则卷轴形标题框，里面竖排写着\"{main_title}\"。卷轴下方一个Q版小人拿着灯笼站在十字路口。右侧大面积留白，点缀手绘星星和树叶涂鸦。底部小字写着\"{subtitle}\"。整体温暖鼓励的氛围。",
+      "params": ["main_title", "subtitle"]
+    },
+    "stages": {
+      "desc": "阶梯/成长路径（支持2-7个阶段）",
+      "template": "横版16:9布局。中间偏左一条手绘阶梯从左下到右上，共{stage_count}级台阶。每级台阶是不同莫兰迪色块（灰粉、豆绿、雾霾蓝、暖桃、薰衣草交替），边缘带手绘抖动感。每级台阶上一个Q版卡通小人做对应动作，台阶旁边清晰手写2-4个汉字标签。台阶左侧有一个向上箭头。右侧空白区点缀星星爱心树叶涂鸦。标题\"{title}\"在顶部卷轴框内。",
+      "params": ["title", "stage_count"]
+    },
+    "stages_3col": {
+      "desc": "三栏阶梯布局（标题+阶梯+信息卡）",
+      "template": "横版16:9布局，左中右三栏。左栏30%：竖排卷轴标题\"{main_title}\"，下方Q版小人持灯笼站路口，左边缘竖向箭头。中栏40%：5级莫兰迪色阶梯从左下到右上，每级一个Q版小人和一个4字手写标签（{stage_labels}），级间有小箭头连接。右栏30%：三张圆角手绘卡片纵向排列，第一张灯泡图标标题\"{card1_title}\"内容\"{card1_text}\"，第二张爱心图标标题\"{card2_title}\"内容\"{card2_text}\"，第三张星星图标标题\"{card3_title}\"内容\"{card3_text}\"。所有中文文字清晰可读。",
+      "params": ["main_title", "stage_labels", "card1_title", "card1_text", "card2_title", "card2_text", "card3_title", "card3_text"]
+    },
+    "comparison": {
+      "desc": "左右对比",
+      "template": "横版16:9布局。画面中间一条手绘竖线将画面分为左右两半。左半{color_left}色块，标题\"{left_title}\"清晰手写，下方一个Q版小人做{left_action}的动作，配上简短手写描述\"{left_desc}\"。右半{color_right}色块，标题\"{right_title}\"清晰手写，下方一个Q版小人做{right_action}的动作，配上简短手写描述\"{right_desc}\"。顶部卷轴框内大标题\"{main_title}\"。边缘手绘星星爱心涂鸦。所有文字清晰可读。",
+      "params": ["main_title", "left_title", "left_desc", "left_action", "color_left", "right_title", "right_desc", "right_action", "color_right"]
+    },
+    "timeline": {
+      "desc": "时间线/里程碑",
+      "template": "横版16:9布局。画面中间一条手绘波浪线从左到右蜿蜒，线上均匀分布{milestone_count}个圆形里程碑节点，每个节点是不同莫兰迪色。每个节点上方一个Q版小卡通人物做相关动作，节点下方清晰手写时间标注和简短描述。左端起点标记\"开始\"，右端终点标记\"目标\"。顶部卷轴框内标题\"{title}\"。背景米白纸张带方格线。手绘星星爱心点缀边缘。",
+      "params": ["title", "milestone_count"]
+    },
+    "summary": {
+      "desc": "总结/要点列表",
+      "template": "横版16:9布局。左侧一个竖排卷轴标题\"{main_title}\"。右侧一个手绘笔记本/账本样式的大区域，里面整齐排列{point_count}个手绘圆角方框条目，每个条目左边一个小图标（灯泡/爱心/星星/叶子/闪电），右边清晰手写一行要点文字（每行不超过12个汉字）。底部一个手绘横幅写着结语\"{closing}\"。整体色调温暖柔和。所有文字清晰可读。",
+      "params": ["main_title", "point_count", "closing"]
+    }
+  }
+}

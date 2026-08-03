@@ -1,0 +1,96 @@
+{
+  "output_dir": "/vol2/1000/output/sticker_ppt_hermes",
+  "scenes": {
+    "01_title": {
+      "scene": "title",
+      "params": {
+        "left_name": "Hermes",
+        "right_name": "OpenClaw",
+        "subtitle": "给大家贡献一些瓜和饭局谈资"
+      }
+    },
+    "02_hype": {
+      "scene": "hype",
+      "params": {
+        "title": "营销泡泡",
+        "buzzwords": "\"新一代\"\"自我进化\"\"革命性\""
+      }
+    },
+    "03_evolution_debunk": {
+      "scene": "debunk",
+      "params": {
+        "title": "自我进化？揭开真相",
+        "reality": "一个计数器显示\"10次\"和一个按钮\"存为技能\"",
+        "reaction": "就这？"
+      }
+    },
+    "04_plagiarism": {
+      "scene": "timeline",
+      "params": {
+        "title": "抄袭争议",
+        "name_a": "evomap",
+        "color_a": "蓝色",
+        "name_b": "Hermes",
+        "color_b": "紫色",
+        "extra": "两段代码片段并排显示。"
+      }
+    },
+    "05_positioning": {
+      "scene": "comparison",
+      "params": {
+        "color_a": "紫色",
+        "left_content": "一个机器人连着多个文件夹，标注\"Hermes：多会话、类Claude Code\"",
+        "color_b": "绿色",
+        "right_content": "一个机器人自主工作，标注\"OpenClaw：个人助理、自主工作\"",
+        "center_text": "定位不同"
+      }
+    },
+    "06_sandbox": {
+      "scene": "sandbox",
+      "params": {
+        "title": "沙盒隔离",
+        "container_contents": "代码、终端、GPU芯片",
+        "label_a": "OpenClaw",
+        "label_b": "Hermes"
+      }
+    },
+    "07_architecture": {
+      "scene": "architecture",
+      "params": {
+        "name_a": "OpenClaw",
+        "name_b": "Hermes",
+        "modules": "每个标注\"Harness\"\"Sandbox\"\"Orchestrator\"\"Tools\"\"Session\"。",
+        "bad_label": "10000行"
+      }
+    },
+    "08_devflow": {
+      "scene": "pipeline",
+      "params": {
+        "steps_a": "Issue到PR到AI审核到合并",
+        "title_a": "OpenClaw AI First",
+        "right_scene": "一个人旁边一堆代码，一只手直接点合并",
+        "title_b": "Hermes 一人开发"
+      }
+    },
+    "09_update": {
+      "scene": "danger_vs_safe",
+      "params": {
+        "danger_text": "git pull main",
+        "danger_title": "Hermes更新",
+        "safe_channels": "\"stable\"\"beta\"\"dev\"",
+        "safe_title": "OpenClaw更新"
+      }
+    },
+    "10_verdict": {
+      "scene": "verdict",
+      "params": {
+        "title": "OpenClaw更胜一筹",
+        "subtitle": "Hermes值得继续观察",
+        "color_a": "紫色",
+        "light_items": "\"体验细节\"\"使用手感\"",
+        "color_b": "绿色",
+        "heavy_items": "\"架构\"\"生态\"\"流程\""
+      }
+    }
+  }
+}

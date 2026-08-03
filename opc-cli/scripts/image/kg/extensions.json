@@ -1,0 +1,5790 @@
+{
+  "meta": {
+    "description": "Extended categories based on imagejson.org analysis; Entities extracted from imagejson.org nano-banana text-to-image templates",
+    "source": "imagejson.org nano-banana-prompt research; https://www.imagejson.org/nano-banana-prompt?type=text_to_image",
+    "template_count": 78,
+    "entity_count": 442,
+    "version": "1.3",
+    "scraped_at": "2026-04-18",
+    "dsl_version": "1.0",
+    "dsl_description": "Chinese Typography DSL entities for video cover / poster generation",
+    "dsl_categories": [
+      "typography",
+      "confrontation"
+    ]
+  },
+  "entities": {
+    "background:abstract": {
+      "category": "background",
+      "name": "abstract",
+      "count": 29
+    },
+    "background:background_elements": {
+      "category": "background",
+      "name": "background_elements",
+      "count": 1
+    },
+    "background:background_environment": {
+      "category": "background",
+      "name": "background_environment",
+      "count": 2
+    },
+    "background:background_setting": {
+      "category": "background",
+      "name": "background_setting",
+      "count": 1
+    },
+    "background:city": {
+      "category": "background",
+      "name": "city",
+      "count": 45
+    },
+    "background:environment": {
+      "category": "background",
+      "name": "environment",
+      "count": 11
+    },
+    "background:environment_and_atmosphere": {
+      "category": "background",
+      "name": "environment_and_atmosphere",
+      "count": 1
+    },
+    "background:environment_and_background": {
+      "category": "background",
+      "name": "environment_and_background",
+      "count": 2
+    },
+    "background:environment_and_composition": {
+      "category": "background",
+      "name": "environment_and_composition",
+      "count": 1
+    },
+    "background:environment_and_context": {
+      "category": "background",
+      "name": "environment_and_context",
+      "count": 1
+    },
+    "background:environment_and_props": {
+      "category": "background",
+      "name": "environment_and_props",
+      "count": 2
+    },
+    "background:environment_context": {
+      "category": "background",
+      "name": "environment_context",
+      "count": 1
+    },
+    "background:environment_details": {
+      "category": "background",
+      "name": "environment_details",
+      "count": 1
+    },
+    "background:environment_setting": {
+      "category": "background",
+      "name": "environment_setting",
+      "count": 2
+    },
+    "background:environmental_background": {
+      "category": "background",
+      "name": "environmental_background",
+      "count": 1
+    },
+    "background:environmental_elements": {
+      "category": "background",
+      "name": "environmental_elements",
+      "count": 2
+    },
+    "background:exterior_environment": {
+      "category": "background",
+      "name": "exterior_environment",
+      "count": 1
+    },
+    "background:gradient": {
+      "category": "background",
+      "name": "gradient",
+      "count": 22
+    },
+    "background:indoor": {
+      "category": "background",
+      "name": "indoor",
+      "count": 41
+    },
+    "background:nature": {
+      "category": "background",
+      "name": "nature",
+      "count": 52
+    },
+    "background:outdoor": {
+      "category": "background",
+      "name": "outdoor",
+      "count": 48
+    },
+    "background:space": {
+      "category": "background",
+      "name": "space",
+      "count": 24
+    },
+    "background:studio": {
+      "category": "background",
+      "name": "studio",
+      "count": 38
+    },
+    "color_palette:color_palette": {
+      "category": "color_palette",
+      "name": "color_palette",
+      "count": 5
+    },
+    "color_palette:color_palette_and_tone": {
+      "category": "color_palette",
+      "name": "color_palette_and_tone",
+      "count": 1
+    },
+    "color_palette:complementary": {
+      "category": "color_palette",
+      "name": "complementary",
+      "count": 15
+    },
+    "color_palette:cool": {
+      "category": "color_palette",
+      "name": "cool",
+      "count": 32
+    },
+    "color_palette:monochromatic": {
+      "category": "color_palette",
+      "name": "monochromatic",
+      "count": 18
+    },
+    "color_palette:muted": {
+      "category": "color_palette",
+      "name": "muted",
+      "count": 19
+    },
+    "color_palette:neon": {
+      "category": "color_palette",
+      "name": "neon",
+      "count": 16
+    },
+    "color_palette:pastel": {
+      "category": "color_palette",
+      "name": "pastel",
+      "count": 21
+    },
+    "color_palette:vibrant": {
+      "category": "color_palette",
+      "name": "vibrant",
+      "count": 28
+    },
+    "color_palette:warm": {
+      "category": "color_palette",
+      "name": "warm",
+      "count": 35
+    },
+    "composition:composition": {
+      "category": "composition",
+      "name": "composition",
+      "count": 15
+    },
+    "composition:composition_and_camera": {
+      "category": "composition",
+      "name": "composition_and_camera",
+      "count": 2
+    },
+    "composition:composition_and_framing": {
+      "category": "composition",
+      "name": "composition_and_framing",
+      "count": 2
+    },
+    "composition:composition_layout": {
+      "category": "composition",
+      "name": "composition_layout",
+      "count": 2
+    },
+    "composition:composition_overview": {
+      "category": "composition",
+      "name": "composition_overview",
+      "count": 2
+    },
+    "composition:composition_settings": {
+      "category": "composition",
+      "name": "composition_settings",
+      "count": 1
+    },
+    "composition:composition_technical": {
+      "category": "composition",
+      "name": "composition_technical",
+      "count": 1
+    },
+    "composition:compositional_balance": {
+      "category": "composition",
+      "name": "compositional_balance",
+      "count": 2
+    },
+    "composition:compositional_structure": {
+      "category": "composition",
+      "name": "compositional_structure",
+      "count": 1
+    },
+    "composition:image_composition": {
+      "category": "composition",
+      "name": "image_composition",
+      "count": 2
+    },
+    "composition:overall_composition": {
+      "category": "composition",
+      "name": "overall_composition",
+      "count": 4
+    },
+    "composition:scene_composition": {
+      "category": "composition",
+      "name": "scene_composition",
+      "count": 14
+    },
+    "composition:visual_composition_breakdown": {
+      "category": "composition",
+      "name": "visual_composition_breakdown",
+      "count": 1
+    },
+    "genre:90s_fashion": {
+      "category": "genre",
+      "name": "90s_fashion",
+      "count": 1
+    },
+    "genre:abstract": {
+      "category": "genre",
+      "name": "abstract",
+      "count": 2
+    },
+    "genre:animal": {
+      "category": "genre",
+      "name": "animal",
+      "count": 3
+    },
+    "genre:animals": {
+      "category": "genre",
+      "name": "animals",
+      "count": 1
+    },
+    "genre:architecture": {
+      "category": "genre",
+      "name": "architecture",
+      "count": 6
+    },
+    "genre:ballet_flats": {
+      "category": "genre",
+      "name": "ballet_flats",
+      "count": 1
+    },
+    "genre:blue_and_gold": {
+      "category": "genre",
+      "name": "blue_and_gold",
+      "count": 1
+    },
+    "genre:body_horror": {
+      "category": "genre",
+      "name": "body_horror",
+      "count": 1
+    },
+    "genre:character_design": {
+      "category": "genre",
+      "name": "character_design",
+      "count": 4
+    },
+    "genre:christmas": {
+      "category": "genre",
+      "name": "christmas",
+      "count": 2
+    },
+    "genre:circus": {
+      "category": "genre",
+      "name": "circus",
+      "count": 1
+    },
+    "genre:creature_design": {
+      "category": "genre",
+      "name": "creature_design",
+      "count": 1
+    },
+    "genre:crochet": {
+      "category": "genre",
+      "name": "crochet",
+      "count": 2
+    },
+    "genre:cyberspace": {
+      "category": "genre",
+      "name": "cyberspace",
+      "count": 1
+    },
+    "genre:dark_fantasy": {
+      "category": "genre",
+      "name": "dark_fantasy",
+      "count": 3
+    },
+    "genre:dynamic_composition": {
+      "category": "genre",
+      "name": "dynamic_composition",
+      "count": 1
+    },
+    "genre:elegant_packaging": {
+      "category": "genre",
+      "name": "elegant_packaging",
+      "count": 1
+    },
+    "genre:embossed_design": {
+      "category": "genre",
+      "name": "embossed_design",
+      "count": 1
+    },
+    "genre:fantasy": {
+      "category": "genre",
+      "name": "fantasy",
+      "count": 14
+    },
+    "genre:fashion": {
+      "category": "genre",
+      "name": "fashion",
+      "count": 2
+    },
+    "genre:food": {
+      "category": "genre",
+      "name": "food",
+      "count": 7
+    },
+    "genre:graphic_design": {
+      "category": "genre",
+      "name": "graphic_design",
+      "count": 1
+    },
+    "genre:halftone": {
+      "category": "genre",
+      "name": "halftone",
+      "count": 1
+    },
+    "genre:high_fashion": {
+      "category": "genre",
+      "name": "high_fashion",
+      "count": 1
+    },
+    "genre:horror": {
+      "category": "genre",
+      "name": "horror",
+      "count": 1
+    },
+    "genre:industrial_design": {
+      "category": "genre",
+      "name": "industrial_design",
+      "count": 1
+    },
+    "genre:interior_design": {
+      "category": "genre",
+      "name": "interior_design",
+      "count": 1
+    },
+    "genre:japanese_school_uniform": {
+      "category": "genre",
+      "name": "japanese_school_uniform",
+      "count": 1
+    },
+    "genre:landscape": {
+      "category": "genre",
+      "name": "landscape",
+      "count": 1
+    },
+    "genre:leading_lines": {
+      "category": "genre",
+      "name": "leading_lines",
+      "count": 1
+    },
+    "genre:leather_texture": {
+      "category": "genre",
+      "name": "leather_texture",
+      "count": 1
+    },
+    "genre:lego": {
+      "category": "genre",
+      "name": "lego",
+      "count": 1
+    },
+    "genre:logo_design": {
+      "category": "genre",
+      "name": "logo_design",
+      "count": 2
+    },
+    "genre:object": {
+      "category": "genre",
+      "name": "object",
+      "count": 12
+    },
+    "genre:one_piece": {
+      "category": "genre",
+      "name": "one_piece",
+      "count": 1
+    },
+    "genre:others": {
+      "category": "genre",
+      "name": "others",
+      "count": 5
+    },
+    "genre:packaging_design": {
+      "category": "genre",
+      "name": "packaging_design",
+      "count": 1
+    },
+    "genre:panettone": {
+      "category": "genre",
+      "name": "panettone",
+      "count": 1
+    },
+    "genre:parody": {
+      "category": "genre",
+      "name": "parody",
+      "count": 1
+    },
+    "genre:perspective": {
+      "category": "genre",
+      "name": "perspective",
+      "count": 2
+    },
+    "genre:portrait": {
+      "category": "genre",
+      "name": "portrait",
+      "count": 21
+    },
+    "genre:postmodernism": {
+      "category": "genre",
+      "name": "postmodernism",
+      "count": 1
+    },
+    "genre:product_design": {
+      "category": "genre",
+      "name": "product_design",
+      "count": 1
+    },
+    "genre:sci_fi": {
+      "category": "genre",
+      "name": "sci_fi",
+      "count": 5
+    },
+    "genre:scifi": {
+      "category": "genre",
+      "name": "scifi",
+      "count": 9
+    },
+    "genre:simulation": {
+      "category": "genre",
+      "name": "simulation",
+      "count": 1
+    },
+    "genre:still_life": {
+      "category": "genre",
+      "name": "still_life",
+      "count": 1
+    },
+    "genre:sunset": {
+      "category": "genre",
+      "name": "sunset",
+      "count": 1
+    },
+    "genre:surreal_comedy": {
+      "category": "genre",
+      "name": "surreal_comedy",
+      "count": 1
+    },
+    "genre:surreal_fashion": {
+      "category": "genre",
+      "name": "surreal_fashion",
+      "count": 1
+    },
+    "genre:symmetrical_portrait": {
+      "category": "genre",
+      "name": "symmetrical_portrait",
+      "count": 1
+    },
+    "genre:thriller": {
+      "category": "genre",
+      "name": "thriller",
+      "count": 1
+    },
+    "genre:time_travel": {
+      "category": "genre",
+      "name": "time_travel",
+      "count": 1
+    },
+    "genre:ui_design": {
+      "category": "genre",
+      "name": "ui_design",
+      "count": 1
+    },
+    "genre:wildlife": {
+      "category": "genre",
+      "name": "wildlife",
+      "count": 1
+    },
+    "genre:youtube_logo": {
+      "category": "genre",
+      "name": "youtube_logo",
+      "count": 1
+    },
+    "lighting:lighting_and_atmosphere": {
+      "category": "lighting",
+      "name": "lighting_and_atmosphere",
+      "count": 14
+    },
+    "lighting:lighting_and_effects": {
+      "category": "lighting",
+      "name": "lighting_and_effects",
+      "count": 1
+    },
+    "lighting:lighting_and_fx": {
+      "category": "lighting",
+      "name": "lighting_and_fx",
+      "count": 1
+    },
+    "lighting:lighting_and_rendering": {
+      "category": "lighting",
+      "name": "lighting_and_rendering",
+      "count": 3
+    },
+    "lighting:lighting_and_shadow": {
+      "category": "lighting",
+      "name": "lighting_and_shadow",
+      "count": 2
+    },
+    "lighting:lighting_and_shadows": {
+      "category": "lighting",
+      "name": "lighting_and_shadows",
+      "count": 1
+    },
+    "lighting:lighting_setup": {
+      "category": "lighting",
+      "name": "lighting_setup",
+      "count": 2
+    },
+    "lighting:sky_and_lighting": {
+      "category": "lighting",
+      "name": "sky_and_lighting",
+      "count": 1
+    },
+    "mood:emotional_tone": {
+      "category": "mood",
+      "name": "emotional_tone",
+      "count": 1
+    },
+    "mood:mood_and_atmosphere": {
+      "category": "mood",
+      "name": "mood_and_atmosphere",
+      "count": 1
+    },
+    "negative_constraints:blur": {
+      "category": "negative_constraints",
+      "name": "blur",
+      "count": 42
+    },
+    "negative_constraints:deformed": {
+      "category": "negative_constraints",
+      "name": "deformed",
+      "count": 35
+    },
+    "negative_constraints:extra_limbs": {
+      "category": "negative_constraints",
+      "name": "extra_limbs",
+      "count": 28
+    },
+    "negative_constraints:low_quality": {
+      "category": "negative_constraints",
+      "name": "low_quality",
+      "count": 38
+    },
+    "negative_constraints:negative_constraints": {
+      "category": "negative_constraints",
+      "name": "negative_constraints",
+      "count": 2
+    },
+    "negative_constraints:negative_prompt_concepts": {
+      "category": "negative_constraints",
+      "name": "negative_prompt_concepts",
+      "count": 1
+    },
+    "negative_constraints:text_error": {
+      "category": "negative_constraints",
+      "name": "text_error",
+      "count": 22
+    },
+    "negative_constraints:watermark": {
+      "category": "negative_constraints",
+      "name": "watermark",
+      "count": 25
+    },
+    "perspective:composition_and_perspective": {
+      "category": "perspective",
+      "name": "composition_and_perspective",
+      "count": 1
+    },
+    "style:3d_abstract": {
+      "category": "style",
+      "name": "3d_abstract",
+      "count": 1
+    },
+    "style:3d_render": {
+      "category": "style",
+      "name": "3d_render",
+      "count": 7
+    },
+    "style:90s_aesthetic": {
+      "category": "style",
+      "name": "90s_aesthetic",
+      "count": 2
+    },
+    "style:90s_anime": {
+      "category": "style",
+      "name": "90s_anime",
+      "count": 1
+    },
+    "style:90s_style": {
+      "category": "style",
+      "name": "90s_style",
+      "count": 1
+    },
+    "style:abstract_figure": {
+      "category": "style",
+      "name": "abstract_figure",
+      "count": 1
+    },
+    "style:abstract_realism": {
+      "category": "style",
+      "name": "abstract_realism",
+      "count": 1
+    },
+    "style:advertising": {
+      "category": "style",
+      "name": "advertising",
+      "count": 2
+    },
+    "style:aesthetic_fusion": {
+      "category": "style",
+      "name": "aesthetic_fusion",
+      "count": 1
+    },
+    "style:aesthetic_style": {
+      "category": "style",
+      "name": "aesthetic_style",
+      "count": 2
+    },
+    "style:amigurumi": {
+      "category": "style",
+      "name": "amigurumi",
+      "count": 1
+    },
+    "style:android": {
+      "category": "style",
+      "name": "android",
+      "count": 1
+    },
+    "style:anime": {
+      "category": "style",
+      "name": "anime",
+      "count": 3
+    },
+    "style:anime_style": {
+      "category": "style",
+      "name": "anime_style",
+      "count": 2
+    },
+    "style:art_style": {
+      "category": "style",
+      "name": "art_style",
+      "count": 1
+    },
+    "style:art_style_parameters": {
+      "category": "style",
+      "name": "art_style_parameters",
+      "count": 1
+    },
+    "style:art_style_specifications": {
+      "category": "style",
+      "name": "art_style_specifications",
+      "count": 1
+    },
+    "style:artistic_direction": {
+      "category": "style",
+      "name": "artistic_direction",
+      "count": 2
+    },
+    "style:artistic_nuance": {
+      "category": "style",
+      "name": "artistic_nuance",
+      "count": 1
+    },
+    "style:artistic_style": {
+      "category": "style",
+      "name": "artistic_style",
+      "count": 5
+    },
+    "style:artistic_style_and_technique": {
+      "category": "style",
+      "name": "artistic_style_and_technique",
+      "count": 1
+    },
+    "style:artistic_style_keywords": {
+      "category": "style",
+      "name": "artistic_style_keywords",
+      "count": 1
+    },
+    "style:artistic_style_parameters": {
+      "category": "style",
+      "name": "artistic_style_parameters",
+      "count": 1
+    },
+    "style:asian_art": {
+      "category": "style",
+      "name": "asian_art",
+      "count": 1
+    },
+    "style:atmospheric": {
+      "category": "style",
+      "name": "atmospheric",
+      "count": 2
+    },
+    "style:automaton": {
+      "category": "style",
+      "name": "automaton",
+      "count": 1
+    },
+    "style:automotive_photography": {
+      "category": "style",
+      "name": "automotive_photography",
+      "count": 1
+    },
+    "style:azulejo": {
+      "category": "style",
+      "name": "azulejo",
+      "count": 1
+    },
+    "style:backlighting": {
+      "category": "style",
+      "name": "backlighting",
+      "count": 1
+    },
+    "style:baroque": {
+      "category": "style",
+      "name": "baroque",
+      "count": 1
+    },
+    "style:battle": {
+      "category": "style",
+      "name": "battle",
+      "count": 1
+    },
+    "style:bauhaus": {
+      "category": "style",
+      "name": "bauhaus",
+      "count": 1
+    },
+    "style:bauhaus_style": {
+      "category": "style",
+      "name": "bauhaus_style",
+      "count": 1
+    },
+    "style:behind_the_scenes": {
+      "category": "style",
+      "name": "behind_the_scenes",
+      "count": 1
+    },
+    "style:biohazard": {
+      "category": "style",
+      "name": "biohazard",
+      "count": 1
+    },
+    "style:black_and_white": {
+      "category": "style",
+      "name": "black_and_white",
+      "count": 1
+    },
+    "style:blue_skin": {
+      "category": "style",
+      "name": "blue_skin",
+      "count": 1
+    },
+    "style:bokeh": {
+      "category": "style",
+      "name": "bokeh",
+      "count": 1
+    },
+    "style:cake_art": {
+      "category": "style",
+      "name": "cake_art",
+      "count": 1
+    },
+    "style:candid_snapshot": {
+      "category": "style",
+      "name": "candid_snapshot",
+      "count": 1
+    },
+    "style:candlelight": {
+      "category": "style",
+      "name": "candlelight",
+      "count": 1
+    },
+    "style:cartography": {
+      "category": "style",
+      "name": "cartography",
+      "count": 1
+    },
+    "style:cat": {
+      "category": "style",
+      "name": "cat",
+      "count": 2
+    },
+    "style:cel_shaded": {
+      "category": "style",
+      "name": "cel_shaded",
+      "count": 2
+    },
+    "style:celebrity": {
+      "category": "style",
+      "name": "celebrity",
+      "count": 1
+    },
+    "style:ceramic_tile": {
+      "category": "style",
+      "name": "ceramic_tile",
+      "count": 1
+    },
+    "style:charcoal_sketch": {
+      "category": "style",
+      "name": "charcoal_sketch",
+      "count": 1
+    },
+    "style:chrome_fashion": {
+      "category": "style",
+      "name": "chrome_fashion",
+      "count": 1
+    },
+    "style:cinematic": {
+      "category": "style",
+      "name": "cinematic",
+      "count": 2
+    },
+    "style:cinematic_collage": {
+      "category": "style",
+      "name": "cinematic_collage",
+      "count": 1
+    },
+    "style:cinematic_lighting": {
+      "category": "style",
+      "name": "cinematic_lighting",
+      "count": 2
+    },
+    "style:circuit_board": {
+      "category": "style",
+      "name": "circuit_board",
+      "count": 1
+    },
+    "style:claymation": {
+      "category": "style",
+      "name": "claymation",
+      "count": 1
+    },
+    "style:coca_cola": {
+      "category": "style",
+      "name": "coca_cola",
+      "count": 1
+    },
+    "style:coding": {
+      "category": "style",
+      "name": "coding",
+      "count": 1
+    },
+    "style:collage": {
+      "category": "style",
+      "name": "collage",
+      "count": 7
+    },
+    "style:collage_art": {
+      "category": "style",
+      "name": "collage_art",
+      "count": 1
+    },
+    "style:collectibles": {
+      "category": "style",
+      "name": "collectibles",
+      "count": 1
+    },
+    "style:commercial": {
+      "category": "style",
+      "name": "commercial",
+      "count": 1
+    },
+    "style:concept_art": {
+      "category": "style",
+      "name": "concept_art",
+      "count": 3
+    },
+    "style:conceptual": {
+      "category": "style",
+      "name": "conceptual",
+      "count": 1
+    },
+    "style:conceptual_art": {
+      "category": "style",
+      "name": "conceptual_art",
+      "count": 2
+    },
+    "style:conceptual_photography": {
+      "category": "style",
+      "name": "conceptual_photography",
+      "count": 1
+    },
+    "style:crt_monitor": {
+      "category": "style",
+      "name": "crt_monitor",
+      "count": 1
+    },
+    "style:cute": {
+      "category": "style",
+      "name": "cute",
+      "count": 3
+    },
+    "style:cyberpunk": {
+      "category": "style",
+      "name": "cyberpunk",
+      "count": 6
+    },
+    "style:cyberpunk_western": {
+      "category": "style",
+      "name": "cyberpunk_western",
+      "count": 1
+    },
+    "style:dashboard": {
+      "category": "style",
+      "name": "dashboard",
+      "count": 1
+    },
+    "style:dating": {
+      "category": "style",
+      "name": "dating",
+      "count": 1
+    },
+    "style:demon": {
+      "category": "style",
+      "name": "demon",
+      "count": 1
+    },
+    "style:digital_art": {
+      "category": "style",
+      "name": "digital_art",
+      "count": 3
+    },
+    "style:digital_distortion": {
+      "category": "style",
+      "name": "digital_distortion",
+      "count": 1
+    },
+    "style:diorama": {
+      "category": "style",
+      "name": "diorama",
+      "count": 4
+    },
+    "style:dystopian": {
+      "category": "style",
+      "name": "dystopian",
+      "count": 1
+    },
+    "style:elemental": {
+      "category": "style",
+      "name": "elemental",
+      "count": 1
+    },
+    "style:elephant": {
+      "category": "style",
+      "name": "elephant",
+      "count": 1
+    },
+    "style:esoteric": {
+      "category": "style",
+      "name": "esoteric",
+      "count": 1
+    },
+    "style:exploded_view": {
+      "category": "style",
+      "name": "exploded_view",
+      "count": 1
+    },
+    "style:felt_art": {
+      "category": "style",
+      "name": "felt_art",
+      "count": 1
+    },
+    "style:film_noir": {
+      "category": "style",
+      "name": "film_noir",
+      "count": 1
+    },
+    "style:film_photography": {
+      "category": "style",
+      "name": "film_photography",
+      "count": 1
+    },
+    "style:fisheye": {
+      "category": "style",
+      "name": "fisheye",
+      "count": 2
+    },
+    "style:flash_photography": {
+      "category": "style",
+      "name": "flash_photography",
+      "count": 2
+    },
+    "style:flat_design": {
+      "category": "style",
+      "name": "flat_design",
+      "count": 1
+    },
+    "style:flat_lay": {
+      "category": "style",
+      "name": "flat_lay",
+      "count": 1
+    },
+    "style:folk_art": {
+      "category": "style",
+      "name": "folk_art",
+      "count": 1
+    },
+    "style:food_art": {
+      "category": "style",
+      "name": "food_art",
+      "count": 2
+    },
+    "style:food_photography": {
+      "category": "style",
+      "name": "food_photography",
+      "count": 3
+    },
+    "style:funny": {
+      "category": "style",
+      "name": "funny",
+      "count": 1
+    },
+    "style:garden_party": {
+      "category": "style",
+      "name": "garden_party",
+      "count": 1
+    },
+    "style:geometric": {
+      "category": "style",
+      "name": "geometric",
+      "count": 1
+    },
+    "style:giantess": {
+      "category": "style",
+      "name": "giantess",
+      "count": 1
+    },
+    "style:glamour": {
+      "category": "style",
+      "name": "glamour",
+      "count": 1
+    },
+    "style:glitch_aesthetic": {
+      "category": "style",
+      "name": "glitch_aesthetic",
+      "count": 1
+    },
+    "style:glitch_art": {
+      "category": "style",
+      "name": "glitch_art",
+      "count": 4
+    },
+    "style:gothic": {
+      "category": "style",
+      "name": "gothic",
+      "count": 1
+    },
+    "style:hamster": {
+      "category": "style",
+      "name": "hamster",
+      "count": 1
+    },
+    "style:hokusai": {
+      "category": "style",
+      "name": "hokusai",
+      "count": 1
+    },
+    "style:humorous": {
+      "category": "style",
+      "name": "humorous",
+      "count": 2
+    },
+    "style:hyperrealistic": {
+      "category": "style",
+      "name": "hyperrealistic",
+      "count": 1
+    },
+    "style:illusion": {
+      "category": "style",
+      "name": "illusion",
+      "count": 1
+    },
+    "style:illustration": {
+      "category": "style",
+      "name": "illustration",
+      "count": 1
+    },
+    "style:isometric": {
+      "category": "style",
+      "name": "isometric",
+      "count": 2
+    },
+    "style:japanese_bath": {
+      "category": "style",
+      "name": "japanese_bath",
+      "count": 1
+    },
+    "style:japanese_style": {
+      "category": "style",
+      "name": "japanese_style",
+      "count": 1
+    },
+    "style:jazz_singer": {
+      "category": "style",
+      "name": "jazz_singer",
+      "count": 1
+    },
+    "style:lebron_james": {
+      "category": "style",
+      "name": "lebron_james",
+      "count": 1
+    },
+    "style:long_exposure": {
+      "category": "style",
+      "name": "long_exposure",
+      "count": 1
+    },
+    "style:low_key": {
+      "category": "style",
+      "name": "low_key",
+      "count": 1
+    },
+    "style:low_poly": {
+      "category": "style",
+      "name": "low_poly",
+      "count": 1
+    },
+    "style:luxury": {
+      "category": "style",
+      "name": "luxury",
+      "count": 1
+    },
+    "style:macro": {
+      "category": "style",
+      "name": "macro",
+      "count": 1
+    },
+    "style:macro_photography": {
+      "category": "style",
+      "name": "macro_photography",
+      "count": 5
+    },
+    "style:mcdonalds": {
+      "category": "style",
+      "name": "mcdonalds",
+      "count": 1
+    },
+    "style:medium_and_style": {
+      "category": "style",
+      "name": "medium_and_style",
+      "count": 1
+    },
+    "style:meme": {
+      "category": "style",
+      "name": "meme",
+      "count": 1
+    },
+    "style:memphis_style": {
+      "category": "style",
+      "name": "memphis_style",
+      "count": 1
+    },
+    "style:miniature": {
+      "category": "style",
+      "name": "miniature",
+      "count": 2
+    },
+    "style:miniature_photography": {
+      "category": "style",
+      "name": "miniature_photography",
+      "count": 1
+    },
+    "style:miniature_world": {
+      "category": "style",
+      "name": "miniature_world",
+      "count": 1
+    },
+    "style:minimalism": {
+      "category": "style",
+      "name": "minimalism",
+      "count": 1
+    },
+    "style:mixed_media": {
+      "category": "style",
+      "name": "mixed_media",
+      "count": 2
+    },
+    "style:monochromatic": {
+      "category": "style",
+      "name": "monochromatic",
+      "count": 1
+    },
+    "style:monochrome": {
+      "category": "style",
+      "name": "monochrome",
+      "count": 1
+    },
+    "style:motion_blur": {
+      "category": "style",
+      "name": "motion_blur",
+      "count": 1
+    },
+    "style:multiverse": {
+      "category": "style",
+      "name": "multiverse",
+      "count": 1
+    },
+    "style:neon": {
+      "category": "style",
+      "name": "neon",
+      "count": 1
+    },
+    "style:noise_texture": {
+      "category": "style",
+      "name": "noise_texture",
+      "count": 1
+    },
+    "style:occult": {
+      "category": "style",
+      "name": "occult",
+      "count": 1
+    },
+    "style:otter": {
+      "category": "style",
+      "name": "otter",
+      "count": 1
+    },
+    "style:paper_art": {
+      "category": "style",
+      "name": "paper_art",
+      "count": 1
+    },
+    "style:paper_cut": {
+      "category": "style",
+      "name": "paper_cut",
+      "count": 1
+    },
+    "style:papercraft": {
+      "category": "style",
+      "name": "papercraft",
+      "count": 2
+    },
+    "style:pastel_aesthetic": {
+      "category": "style",
+      "name": "pastel_aesthetic",
+      "count": 3
+    },
+    "style:pastel_aesthetics": {
+      "category": "style",
+      "name": "pastel_aesthetics",
+      "count": 1
+    },
+    "style:photography_style": {
+      "category": "style",
+      "name": "photography_style",
+      "count": 1
+    },
+    "style:photorealistic": {
+      "category": "style",
+      "name": "photorealistic",
+      "count": 1
+    },
+    "style:pistol": {
+      "category": "style",
+      "name": "pistol",
+      "count": 1
+    },
+    "style:pixel_art": {
+      "category": "style",
+      "name": "pixel_art",
+      "count": 3
+    },
+    "style:pop_art": {
+      "category": "style",
+      "name": "pop_art",
+      "count": 4
+    },
+    "style:pop_surrealism": {
+      "category": "style",
+      "name": "pop_surrealism",
+      "count": 1
+    },
+    "style:porcelain": {
+      "category": "style",
+      "name": "porcelain",
+      "count": 1
+    },
+    "style:poster_art": {
+      "category": "style",
+      "name": "poster_art",
+      "count": 1
+    },
+    "style:product_photography": {
+      "category": "style",
+      "name": "product_photography",
+      "count": 5
+    },
+    "style:red": {
+      "category": "style",
+      "name": "red",
+      "count": 1
+    },
+    "style:red_aesthetic": {
+      "category": "style",
+      "name": "red_aesthetic",
+      "count": 1
+    },
+    "style:reference_sheet": {
+      "category": "style",
+      "name": "reference_sheet",
+      "count": 1
+    },
+    "style:retro": {
+      "category": "style",
+      "name": "retro",
+      "count": 2
+    },
+    "style:retro_80s": {
+      "category": "style",
+      "name": "retro_80s",
+      "count": 1
+    },
+    "style:retro_computing": {
+      "category": "style",
+      "name": "retro_computing",
+      "count": 1
+    },
+    "style:retro_futuristic": {
+      "category": "style",
+      "name": "retro_futuristic",
+      "count": 1
+    },
+    "style:retro_landscape": {
+      "category": "style",
+      "name": "retro_landscape",
+      "count": 1
+    },
+    "style:retro_luxury": {
+      "category": "style",
+      "name": "retro_luxury",
+      "count": 1
+    },
+    "style:robotics": {
+      "category": "style",
+      "name": "robotics",
+      "count": 1
+    },
+    "style:rococo": {
+      "category": "style",
+      "name": "rococo",
+      "count": 3
+    },
+    "style:sad_clown": {
+      "category": "style",
+      "name": "sad_clown",
+      "count": 1
+    },
+    "style:samurai": {
+      "category": "style",
+      "name": "samurai",
+      "count": 2
+    },
+    "style:sequin_dress": {
+      "category": "style",
+      "name": "sequin_dress",
+      "count": 1
+    },
+    "style:shadowy": {
+      "category": "style",
+      "name": "shadowy",
+      "count": 1
+    },
+    "style:silhouette": {
+      "category": "style",
+      "name": "silhouette",
+      "count": 3
+    },
+    "style:sketch": {
+      "category": "style",
+      "name": "sketch",
+      "count": 1
+    },
+    "style:skincare_theme": {
+      "category": "style",
+      "name": "skincare_theme",
+      "count": 1
+    },
+    "style:sky_aesthetic": {
+      "category": "style",
+      "name": "sky_aesthetic",
+      "count": 1
+    },
+    "style:snowboard": {
+      "category": "style",
+      "name": "snowboard",
+      "count": 1
+    },
+    "style:snowmobile": {
+      "category": "style",
+      "name": "snowmobile",
+      "count": 1
+    },
+    "style:social_media": {
+      "category": "style",
+      "name": "social_media",
+      "count": 1
+    },
+    "style:soft_sculpture": {
+      "category": "style",
+      "name": "soft_sculpture",
+      "count": 1
+    },
+    "style:solarpunk": {
+      "category": "style",
+      "name": "solarpunk",
+      "count": 1
+    },
+    "style:spiral": {
+      "category": "style",
+      "name": "spiral",
+      "count": 1
+    },
+    "style:splash_art": {
+      "category": "style",
+      "name": "splash_art",
+      "count": 1
+    },
+    "style:splatter_art": {
+      "category": "style",
+      "name": "splatter_art",
+      "count": 1
+    },
+    "style:sports_illustration": {
+      "category": "style",
+      "name": "sports_illustration",
+      "count": 1
+    },
+    "style:steampunk": {
+      "category": "style",
+      "name": "steampunk",
+      "count": 1
+    },
+    "style:stippling": {
+      "category": "style",
+      "name": "stippling",
+      "count": 1
+    },
+    "style:stop_motion": {
+      "category": "style",
+      "name": "stop_motion",
+      "count": 1
+    },
+    "style:strawberry_cream": {
+      "category": "style",
+      "name": "strawberry_cream",
+      "count": 1
+    },
+    "style:street_art": {
+      "category": "style",
+      "name": "street_art",
+      "count": 1
+    },
+    "style:street_photography": {
+      "category": "style",
+      "name": "street_photography",
+      "count": 2
+    },
+    "style:studio_ghibli": {
+      "category": "style",
+      "name": "studio_ghibli",
+      "count": 1
+    },
+    "style:studio_lighting": {
+      "category": "style",
+      "name": "studio_lighting",
+      "count": 2
+    },
+    "style:stylistic_references": {
+      "category": "style",
+      "name": "stylistic_references",
+      "count": 1
+    },
+    "style:sunglasses": {
+      "category": "style",
+      "name": "sunglasses",
+      "count": 1
+    },
+    "style:surreal": {
+      "category": "style",
+      "name": "surreal",
+      "count": 2
+    },
+    "style:surrealism": {
+      "category": "style",
+      "name": "surrealism",
+      "count": 16
+    },
+    "style:surveillance": {
+      "category": "style",
+      "name": "surveillance",
+      "count": 1
+    },
+    "style:synthwave": {
+      "category": "style",
+      "name": "synthwave",
+      "count": 1
+    },
+    "style:textured": {
+      "category": "style",
+      "name": "textured",
+      "count": 1
+    },
+    "style:top_down": {
+      "category": "style",
+      "name": "top_down",
+      "count": 3
+    },
+    "style:traditional": {
+      "category": "style",
+      "name": "traditional",
+      "count": 1
+    },
+    "style:typography": {
+      "category": "style",
+      "name": "typography",
+      "count": 2
+    },
+    "style:vaporwave": {
+      "category": "style",
+      "name": "vaporwave",
+      "count": 3
+    },
+    "style:vector_art": {
+      "category": "style",
+      "name": "vector_art",
+      "count": 1
+    },
+    "style:vector_illustration": {
+      "category": "style",
+      "name": "vector_illustration",
+      "count": 1
+    },
+    "style:vintage": {
+      "category": "style",
+      "name": "vintage",
+      "count": 6
+    },
+    "style:vintage_aesthetic": {
+      "category": "style",
+      "name": "vintage_aesthetic",
+      "count": 1
+    },
+    "style:vintage_fashion": {
+      "category": "style",
+      "name": "vintage_fashion",
+      "count": 1
+    },
+    "style:vintage_ledger": {
+      "category": "style",
+      "name": "vintage_ledger",
+      "count": 5
+    },
+    "style:violinist": {
+      "category": "style",
+      "name": "violinist",
+      "count": 1
+    },
+    "style:virus_theme": {
+      "category": "style",
+      "name": "virus_theme",
+      "count": 1
+    },
+    "style:voxel_art": {
+      "category": "style",
+      "name": "voxel_art",
+      "count": 1
+    },
+    "style:watercolor": {
+      "category": "style",
+      "name": "watercolor",
+      "count": 1
+    },
+    "style:wes_anderson_style": {
+      "category": "style",
+      "name": "wes_anderson_style",
+      "count": 1
+    },
+    "style:whatsapp": {
+      "category": "style",
+      "name": "whatsapp",
+      "count": 1
+    },
+    "style:whimsical": {
+      "category": "style",
+      "name": "whimsical",
+      "count": 5
+    },
+    "style:white": {
+      "category": "style",
+      "name": "white",
+      "count": 1
+    },
+    "style:wide_angle": {
+      "category": "style",
+      "name": "wide_angle",
+      "count": 1
+    },
+    "style:winter": {
+      "category": "style",
+      "name": "winter",
+      "count": 2
+    },
+    "style:wizard": {
+      "category": "style",
+      "name": "wizard",
+      "count": 1
+    },
+    "style:woodcarving": {
+      "category": "style",
+      "name": "woodcarving",
+      "count": 1
+    },
+    "style:wwii": {
+      "category": "style",
+      "name": "wwii",
+      "count": 1
+    },
+    "style:y2k": {
+      "category": "style",
+      "name": "y2k",
+      "count": 1
+    },
+    "subject:animals": {
+      "category": "subject",
+      "name": "animals",
+      "count": 1
+    },
+    "subject:architecture": {
+      "category": "subject",
+      "name": "architecture",
+      "count": 3
+    },
+    "subject:automaton_character": {
+      "category": "subject",
+      "name": "automaton_character",
+      "count": 1
+    },
+    "subject:blueprint": {
+      "category": "subject",
+      "name": "blueprint",
+      "count": 1
+    },
+    "subject:central_figure": {
+      "category": "subject",
+      "name": "central_figure",
+      "count": 1
+    },
+    "subject:central_structure": {
+      "category": "subject",
+      "name": "central_structure",
+      "count": 1
+    },
+    "subject:central_subject": {
+      "category": "subject",
+      "name": "central_subject",
+      "count": 2
+    },
+    "subject:characters": {
+      "category": "subject",
+      "name": "characters",
+      "count": 4
+    },
+    "subject:culinary_map": {
+      "category": "subject",
+      "name": "culinary_map",
+      "count": 1
+    },
+    "subject:cute_character": {
+      "category": "subject",
+      "name": "cute_character",
+      "count": 1
+    },
+    "subject:desert": {
+      "category": "subject",
+      "name": "desert",
+      "count": 1
+    },
+    "subject:desert_landscape": {
+      "category": "subject",
+      "name": "desert_landscape",
+      "count": 1
+    },
+    "subject:fabric_detail": {
+      "category": "subject",
+      "name": "fabric_detail",
+      "count": 1
+    },
+    "subject:geocities": {
+      "category": "subject",
+      "name": "geocities",
+      "count": 1
+    },
+    "subject:hamburger": {
+      "category": "subject",
+      "name": "hamburger",
+      "count": 1
+    },
+    "subject:hyper_realistic": {
+      "category": "subject",
+      "name": "hyper_realistic",
+      "count": 2
+    },
+    "subject:infographic": {
+      "category": "subject",
+      "name": "infographic",
+      "count": 1
+    },
+    "subject:interface": {
+      "category": "subject",
+      "name": "interface",
+      "count": 1
+    },
+    "subject:inventory_breakdown": {
+      "category": "subject",
+      "name": "inventory_breakdown",
+      "count": 1
+    },
+    "subject:lakers": {
+      "category": "subject",
+      "name": "lakers",
+      "count": 1
+    },
+    "subject:main_subject": {
+      "category": "subject",
+      "name": "main_subject",
+      "count": 5
+    },
+    "subject:movie_poster": {
+      "category": "subject",
+      "name": "movie_poster",
+      "count": 1
+    },
+    "subject:object": {
+      "category": "subject",
+      "name": "object",
+      "count": 1
+    },
+    "subject:ocean": {
+      "category": "subject",
+      "name": "ocean",
+      "count": 1
+    },
+    "subject:portrait": {
+      "category": "subject",
+      "name": "portrait",
+      "count": 6
+    },
+    "subject:street_scene": {
+      "category": "subject",
+      "name": "street_scene",
+      "count": 1
+    },
+    "subject:streetwear": {
+      "category": "subject",
+      "name": "streetwear",
+      "count": 1
+    },
+    "subject:subject_analysis": {
+      "category": "subject",
+      "name": "subject_analysis",
+      "count": 3
+    },
+    "subject:subject_architecture": {
+      "category": "subject",
+      "name": "subject_architecture",
+      "count": 1
+    },
+    "subject:subject_breakdown": {
+      "category": "subject",
+      "name": "subject_breakdown",
+      "count": 2
+    },
+    "subject:subject_character": {
+      "category": "subject",
+      "name": "subject_character",
+      "count": 3
+    },
+    "subject:subject_characterization": {
+      "category": "subject",
+      "name": "subject_characterization",
+      "count": 1
+    },
+    "subject:subject_details": {
+      "category": "subject",
+      "name": "subject_details",
+      "count": 12
+    },
+    "subject:subject_entity": {
+      "category": "subject",
+      "name": "subject_entity",
+      "count": 1
+    },
+    "subject:subject_human": {
+      "category": "subject",
+      "name": "subject_human",
+      "count": 1
+    },
+    "subject:subject_matter": {
+      "category": "subject",
+      "name": "subject_matter",
+      "count": 1
+    },
+    "subject:subjects": {
+      "category": "subject",
+      "name": "subjects",
+      "count": 6
+    },
+    "subject:surreal_portrait": {
+      "category": "subject",
+      "name": "surreal_portrait",
+      "count": 1
+    },
+    "subject:tokyo_street": {
+      "category": "subject",
+      "name": "tokyo_street",
+      "count": 1
+    },
+    "subject:topographic_map": {
+      "category": "subject",
+      "name": "topographic_map",
+      "count": 1
+    },
+    "subject:webcore": {
+      "category": "subject",
+      "name": "webcore",
+      "count": 1
+    },
+    "subject:winter_landscape": {
+      "category": "subject",
+      "name": "winter_landscape",
+      "count": 1
+    },
+    "technical_specs:85mm": {
+      "category": "technical_specs",
+      "name": "85mm",
+      "count": 18
+    },
+    "technical_specs:8k": {
+      "category": "technical_specs",
+      "name": "8k",
+      "count": 48
+    },
+    "technical_specs:camera_settings_simulation": {
+      "category": "technical_specs",
+      "name": "camera_settings_simulation",
+      "count": 1
+    },
+    "technical_specs:film_grain": {
+      "category": "technical_specs",
+      "name": "film_grain",
+      "count": 15
+    },
+    "technical_specs:octane": {
+      "category": "technical_specs",
+      "name": "octane",
+      "count": 24
+    },
+    "technical_specs:shallow_dof": {
+      "category": "technical_specs",
+      "name": "shallow_dof",
+      "count": 26
+    },
+    "technical_specs:technical_aesthetics": {
+      "category": "technical_specs",
+      "name": "technical_aesthetics",
+      "count": 1
+    },
+    "technical_specs:technical_constraints": {
+      "category": "technical_specs",
+      "name": "technical_constraints",
+      "count": 3
+    },
+    "technical_specs:technical_details": {
+      "category": "technical_specs",
+      "name": "technical_details",
+      "count": 3
+    },
+    "technical_specs:technical_equipment": {
+      "category": "technical_specs",
+      "name": "technical_equipment",
+      "count": 1
+    },
+    "technical_specs:technical_execution": {
+      "category": "technical_specs",
+      "name": "technical_execution",
+      "count": 6
+    },
+    "technical_specs:technical_parameters": {
+      "category": "technical_specs",
+      "name": "technical_parameters",
+      "count": 4
+    },
+    "technical_specs:technical_prompts": {
+      "category": "technical_specs",
+      "name": "technical_prompts",
+      "count": 2
+    },
+    "technical_specs:technical_rendering_specs": {
+      "category": "technical_specs",
+      "name": "technical_rendering_specs",
+      "count": 2
+    },
+    "technical_specs:technical_specifications": {
+      "category": "technical_specs",
+      "name": "technical_specifications",
+      "count": 7
+    },
+    "technical_specs:technical_specs": {
+      "category": "technical_specs",
+      "name": "technical_specs",
+      "count": 4
+    },
+    "technical_specs:unreal_engine": {
+      "category": "technical_specs",
+      "name": "unreal_engine",
+      "count": 32
+    },
+    "text_content:credits": {
+      "category": "text_content",
+      "name": "credits",
+      "count": 18
+    },
+    "text_content:dialogue": {
+      "category": "text_content",
+      "name": "dialogue",
+      "count": 14
+    },
+    "text_content:labels": {
+      "category": "text_content",
+      "name": "labels",
+      "count": 22
+    },
+    "text_content:title": {
+      "category": "text_content",
+      "name": "title",
+      "count": 30
+    },
+    "text_content:typography_and_code_elements": {
+      "category": "text_content",
+      "name": "typography_and_code_elements",
+      "count": 1
+    },
+    "text_content:typography_and_graphics": {
+      "category": "text_content",
+      "name": "typography_and_graphics",
+      "count": 1
+    },
+    "text_content:typography_and_text": {
+      "category": "text_content",
+      "name": "typography_and_text",
+      "count": 1
+    },
+    "text_content:ui_text": {
+      "category": "text_content",
+      "name": "ui_text",
+      "count": 12
+    },
+    "typography:top": {
+      "category": "typography",
+      "name": "顶部",
+      "count": 30
+    },
+    "typography:second_line": {
+      "category": "typography",
+      "name": "第二行",
+      "count": 25
+    },
+    "typography:third_line": {
+      "category": "typography",
+      "name": "第三行",
+      "count": 20
+    },
+    "typography:middle": {
+      "category": "typography",
+      "name": "中间",
+      "count": 18
+    },
+    "typography:center": {
+      "category": "typography",
+      "name": "中央",
+      "count": 35
+    },
+    "typography:bottom": {
+      "category": "typography",
+      "name": "底部",
+      "count": 22
+    },
+    "typography:bottom_center": {
+      "category": "typography",
+      "name": "底部中央",
+      "count": 15
+    },
+    "typography:top_left": {
+      "category": "typography",
+      "name": "顶部左侧",
+      "count": 8
+    },
+    "typography:top_right": {
+      "category": "typography",
+      "name": "顶部右侧",
+      "count": 8
+    },
+    "typography:bottom_left": {
+      "category": "typography",
+      "name": "底部左侧",
+      "count": 6
+    },
+    "typography:bottom_right": {
+      "category": "typography",
+      "name": "底部右侧",
+      "count": 6
+    },
+    "typography:left": {
+      "category": "typography",
+      "name": "左侧",
+      "count": 12
+    },
+    "typography:right": {
+      "category": "typography",
+      "name": "右侧",
+      "count": 12
+    },
+    "typography:large_text": {
+      "category": "typography",
+      "name": "大字",
+      "count": 28
+    },
+    "typography:extra_large_title": {
+      "category": "typography",
+      "name": "超大标题",
+      "count": 22
+    },
+    "typography:bold_text": {
+      "category": "typography",
+      "name": "粗体大字",
+      "count": 20
+    },
+    "typography:handwritten": {
+      "category": "typography",
+      "name": "手写体",
+      "count": 15
+    },
+    "typography:brush_calligraphy": {
+      "category": "typography",
+      "name": "毛笔字",
+      "count": 18
+    },
+    "typography:embossed_3d": {
+      "category": "typography",
+      "name": "3D浮雕",
+      "count": 16
+    },
+    "typography:drop_shadow": {
+      "category": "typography",
+      "name": "重阴影",
+      "count": 14
+    },
+    "typography:gradient_text": {
+      "category": "typography",
+      "name": "渐变文字",
+      "count": 12
+    },
+    "typography:neon_glow": {
+      "category": "typography",
+      "name": "霓虹发光",
+      "count": 10
+    },
+    "typography:circular_frame": {
+      "category": "typography",
+      "name": "圆形边框",
+      "count": 14
+    },
+    "typography:glowing_border": {
+      "category": "typography",
+      "name": "发光边框",
+      "count": 12
+    },
+    "typography:red_seal": {
+      "category": "typography",
+      "name": "红色印章",
+      "count": 10
+    },
+    "typography:four_corner_seal": {
+      "category": "typography",
+      "name": "四角印章",
+      "count": 8
+    },
+    "typography:halftone_texture": {
+      "category": "typography",
+      "name": "网点纹理",
+      "count": 16
+    },
+    "typography:paper_grain": {
+      "category": "typography",
+      "name": "纸张颗粒感",
+      "count": 10
+    },
+    "typography:ink_bleed": {
+      "category": "typography",
+      "name": "墨迹晕染",
+      "count": 6
+    },
+    "confrontation:left_vs_right": {
+      "category": "confrontation",
+      "name": "左右对峙",
+      "count": 18
+    },
+    "confrontation:top_vs_bottom": {
+      "category": "confrontation",
+      "name": "上下对比",
+      "count": 12
+    },
+    "confrontation:three_way": {
+      "category": "confrontation",
+      "name": "三方对比",
+      "count": 5
+    },
+    "color_palette:pink": {
+      "category": "color_palette",
+      "name": "粉色",
+      "count": 20
+    },
+    "color_palette:white": {
+      "category": "color_palette",
+      "name": "白色",
+      "count": 25
+    },
+    "color_palette:blue": {
+      "category": "color_palette",
+      "name": "蓝色",
+      "count": 22
+    },
+    "color_palette:orange_red": {
+      "category": "color_palette",
+      "name": "橙红色",
+      "count": 18
+    },
+    "color_palette:yellow": {
+      "category": "color_palette",
+      "name": "黄色",
+      "count": 20
+    },
+    "color_palette:deep_red": {
+      "category": "color_palette",
+      "name": "深红色",
+      "count": 15
+    },
+    "color_palette:gold": {
+      "category": "color_palette",
+      "name": "金色",
+      "count": 16
+    },
+    "color_palette:black": {
+      "category": "color_palette",
+      "name": "黑色",
+      "count": 30
+    },
+    "color_palette:green": {
+      "category": "color_palette",
+      "name": "绿色",
+      "count": 14
+    },
+    "color_palette:purple": {
+      "category": "color_palette",
+      "name": "紫色",
+      "count": 12
+    },
+    "color_palette:cyan": {
+      "category": "color_palette",
+      "name": "青色",
+      "count": 10
+    },
+    "color_palette:magenta": {
+      "category": "color_palette",
+      "name": "洋红色",
+      "count": 8
+    }
+  },
+  "co_occurrence": {
+    "background:abstract": {
+      "style:illustration": 15,
+      "style:flat_design": 12,
+      "mood:playful": 10,
+      "color_palette:vibrant": 14,
+      "color_palette:neon": 8
+    },
+    "background:background_elements": {
+      "composition:overall_composition": 1,
+      "genre:body_horror": 1,
+      "genre:portrait": 1,
+      "style:collage_art": 1,
+      "style:retro_80s": 1,
+      "style:typography": 1,
+      "subject:movie_poster": 1,
+      "subject:subject_analysis": 1,
+      "text_content:typography_and_text": 1
+    },
+    "background:background_environment": {
+      "composition:composition_overview": 1,
+      "genre:elegant_packaging": 1,
+      "genre:food": 1,
+      "lighting:lighting_and_atmosphere": 2,
+      "style:bokeh": 1,
+      "style:garden_party": 1,
+      "style:product_photography": 1,
+      "style:strawberry_cream": 1,
+      "subject:subject_details": 1,
+      "technical_specs:camera_settings_simulation": 1,
+      "composition:composition_and_framing": 1,
+      "genre:animal": 1,
+      "genre:wildlife": 1,
+      "style:cute": 1,
+      "style:fisheye": 1,
+      "style:macro": 1,
+      "style:otter": 1,
+      "style:photorealistic": 1,
+      "subject:subject_analysis": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "background:background_setting": {
+      "composition:composition_and_camera": 1,
+      "genre:object": 1,
+      "lighting:lighting_and_atmosphere": 1,
+      "negative_constraints:negative_constraints": 1,
+      "style:artistic_style": 1,
+      "style:biohazard": 1,
+      "style:diorama": 1,
+      "style:papercraft": 1,
+      "style:solarpunk": 1,
+      "style:wwii": 1,
+      "subject:main_subject": 1
+    },
+    "background:city": {
+      "style:3d_render": 18,
+      "style:photography": 22,
+      "mood:dramatic": 15,
+      "mood:dark": 20,
+      "lighting:dramatic": 14,
+      "technical_specs:8k": 16,
+      "subject:architecture": 12,
+      "subject:vehicle": 10
+    },
+    "background:environment": {
+      "composition:scene_composition": 3,
+      "genre:food": 2,
+      "lighting:lighting_setup": 1,
+      "style:advertising": 1,
+      "style:coca_cola": 1,
+      "style:product_photography": 1,
+      "style:splash_art": 1,
+      "subject:central_subject": 1,
+      "subject:hyper_realistic": 2,
+      "genre:sci_fi": 2,
+      "lighting:lighting_and_rendering": 1,
+      "style:diorama": 2,
+      "style:food_art": 1,
+      "style:miniature_photography": 1,
+      "style:surrealism": 3,
+      "subject:characters": 1,
+      "subject:main_subject": 4,
+      "color_palette:color_palette": 2,
+      "composition:composition": 4,
+      "genre:fantasy": 3,
+      "lighting:lighting_and_atmosphere": 2,
+      "style:artistic_style": 3,
+      "style:asian_art": 1,
+      "style:paper_cut": 1,
+      "style:red": 1,
+      "style:silhouette": 1,
+      "style:traditional": 1,
+      "subject:subject_matter": 1,
+      "technical_specs:technical_details": 1,
+      "genre:portrait": 3,
+      "style:90s_style": 1,
+      "style:aesthetic_style": 1,
+      "style:anime": 1,
+      "style:cel_shaded": 1,
+      "style:vintage": 1,
+      "subject:portrait": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_prompts": 1,
+      "composition:composition_technical": 1,
+      "lighting:sky_and_lighting": 1,
+      "style:3d_render": 1,
+      "style:pastel_aesthetic": 1,
+      "style:whimsical": 3,
+      "subject:desert": 1,
+      "genre:object": 1,
+      "genre:still_life": 1,
+      "style:conceptual_art": 1,
+      "style:illusion": 1,
+      "style:papercraft": 1,
+      "technical_specs:technical_execution": 2,
+      "composition:image_composition": 1,
+      "genre:scifi": 1,
+      "lighting:lighting_and_shadow": 1,
+      "style:collage": 1,
+      "style:pop_art": 1,
+      "style:street_photography": 1,
+      "subject:subjects": 2,
+      "genre:christmas": 1,
+      "style:illustration": 1,
+      "style:paper_art": 1,
+      "style:textured": 1,
+      "subject:subject_character": 1,
+      "genre:symmetrical_portrait": 1,
+      "style:cinematic_lighting": 1,
+      "style:retro_luxury": 1,
+      "style:vintage_fashion": 1,
+      "style:wes_anderson_style": 1,
+      "genre:animals": 1,
+      "style:funny": 1,
+      "style:hamster": 1,
+      "style:meme": 1,
+      "style:photography_style": 1,
+      "style:pistol": 1,
+      "style:sunglasses": 1,
+      "style:vintage_aesthetic": 1,
+      "subject:animals": 1,
+      "subject:surreal_portrait": 1
+    },
+    "background:environment_and_atmosphere": {
+      "composition:overall_composition": 1,
+      "genre:fantasy": 1,
+      "style:3d_abstract": 1,
+      "style:art_style_parameters": 1,
+      "style:occult": 1,
+      "style:pop_art": 1,
+      "style:surrealism": 1,
+      "style:wide_angle": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_constraints": 1
+    },
+    "background:environment_and_background": {
+      "genre:fantasy": 1,
+      "genre:one_piece": 1,
+      "genre:portrait": 2,
+      "lighting:lighting_and_effects": 1,
+      "style:anime": 1,
+      "style:battle": 1,
+      "style:digital_art": 1,
+      "subject:subject_character": 1,
+      "composition:composition_overview": 1,
+      "genre:90s_fashion": 1,
+      "style:flash_photography": 1,
+      "style:glamour": 1,
+      "style:sequin_dress": 1,
+      "style:vintage": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "background:environment_and_composition": {
+      "genre:animal": 1,
+      "genre:character_design": 1,
+      "style:cat": 1,
+      "style:digital_art": 1,
+      "style:japanese_style": 1,
+      "style:samurai": 1,
+      "subject:subject_breakdown": 1,
+      "technical_specs:technical_prompts": 1
+    },
+    "background:environment_and_context": {
+      "composition:composition": 1,
+      "genre:ballet_flats": 1,
+      "genre:object": 1,
+      "lighting:lighting_and_rendering": 1,
+      "style:artistic_style": 1,
+      "style:chrome_fashion": 1,
+      "style:sky_aesthetic": 1,
+      "style:surrealism": 1,
+      "style:y2k": 1,
+      "subject:subject_analysis": 1
+    },
+    "background:environment_and_props": {
+      "genre:fashion": 1,
+      "genre:portrait": 2,
+      "lighting:lighting_and_atmosphere": 1,
+      "perspective:composition_and_perspective": 1,
+      "style:flash_photography": 1,
+      "style:luxury": 1,
+      "style:snowmobile": 1,
+      "style:stylistic_references": 1,
+      "style:winter": 1,
+      "subject:subjects": 1,
+      "composition:composition_settings": 1,
+      "genre:dark_fantasy": 1,
+      "negative_constraints:negative_prompt_concepts": 1,
+      "style:artistic_direction": 1,
+      "style:mixed_media": 1,
+      "style:pop_surrealism": 1,
+      "style:rococo": 1,
+      "style:top_down": 1,
+      "subject:subject_characterization": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "background:environment_context": {
+      "genre:fantasy": 1,
+      "genre:perspective": 1,
+      "style:giantess": 1,
+      "style:pastel_aesthetic": 1,
+      "style:surrealism": 1,
+      "subject:subject_details": 1,
+      "subject:tokyo_street": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "background:environment_details": {
+      "genre:horror": 1,
+      "genre:lego": 1,
+      "genre:others": 1,
+      "lighting:lighting_and_atmosphere": 1,
+      "style:behind_the_scenes": 1,
+      "style:cinematic": 1,
+      "style:diorama": 1,
+      "subject:characters": 1,
+      "technical_specs:technical_equipment": 1
+    },
+    "background:environment_setting": {
+      "composition:scene_composition": 2,
+      "genre:creature_design": 1,
+      "genre:dark_fantasy": 1,
+      "genre:fantasy": 2,
+      "style:atmospheric": 1,
+      "style:monochromatic": 1,
+      "subject:desert_landscape": 1,
+      "subject:subject_entity": 1,
+      "technical_specs:technical_aesthetics": 1,
+      "style:claymation": 1,
+      "style:humorous": 1,
+      "style:stop_motion": 1,
+      "style:surreal": 1,
+      "style:whimsical": 1,
+      "subject:subjects": 1
+    },
+    "background:environmental_background": {
+      "genre:others": 1,
+      "style:conceptual": 1,
+      "style:dating": 1,
+      "style:social_media": 1,
+      "style:top_down": 1,
+      "style:whatsapp": 1,
+      "subject:central_subject": 1,
+      "subject:characters": 1
+    },
+    "background:environmental_elements": {
+      "composition:composition": 1,
+      "genre:fantasy": 1,
+      "style:aesthetic_style": 1,
+      "style:cyberpunk": 1,
+      "style:glitch_art": 1,
+      "style:pastel_aesthetic": 1,
+      "style:samurai": 1,
+      "style:vaporwave": 1,
+      "subject:subject_details": 1,
+      "color_palette:color_palette_and_tone": 1,
+      "composition:composition_and_framing": 1,
+      "genre:japanese_school_uniform": 1,
+      "genre:portrait": 1,
+      "style:90s_aesthetic": 1,
+      "style:candid_snapshot": 1,
+      "style:film_photography": 1,
+      "style:vintage": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "background:exterior_environment": {
+      "composition:scene_composition": 1,
+      "genre:architecture": 1,
+      "lighting:lighting_and_atmosphere": 1,
+      "style:3d_render": 1,
+      "style:cute": 1,
+      "style:isometric": 1,
+      "style:mcdonalds": 1,
+      "style:miniature": 1,
+      "subject:central_structure": 1,
+      "subject:characters": 1,
+      "technical_specs:technical_details": 1
+    },
+    "background:nature": {
+      "style:photography": 28,
+      "mood:serene": 20,
+      "mood:warm": 18,
+      "lighting:soft": 22,
+      "color_palette:warm": 15,
+      "color_palette:pastel": 12,
+      "subject:nature": 25
+    },
+    "background:studio": {
+      "style:photography": 25,
+      "genre:product_ad": 20,
+      "mood:luxurious": 15,
+      "lighting:soft": 18,
+      "color_palette:muted": 12,
+      "subject:fashion": 14
+    },
+    "color_palette:color_palette": {
+      "composition:composition": 2,
+      "genre:portrait": 1,
+      "style:artistic_style_keywords": 1,
+      "style:collage": 1,
+      "style:lebron_james": 1,
+      "style:silhouette": 2,
+      "style:sports_illustration": 1,
+      "subject:lakers": 1,
+      "subject:subject_details": 2,
+      "genre:fantasy": 2,
+      "lighting:lighting_and_atmosphere": 2,
+      "style:artistic_style": 1,
+      "style:asian_art": 1,
+      "style:paper_cut": 1,
+      "style:red": 1,
+      "style:traditional": 1,
+      "subject:subject_matter": 1,
+      "technical_specs:technical_details": 1,
+      "composition:scene_composition": 2,
+      "genre:object": 2,
+      "style:art_style_specifications": 1,
+      "style:candlelight": 1,
+      "style:coding": 1,
+      "style:low_poly": 1,
+      "style:top_down": 1,
+      "style:voxel_art": 1,
+      "text_content:typography_and_code_elements": 1,
+      "composition:composition_technical": 1,
+      "lighting:sky_and_lighting": 1,
+      "style:3d_render": 1,
+      "style:pastel_aesthetic": 1,
+      "style:surrealism": 1,
+      "style:whimsical": 1,
+      "subject:desert": 1,
+      "subject:main_subject": 1,
+      "genre:packaging_design": 1,
+      "mood:mood_and_atmosphere": 1,
+      "style:geometric": 1,
+      "style:memphis_style": 1,
+      "style:product_photography": 1,
+      "style:studio_lighting": 1,
+      "subject:subjects": 1
+    },
+    "color_palette:color_palette_and_tone": {
+      "composition:composition_and_framing": 1,
+      "genre:japanese_school_uniform": 1,
+      "genre:portrait": 1,
+      "style:90s_aesthetic": 1,
+      "style:candid_snapshot": 1,
+      "style:film_photography": 1,
+      "style:vintage": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "color_palette:cool": {
+      "mood:dark": 22,
+      "mood:dramatic": 18,
+      "lighting:dramatic": 16,
+      "background:city": 14,
+      "style:3d_render": 12
+    },
+    "color_palette:neon": {
+      "mood:dramatic": 12,
+      "background:city": 10,
+      "style:3d_render": 8,
+      "lighting:dramatic": 11,
+      "technical_specs:unreal_engine": 6
+    },
+    "color_palette:warm": {
+      "mood:warm": 25,
+      "mood:nostalgic": 18,
+      "lighting:soft": 20,
+      "background:nature": 15,
+      "style:hand_drawn": 12
+    },
+    "composition:composition": {
+      "genre:architecture": 1,
+      "lighting:lighting_and_atmosphere": 3,
+      "style:minimalism": 1,
+      "style:spiral": 1,
+      "style:surreal": 1,
+      "style:white": 1,
+      "subject:architecture": 1,
+      "subject:subject_human": 1,
+      "genre:scifi": 1,
+      "lighting:lighting_and_fx": 1,
+      "style:atmospheric": 1,
+      "style:cinematic": 1,
+      "style:concept_art": 2,
+      "style:dystopian": 1,
+      "genre:circus": 1,
+      "genre:portrait": 6,
+      "lighting:lighting_and_shadow": 1,
+      "mood:emotional_tone": 1,
+      "style:charcoal_sketch": 1,
+      "style:medium_and_style": 1,
+      "style:monochrome": 1,
+      "style:sad_clown": 1,
+      "subject:portrait": 4,
+      "subject:subject_character": 1,
+      "style:artistic_style_keywords": 1,
+      "style:collage": 2,
+      "style:lebron_james": 1,
+      "style:silhouette": 2,
+      "style:sports_illustration": 1,
+      "subject:lakers": 1,
+      "subject:subject_details": 3,
+      "genre:food": 1,
+      "genre:logo_design": 1,
+      "style:3d_render": 1,
+      "style:cake_art": 1,
+      "style:food_photography": 1,
+      "style:surrealism": 3,
+      "technical_specs:technical_execution": 3,
+      "genre:fantasy": 2,
+      "style:artistic_style": 2,
+      "style:asian_art": 1,
+      "style:paper_cut": 1,
+      "style:red": 1,
+      "style:traditional": 1,
+      "subject:subject_matter": 1,
+      "technical_specs:technical_details": 1,
+      "style:aesthetic_style": 2,
+      "style:cyberpunk": 1,
+      "style:glitch_art": 2,
+      "style:pastel_aesthetic": 1,
+      "style:samurai": 1,
+      "style:vaporwave": 1,
+      "genre:abstract": 1,
+      "style:conceptual_art": 2,
+      "style:elemental": 1,
+      "style:hyperrealistic": 1,
+      "style:macro_photography": 1,
+      "style:digital_distortion": 1,
+      "style:mixed_media": 1,
+      "technical_specs:technical_parameters": 1,
+      "genre:ballet_flats": 1,
+      "genre:object": 2,
+      "lighting:lighting_and_rendering": 1,
+      "style:chrome_fashion": 1,
+      "style:sky_aesthetic": 1,
+      "style:y2k": 1,
+      "subject:subject_analysis": 1,
+      "style:90s_style": 1,
+      "style:anime": 1,
+      "style:cel_shaded": 1,
+      "style:vintage": 1,
+      "technical_specs:technical_prompts": 1,
+      "genre:character_design": 1,
+      "genre:others": 1,
+      "style:anime_style": 1,
+      "style:reference_sheet": 1,
+      "subject:central_figure": 1,
+      "subject:inventory_breakdown": 1,
+      "genre:still_life": 1,
+      "style:illusion": 1,
+      "style:papercraft": 1,
+      "style:whimsical": 1,
+      "subject:main_subject": 1,
+      "style:cat": 1,
+      "style:cute": 1,
+      "style:humorous": 1,
+      "style:studio_lighting": 1,
+      "subject:subjects": 2,
+      "technical_specs:technical_specs": 1,
+      "genre:symmetrical_portrait": 1,
+      "style:cinematic_lighting": 1,
+      "style:retro_luxury": 1,
+      "style:vintage_fashion": 1,
+      "style:wes_anderson_style": 1
+    },
+    "composition:composition_and_camera": {
+      "genre:object": 1,
+      "lighting:lighting_and_atmosphere": 1,
+      "negative_constraints:negative_constraints": 1,
+      "style:artistic_style": 1,
+      "style:biohazard": 1,
+      "style:diorama": 1,
+      "style:papercraft": 1,
+      "style:solarpunk": 1,
+      "style:wwii": 1,
+      "subject:main_subject": 1,
+      "genre:cyberspace": 1,
+      "genre:perspective": 1,
+      "genre:sci_fi": 1,
+      "genre:scifi": 1,
+      "lighting:lighting_and_shadows": 1,
+      "style:neon": 1,
+      "style:snowboard": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "composition:composition_and_framing": {
+      "genre:animal": 1,
+      "genre:wildlife": 1,
+      "lighting:lighting_and_atmosphere": 1,
+      "style:cute": 1,
+      "style:fisheye": 1,
+      "style:macro": 1,
+      "style:otter": 1,
+      "style:photorealistic": 1,
+      "subject:subject_analysis": 1,
+      "technical_specs:technical_specifications": 2,
+      "genre:japanese_school_uniform": 1,
+      "genre:portrait": 1,
+      "style:90s_aesthetic": 1,
+      "style:candid_snapshot": 1,
+      "style:film_photography": 1,
+      "style:vintage": 1
+    },
+    "composition:composition_layout": {
+      "genre:food": 1,
+      "style:conceptual_photography": 1,
+      "style:flat_lay": 1,
+      "style:food_art": 1,
+      "style:miniature_world": 1,
+      "subject:culinary_map": 1,
+      "technical_specs:technical_specifications": 2,
+      "genre:high_fashion": 1,
+      "genre:others": 1,
+      "style:automotive_photography": 1,
+      "style:cinematic_collage": 1,
+      "style:red_aesthetic": 1,
+      "style:surrealism": 1
+    },
+    "composition:composition_overview": {
+      "genre:elegant_packaging": 1,
+      "genre:food": 1,
+      "lighting:lighting_and_atmosphere": 1,
+      "style:bokeh": 1,
+      "style:garden_party": 1,
+      "style:product_photography": 1,
+      "style:strawberry_cream": 1,
+      "subject:subject_details": 2,
+      "technical_specs:camera_settings_simulation": 1,
+      "genre:90s_fashion": 1,
+      "genre:portrait": 1,
+      "style:flash_photography": 1,
+      "style:glamour": 1,
+      "style:sequin_dress": 1,
+      "style:vintage": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "composition:composition_settings": {
+      "genre:dark_fantasy": 1,
+      "genre:portrait": 1,
+      "negative_constraints:negative_prompt_concepts": 1,
+      "style:artistic_direction": 1,
+      "style:mixed_media": 1,
+      "style:pop_surrealism": 1,
+      "style:rococo": 1,
+      "style:top_down": 1,
+      "subject:subject_characterization": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "composition:composition_technical": {
+      "genre:fantasy": 1,
+      "lighting:sky_and_lighting": 1,
+      "style:3d_render": 1,
+      "style:pastel_aesthetic": 1,
+      "style:surrealism": 1,
+      "style:whimsical": 1,
+      "subject:desert": 1,
+      "subject:main_subject": 1
+    },
+    "composition:compositional_balance": {
+      "genre:architecture": 1,
+      "genre:interior_design": 1,
+      "lighting:lighting_and_rendering": 1,
+      "style:hokusai": 1,
+      "style:japanese_bath": 1,
+      "style:surrealism": 1,
+      "style:vaporwave": 1,
+      "genre:crochet": 1,
+      "genre:object": 1,
+      "style:amigurumi": 1,
+      "style:felt_art": 1,
+      "style:pastel_aesthetics": 1,
+      "style:product_photography": 1,
+      "style:skincare_theme": 1,
+      "style:soft_sculpture": 1,
+      "style:whimsical": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "composition:compositional_structure": {
+      "genre:portrait": 1,
+      "style:black_and_white": 1,
+      "style:long_exposure": 1,
+      "style:motion_blur": 1,
+      "style:street_photography": 1,
+      "subject:portrait": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "composition:image_composition": {
+      "genre:portrait": 1,
+      "lighting:lighting_and_atmosphere": 1,
+      "style:cinematic_lighting": 1,
+      "style:film_noir": 1,
+      "style:jazz_singer": 1,
+      "style:low_key": 1,
+      "style:vintage": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_specs": 1,
+      "genre:sci_fi": 1,
+      "genre:scifi": 1,
+      "lighting:lighting_and_shadow": 1,
+      "style:artistic_style": 1,
+      "style:collage": 1,
+      "style:pop_art": 1,
+      "style:street_photography": 1,
+      "style:surrealism": 1,
+      "subject:subjects": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "composition:overall_composition": {
+      "genre:body_horror": 1,
+      "genre:portrait": 1,
+      "style:collage_art": 1,
+      "style:retro_80s": 1,
+      "style:typography": 1,
+      "subject:movie_poster": 1,
+      "subject:subject_analysis": 1,
+      "text_content:typography_and_text": 1,
+      "genre:fantasy": 1,
+      "style:3d_abstract": 1,
+      "style:art_style_parameters": 1,
+      "style:occult": 1,
+      "style:pop_art": 2,
+      "style:surrealism": 2,
+      "style:wide_angle": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_constraints": 1,
+      "genre:landscape": 1,
+      "genre:sunset": 1,
+      "style:art_style": 1,
+      "style:noise_texture": 1,
+      "style:retro_landscape": 1,
+      "style:stippling": 1,
+      "technical_specs:technical_details": 1,
+      "genre:christmas": 1,
+      "genre:others": 1,
+      "style:collage": 1,
+      "style:retro": 1,
+      "style:vintage": 1,
+      "technical_specs:technical_rendering_specs": 1
+    },
+    "composition:scene_composition": {
+      "genre:food": 2,
+      "lighting:lighting_setup": 1,
+      "style:advertising": 1,
+      "style:coca_cola": 1,
+      "style:product_photography": 2,
+      "style:splash_art": 1,
+      "subject:central_subject": 1,
+      "subject:hyper_realistic": 1,
+      "genre:sci_fi": 2,
+      "lighting:lighting_and_rendering": 1,
+      "style:diorama": 2,
+      "style:food_art": 1,
+      "style:miniature_photography": 1,
+      "style:surrealism": 3,
+      "subject:characters": 2,
+      "subject:main_subject": 1,
+      "genre:scifi": 2,
+      "style:artistic_direction": 1,
+      "style:flat_design": 1,
+      "style:multiverse": 1,
+      "style:vector_illustration": 1,
+      "technical_specs:technical_constraints": 1,
+      "genre:logo_design": 1,
+      "genre:object": 4,
+      "genre:postmodernism": 1,
+      "lighting:lighting_and_atmosphere": 5,
+      "style:artistic_style_and_technique": 1,
+      "style:esoteric": 1,
+      "style:sketch": 1,
+      "genre:architecture": 2,
+      "negative_constraints:negative_constraints": 1,
+      "style:bauhaus": 1,
+      "style:fisheye": 1,
+      "style:rococo": 1,
+      "style:shadowy": 1,
+      "subject:architecture": 1,
+      "style:art_style_specifications": 1,
+      "style:candlelight": 1,
+      "style:coding": 1,
+      "style:low_poly": 1,
+      "style:top_down": 1,
+      "style:voxel_art": 1,
+      "subject:subject_details": 2,
+      "text_content:typography_and_code_elements": 1,
+      "genre:creature_design": 1,
+      "genre:dark_fantasy": 1,
+      "genre:fantasy": 3,
+      "style:atmospheric": 1,
+      "style:monochromatic": 1,
+      "subject:desert_landscape": 1,
+      "subject:subject_entity": 1,
+      "technical_specs:technical_aesthetics": 1,
+      "genre:fashion": 1,
+      "genre:portrait": 1,
+      "style:cyberpunk": 2,
+      "style:surveillance": 1,
+      "subject:interface": 1,
+      "subject:streetwear": 1,
+      "genre:packaging_design": 1,
+      "mood:mood_and_atmosphere": 1,
+      "style:geometric": 1,
+      "style:memphis_style": 1,
+      "style:studio_lighting": 1,
+      "subject:subjects": 2,
+      "style:3d_render": 1,
+      "style:cute": 1,
+      "style:isometric": 1,
+      "style:mcdonalds": 1,
+      "style:miniature": 1,
+      "subject:central_structure": 1,
+      "technical_specs:technical_details": 1,
+      "style:claymation": 1,
+      "style:humorous": 1,
+      "style:stop_motion": 1,
+      "style:surreal": 1,
+      "style:whimsical": 1,
+      "style:automaton": 1,
+      "style:macro_photography": 1,
+      "style:steampunk": 1,
+      "style:violinist": 1,
+      "style:woodcarving": 1,
+      "subject:automaton_character": 1,
+      "style:glitch_aesthetic": 1,
+      "style:pixel_art": 1,
+      "style:retro_computing": 1,
+      "style:synthwave": 1,
+      "technical_specs:technical_rendering_specs": 1,
+      "genre:christmas": 1,
+      "style:artistic_style": 1,
+      "style:illustration": 1,
+      "style:paper_art": 1,
+      "style:textured": 1,
+      "subject:subject_character": 1
+    },
+    "composition:visual_composition_breakdown": {
+      "genre:dynamic_composition": 1,
+      "genre:food": 1,
+      "genre:panettone": 1,
+      "style:3d_render": 1,
+      "style:advertising": 1,
+      "style:food_photography": 1
+    },
+    "genre:90s_fashion": {
+      "genre:portrait": 1,
+      "style:flash_photography": 1,
+      "style:glamour": 1,
+      "style:sequin_dress": 1,
+      "style:vintage": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "genre:abstract": {
+      "style:abstract_figure": 1,
+      "style:cartography": 1,
+      "style:collage": 1,
+      "style:glitch_art": 1,
+      "style:surrealism": 2,
+      "style:conceptual_art": 1,
+      "style:elemental": 1,
+      "style:hyperrealistic": 1,
+      "style:macro_photography": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "genre:animal": {
+      "genre:character_design": 1,
+      "style:cat": 1,
+      "style:digital_art": 1,
+      "style:japanese_style": 1,
+      "style:samurai": 1,
+      "subject:subject_breakdown": 1,
+      "technical_specs:technical_prompts": 1,
+      "genre:wildlife": 1,
+      "lighting:lighting_and_atmosphere": 1,
+      "style:cute": 1,
+      "style:fisheye": 1,
+      "style:macro": 1,
+      "style:otter": 1,
+      "style:photorealistic": 1,
+      "subject:subject_analysis": 1,
+      "technical_specs:technical_specifications": 1,
+      "genre:blue_and_gold": 1,
+      "style:abstract_realism": 1,
+      "style:elephant": 1,
+      "style:splatter_art": 1,
+      "style:watercolor": 1
+    },
+    "genre:animals": {
+      "style:funny": 1,
+      "style:hamster": 1,
+      "style:meme": 1,
+      "style:photography_style": 1,
+      "style:pistol": 1,
+      "style:sunglasses": 1,
+      "subject:main_subject": 1
+    },
+    "genre:architecture": {
+      "genre:graphic_design": 1,
+      "style:collage": 1,
+      "style:poster_art": 1,
+      "style:typography": 1,
+      "style:vintage": 1,
+      "technical_specs:technical_specs": 1,
+      "lighting:lighting_and_atmosphere": 3,
+      "style:minimalism": 1,
+      "style:spiral": 1,
+      "style:surreal": 1,
+      "style:white": 1,
+      "subject:architecture": 3,
+      "subject:subject_human": 1,
+      "genre:interior_design": 1,
+      "lighting:lighting_and_rendering": 1,
+      "style:hokusai": 1,
+      "style:japanese_bath": 1,
+      "style:surrealism": 1,
+      "style:vaporwave": 1,
+      "negative_constraints:negative_constraints": 1,
+      "style:bauhaus": 1,
+      "style:fisheye": 1,
+      "style:rococo": 1,
+      "style:shadowy": 1,
+      "style:concept_art": 1,
+      "style:winter": 1,
+      "subject:blueprint": 1,
+      "subject:street_scene": 1,
+      "style:3d_render": 1,
+      "style:cute": 1,
+      "style:isometric": 1,
+      "style:mcdonalds": 1,
+      "style:miniature": 1,
+      "subject:central_structure": 1,
+      "subject:characters": 1,
+      "technical_specs:technical_details": 1
+    },
+    "genre:ballet_flats": {
+      "genre:object": 1,
+      "lighting:lighting_and_rendering": 1,
+      "style:artistic_style": 1,
+      "style:chrome_fashion": 1,
+      "style:sky_aesthetic": 1,
+      "style:surrealism": 1,
+      "style:y2k": 1,
+      "subject:subject_analysis": 1
+    },
+    "genre:blue_and_gold": {
+      "style:abstract_realism": 1,
+      "style:elephant": 1,
+      "style:splatter_art": 1,
+      "style:watercolor": 1
+    },
+    "genre:body_horror": {
+      "genre:portrait": 1,
+      "style:collage_art": 1,
+      "style:retro_80s": 1,
+      "style:typography": 1,
+      "subject:movie_poster": 1,
+      "subject:subject_analysis": 1,
+      "text_content:typography_and_text": 1
+    },
+    "genre:character_design": {
+      "genre:portrait": 1,
+      "style:cyberpunk_western": 1,
+      "style:pixel_art": 1,
+      "style:virus_theme": 1,
+      "subject:portrait": 1,
+      "style:cat": 1,
+      "style:digital_art": 2,
+      "style:japanese_style": 1,
+      "style:samurai": 1,
+      "subject:subject_breakdown": 1,
+      "technical_specs:technical_prompts": 1,
+      "genre:dark_fantasy": 1,
+      "genre:fantasy": 1,
+      "style:demon": 1,
+      "style:gothic": 1,
+      "genre:others": 1,
+      "style:anime_style": 1,
+      "style:concept_art": 1,
+      "style:reference_sheet": 1,
+      "subject:central_figure": 1,
+      "subject:inventory_breakdown": 1
+    },
+    "genre:christmas": {
+      "genre:others": 1,
+      "style:collage": 1,
+      "style:pop_art": 1,
+      "style:retro": 1,
+      "style:vintage": 1,
+      "technical_specs:technical_rendering_specs": 1,
+      "genre:fantasy": 1,
+      "style:artistic_style": 1,
+      "style:diorama": 1,
+      "style:illustration": 1,
+      "style:paper_art": 1,
+      "style:textured": 1,
+      "subject:subject_character": 1
+    },
+    "genre:circus": {
+      "genre:portrait": 1,
+      "lighting:lighting_and_shadow": 1,
+      "mood:emotional_tone": 1,
+      "style:charcoal_sketch": 1,
+      "style:medium_and_style": 1,
+      "style:monochrome": 1,
+      "style:sad_clown": 1,
+      "subject:portrait": 1,
+      "subject:subject_character": 1
+    },
+    "genre:creature_design": {
+      "genre:dark_fantasy": 1,
+      "genre:fantasy": 1,
+      "style:atmospheric": 1,
+      "style:monochromatic": 1,
+      "subject:desert_landscape": 1,
+      "subject:subject_entity": 1,
+      "technical_specs:technical_aesthetics": 1
+    },
+    "genre:crochet": {
+      "genre:fantasy": 1,
+      "style:rococo": 1,
+      "style:silhouette": 1,
+      "style:surrealism": 1,
+      "subject:ocean": 1,
+      "genre:object": 1,
+      "style:amigurumi": 1,
+      "style:felt_art": 1,
+      "style:pastel_aesthetics": 1,
+      "style:product_photography": 1,
+      "style:skincare_theme": 1,
+      "style:soft_sculpture": 1,
+      "style:whimsical": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "genre:cyberspace": {
+      "genre:perspective": 1,
+      "genre:sci_fi": 1,
+      "genre:scifi": 1,
+      "lighting:lighting_and_shadows": 1,
+      "style:neon": 1,
+      "style:snowboard": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "genre:dark_fantasy": {
+      "genre:portrait": 1,
+      "negative_constraints:negative_prompt_concepts": 1,
+      "style:artistic_direction": 1,
+      "style:mixed_media": 1,
+      "style:pop_surrealism": 1,
+      "style:rococo": 1,
+      "style:top_down": 1,
+      "subject:subject_characterization": 1,
+      "technical_specs:technical_parameters": 1,
+      "genre:fantasy": 2,
+      "style:atmospheric": 1,
+      "style:monochromatic": 1,
+      "subject:desert_landscape": 1,
+      "subject:subject_entity": 1,
+      "technical_specs:technical_aesthetics": 1,
+      "style:demon": 1,
+      "style:digital_art": 1,
+      "style:gothic": 1
+    },
+    "genre:dynamic_composition": {
+      "genre:food": 1,
+      "genre:panettone": 1,
+      "style:3d_render": 1,
+      "style:advertising": 1,
+      "style:food_photography": 1
+    },
+    "genre:elegant_packaging": {
+      "genre:food": 1,
+      "lighting:lighting_and_atmosphere": 1,
+      "style:bokeh": 1,
+      "style:garden_party": 1,
+      "style:product_photography": 1,
+      "style:strawberry_cream": 1,
+      "subject:subject_details": 1,
+      "technical_specs:camera_settings_simulation": 1
+    },
+    "genre:embossed_design": {
+      "genre:leather_texture": 1,
+      "genre:object": 1,
+      "genre:youtube_logo": 1,
+      "style:macro_photography": 1,
+      "subject:fabric_detail": 1
+    },
+    "genre:fantasy": {
+      "genre:one_piece": 1,
+      "genre:portrait": 1,
+      "lighting:lighting_and_effects": 1,
+      "style:anime": 2,
+      "style:battle": 1,
+      "style:digital_art": 2,
+      "subject:subject_character": 2,
+      "lighting:lighting_and_atmosphere": 1,
+      "style:artistic_style": 2,
+      "style:asian_art": 1,
+      "style:paper_cut": 1,
+      "style:red": 1,
+      "style:silhouette": 2,
+      "style:traditional": 1,
+      "subject:subject_matter": 1,
+      "technical_specs:technical_details": 1,
+      "style:cel_shaded": 1,
+      "style:studio_ghibli": 1,
+      "style:wizard": 1,
+      "style:aesthetic_style": 1,
+      "style:cyberpunk": 1,
+      "style:glitch_art": 1,
+      "style:pastel_aesthetic": 3,
+      "style:samurai": 1,
+      "style:vaporwave": 1,
+      "subject:subject_details": 3,
+      "style:rococo": 1,
+      "style:surrealism": 4,
+      "subject:ocean": 1,
+      "style:3d_abstract": 1,
+      "style:art_style_parameters": 1,
+      "style:occult": 1,
+      "style:pop_art": 1,
+      "style:wide_angle": 1,
+      "technical_specs:technical_constraints": 1,
+      "lighting:sky_and_lighting": 1,
+      "style:3d_render": 2,
+      "style:whimsical": 2,
+      "subject:desert": 1,
+      "subject:main_subject": 1,
+      "style:atmospheric": 1,
+      "style:monochromatic": 1,
+      "subject:desert_landscape": 1,
+      "subject:subject_entity": 1,
+      "technical_specs:technical_aesthetics": 1,
+      "style:demon": 1,
+      "style:gothic": 1,
+      "style:anime_style": 1,
+      "style:macro_photography": 1,
+      "subject:cute_character": 1,
+      "subject:winter_landscape": 1,
+      "style:claymation": 1,
+      "style:humorous": 1,
+      "style:stop_motion": 1,
+      "style:surreal": 1,
+      "subject:subjects": 1,
+      "genre:perspective": 1,
+      "style:giantess": 1,
+      "subject:tokyo_street": 1,
+      "technical_specs:technical_parameters": 1,
+      "style:diorama": 1,
+      "style:illustration": 1,
+      "style:paper_art": 1,
+      "style:textured": 1
+    },
+    "genre:fashion": {
+      "genre:portrait": 2,
+      "lighting:lighting_and_atmosphere": 1,
+      "perspective:composition_and_perspective": 1,
+      "style:flash_photography": 1,
+      "style:luxury": 1,
+      "style:snowmobile": 1,
+      "style:stylistic_references": 1,
+      "style:winter": 1,
+      "subject:subjects": 1,
+      "style:cyberpunk": 1,
+      "style:surveillance": 1,
+      "subject:interface": 1,
+      "subject:streetwear": 1,
+      "subject:subject_details": 1
+    },
+    "genre:food": {
+      "lighting:lighting_setup": 2,
+      "style:commercial": 1,
+      "style:exploded_view": 1,
+      "style:food_photography": 3,
+      "subject:hamburger": 1,
+      "subject:infographic": 1,
+      "technical_specs:technical_specs": 1,
+      "text_content:typography_and_graphics": 1,
+      "lighting:lighting_and_atmosphere": 1,
+      "style:bokeh": 1,
+      "style:garden_party": 1,
+      "style:product_photography": 2,
+      "style:strawberry_cream": 1,
+      "subject:subject_details": 1,
+      "technical_specs:camera_settings_simulation": 1,
+      "style:advertising": 2,
+      "style:coca_cola": 1,
+      "style:splash_art": 1,
+      "subject:central_subject": 1,
+      "subject:hyper_realistic": 1,
+      "genre:sci_fi": 1,
+      "lighting:lighting_and_rendering": 1,
+      "style:diorama": 1,
+      "style:food_art": 2,
+      "style:miniature_photography": 1,
+      "style:surrealism": 2,
+      "subject:characters": 1,
+      "subject:main_subject": 1,
+      "genre:logo_design": 1,
+      "style:3d_render": 2,
+      "style:cake_art": 1,
+      "technical_specs:technical_execution": 1,
+      "style:conceptual_photography": 1,
+      "style:flat_lay": 1,
+      "style:miniature_world": 1,
+      "subject:culinary_map": 1,
+      "technical_specs:technical_specifications": 1,
+      "genre:panettone": 1
+    },
+    "genre:graphic_design": {
+      "style:collage": 1,
+      "style:poster_art": 1,
+      "style:typography": 1,
+      "style:vintage": 1,
+      "technical_specs:technical_specs": 1
+    },
+    "genre:halftone": {
+      "genre:portrait": 1,
+      "style:collage": 1,
+      "style:glitch_art": 1,
+      "style:pop_art": 1,
+      "style:street_art": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "genre:high_fashion": {
+      "genre:others": 1,
+      "style:automotive_photography": 1,
+      "style:cinematic_collage": 1,
+      "style:red_aesthetic": 1,
+      "style:surrealism": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "genre:horror": {
+      "genre:lego": 1,
+      "genre:others": 1,
+      "lighting:lighting_and_atmosphere": 1,
+      "style:behind_the_scenes": 1,
+      "style:cinematic": 1,
+      "style:diorama": 1,
+      "subject:characters": 1,
+      "technical_specs:technical_equipment": 1
+    },
+    "genre:industrial_design": {
+      "genre:object": 1,
+      "style:bauhaus_style": 1,
+      "style:isometric": 1,
+      "style:product_photography": 1,
+      "style:retro_futuristic": 1
+    },
+    "genre:interior_design": {
+      "lighting:lighting_and_rendering": 1,
+      "style:hokusai": 1,
+      "style:japanese_bath": 1,
+      "style:surrealism": 1,
+      "style:vaporwave": 1
+    },
+    "genre:japanese_school_uniform": {
+      "genre:portrait": 1,
+      "style:90s_aesthetic": 1,
+      "style:candid_snapshot": 1,
+      "style:film_photography": 1,
+      "style:vintage": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "genre:landscape": {
+      "genre:sunset": 1,
+      "style:art_style": 1,
+      "style:noise_texture": 1,
+      "style:retro_landscape": 1,
+      "style:stippling": 1,
+      "style:surrealism": 1,
+      "technical_specs:technical_details": 1
+    },
+    "genre:leading_lines": {
+      "genre:scifi": 1,
+      "genre:surreal_comedy": 1,
+      "genre:time_travel": 1,
+      "style:artistic_style_parameters": 1,
+      "style:vector_art": 1,
+      "subject:subject_architecture": 1,
+      "subject:topographic_map": 1,
+      "technical_specs:technical_constraints": 1
+    },
+    "genre:leather_texture": {
+      "genre:object": 1,
+      "genre:youtube_logo": 1,
+      "style:macro_photography": 1,
+      "subject:fabric_detail": 1
+    },
+    "genre:lego": {
+      "genre:others": 1,
+      "lighting:lighting_and_atmosphere": 1,
+      "style:behind_the_scenes": 1,
+      "style:cinematic": 1,
+      "style:diorama": 1,
+      "subject:characters": 1,
+      "technical_specs:technical_equipment": 1
+    },
+    "genre:logo_design": {
+      "style:3d_render": 1,
+      "style:cake_art": 1,
+      "style:food_photography": 1,
+      "style:surrealism": 2,
+      "technical_specs:technical_execution": 1,
+      "genre:object": 1,
+      "genre:postmodernism": 1,
+      "lighting:lighting_and_atmosphere": 1,
+      "style:artistic_style_and_technique": 1,
+      "style:esoteric": 1,
+      "style:sketch": 1
+    },
+    "genre:object": {
+      "lighting:lighting_and_atmosphere": 5,
+      "negative_constraints:negative_constraints": 1,
+      "style:artistic_style": 2,
+      "style:biohazard": 1,
+      "style:diorama": 1,
+      "style:papercraft": 2,
+      "style:solarpunk": 1,
+      "style:wwii": 1,
+      "subject:main_subject": 2,
+      "genre:youtube_logo": 1,
+      "style:macro_photography": 3,
+      "subject:fabric_detail": 1,
+      "genre:parody": 1,
+      "genre:thriller": 1,
+      "style:3d_render": 1,
+      "style:backlighting": 1,
+      "subject:object": 1,
+      "genre:postmodernism": 1,
+      "style:artistic_style_and_technique": 1,
+      "style:esoteric": 1,
+      "style:sketch": 1,
+      "style:surrealism": 2,
+      "style:art_style_specifications": 1,
+      "style:candlelight": 1,
+      "style:coding": 1,
+      "style:low_poly": 1,
+      "style:top_down": 1,
+      "style:voxel_art": 1,
+      "subject:subject_details": 1,
+      "text_content:typography_and_code_elements": 1,
+      "lighting:lighting_and_rendering": 1,
+      "style:chrome_fashion": 1,
+      "style:sky_aesthetic": 1,
+      "style:y2k": 1,
+      "subject:subject_analysis": 1,
+      "style:bauhaus_style": 1,
+      "style:isometric": 1,
+      "style:product_photography": 3,
+      "style:retro_futuristic": 1,
+      "genre:packaging_design": 1,
+      "mood:mood_and_atmosphere": 1,
+      "style:geometric": 1,
+      "style:memphis_style": 1,
+      "style:studio_lighting": 1,
+      "subject:subjects": 1,
+      "genre:still_life": 1,
+      "style:conceptual_art": 1,
+      "style:illusion": 1,
+      "style:whimsical": 2,
+      "technical_specs:technical_execution": 1,
+      "style:automaton": 1,
+      "style:steampunk": 1,
+      "style:violinist": 1,
+      "style:woodcarving": 1,
+      "subject:automaton_character": 1,
+      "style:amigurumi": 1,
+      "style:felt_art": 1,
+      "style:pastel_aesthetics": 1,
+      "style:skincare_theme": 1,
+      "style:soft_sculpture": 1,
+      "technical_specs:technical_specifications": 1,
+      "genre:product_design": 1,
+      "style:celebrity": 1,
+      "style:collectibles": 1,
+      "style:miniature": 1
+    },
+    "genre:one_piece": {
+      "genre:portrait": 1,
+      "lighting:lighting_and_effects": 1,
+      "style:anime": 1,
+      "style:battle": 1,
+      "style:digital_art": 1,
+      "subject:subject_character": 1
+    },
+    "genre:others": {
+      "style:conceptual": 1,
+      "style:dating": 1,
+      "style:social_media": 1,
+      "style:top_down": 1,
+      "style:whatsapp": 1,
+      "subject:central_subject": 1,
+      "subject:characters": 2,
+      "style:automotive_photography": 1,
+      "style:cinematic_collage": 1,
+      "style:red_aesthetic": 1,
+      "style:surrealism": 1,
+      "technical_specs:technical_specifications": 1,
+      "lighting:lighting_and_atmosphere": 1,
+      "style:behind_the_scenes": 1,
+      "style:cinematic": 1,
+      "style:diorama": 1,
+      "technical_specs:technical_equipment": 1,
+      "style:collage": 1,
+      "style:pop_art": 1,
+      "style:retro": 1,
+      "style:vintage": 1,
+      "technical_specs:technical_rendering_specs": 1,
+      "style:anime_style": 1,
+      "style:concept_art": 1,
+      "style:reference_sheet": 1,
+      "subject:central_figure": 1,
+      "subject:inventory_breakdown": 1
+    },
+    "genre:packaging_design": {
+      "mood:mood_and_atmosphere": 1,
+      "style:geometric": 1,
+      "style:memphis_style": 1,
+      "style:product_photography": 1,
+      "style:studio_lighting": 1,
+      "subject:subjects": 1
+    },
+    "genre:panettone": {
+      "style:3d_render": 1,
+      "style:advertising": 1,
+      "style:food_photography": 1
+    },
+    "genre:parody": {
+      "genre:thriller": 1,
+      "style:3d_render": 1,
+      "style:backlighting": 1,
+      "subject:object": 1
+    },
+    "genre:perspective": {
+      "genre:sci_fi": 1,
+      "genre:scifi": 1,
+      "lighting:lighting_and_shadows": 1,
+      "style:neon": 1,
+      "style:snowboard": 1,
+      "subject:subject_details": 2,
+      "technical_specs:technical_specifications": 1,
+      "style:giantess": 1,
+      "style:pastel_aesthetic": 1,
+      "style:surrealism": 1,
+      "subject:tokyo_street": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "genre:portrait": {
+      "style:cyberpunk_western": 1,
+      "style:pixel_art": 1,
+      "style:virus_theme": 1,
+      "subject:portrait": 6,
+      "style:collage_art": 1,
+      "style:retro_80s": 1,
+      "style:typography": 1,
+      "subject:movie_poster": 1,
+      "subject:subject_analysis": 1,
+      "text_content:typography_and_text": 1,
+      "style:collage": 3,
+      "style:glitch_art": 2,
+      "style:pop_art": 1,
+      "style:street_art": 1,
+      "technical_specs:technical_specifications": 2,
+      "lighting:lighting_and_shadow": 1,
+      "mood:emotional_tone": 1,
+      "style:charcoal_sketch": 1,
+      "style:medium_and_style": 1,
+      "style:monochrome": 1,
+      "style:sad_clown": 1,
+      "subject:subject_character": 2,
+      "lighting:lighting_and_effects": 1,
+      "style:anime": 2,
+      "style:battle": 1,
+      "style:digital_art": 1,
+      "style:artistic_style_keywords": 1,
+      "style:lebron_james": 1,
+      "style:silhouette": 1,
+      "style:sports_illustration": 1,
+      "subject:lakers": 1,
+      "subject:subject_details": 6,
+      "lighting:lighting_and_atmosphere": 2,
+      "perspective:composition_and_perspective": 1,
+      "style:flash_photography": 2,
+      "style:luxury": 1,
+      "style:snowmobile": 1,
+      "style:stylistic_references": 1,
+      "style:winter": 1,
+      "subject:subjects": 3,
+      "style:azulejo": 1,
+      "style:baroque": 1,
+      "style:blue_skin": 1,
+      "style:ceramic_tile": 1,
+      "style:folk_art": 1,
+      "style:black_and_white": 1,
+      "style:long_exposure": 1,
+      "style:motion_blur": 1,
+      "style:street_photography": 1,
+      "technical_specs:technical_execution": 2,
+      "style:glamour": 1,
+      "style:sequin_dress": 1,
+      "style:vintage": 4,
+      "technical_specs:technical_parameters": 3,
+      "style:cinematic_lighting": 2,
+      "style:film_noir": 1,
+      "style:jazz_singer": 1,
+      "style:low_key": 1,
+      "technical_specs:technical_specs": 2,
+      "style:digital_distortion": 1,
+      "style:mixed_media": 2,
+      "negative_constraints:negative_prompt_concepts": 1,
+      "style:artistic_direction": 1,
+      "style:pop_surrealism": 1,
+      "style:rococo": 1,
+      "style:top_down": 1,
+      "subject:subject_characterization": 1,
+      "style:90s_style": 1,
+      "style:aesthetic_style": 1,
+      "style:cel_shaded": 1,
+      "technical_specs:technical_prompts": 1,
+      "style:3d_render": 1,
+      "style:aesthetic_fusion": 1,
+      "style:android": 1,
+      "style:artistic_nuance": 1,
+      "style:cyberpunk": 3,
+      "style:porcelain": 1,
+      "style:surrealism": 1,
+      "subject:subject_breakdown": 1,
+      "style:surveillance": 1,
+      "subject:interface": 1,
+      "subject:streetwear": 1,
+      "style:90s_aesthetic": 1,
+      "style:candid_snapshot": 1,
+      "style:film_photography": 1,
+      "genre:surreal_fashion": 1,
+      "style:90s_anime": 1,
+      "style:circuit_board": 1,
+      "style:retro": 1,
+      "style:cat": 1,
+      "style:cute": 1,
+      "style:humorous": 1,
+      "style:studio_lighting": 1,
+      "genre:symmetrical_portrait": 1,
+      "style:retro_luxury": 1,
+      "style:vintage_fashion": 1,
+      "style:wes_anderson_style": 1,
+      "style:vintage_aesthetic": 1,
+      "style:whimsical": 1,
+      "subject:animals": 1,
+      "subject:hyper_realistic": 1,
+      "subject:surreal_portrait": 1
+    },
+    "genre:postmodernism": {
+      "lighting:lighting_and_atmosphere": 1,
+      "style:artistic_style_and_technique": 1,
+      "style:esoteric": 1,
+      "style:sketch": 1,
+      "style:surrealism": 1
+    },
+    "genre:product_design": {
+      "style:celebrity": 1,
+      "style:collectibles": 1,
+      "style:macro_photography": 1,
+      "style:miniature": 1
+    },
+    "genre:sci_fi": {
+      "lighting:lighting_and_rendering": 1,
+      "style:diorama": 1,
+      "style:food_art": 1,
+      "style:miniature_photography": 1,
+      "style:surrealism": 3,
+      "subject:characters": 1,
+      "subject:main_subject": 1,
+      "genre:scifi": 4,
+      "style:artistic_direction": 1,
+      "style:flat_design": 1,
+      "style:multiverse": 1,
+      "style:vector_illustration": 1,
+      "technical_specs:technical_constraints": 1,
+      "lighting:lighting_and_shadows": 1,
+      "style:neon": 1,
+      "style:snowboard": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_specifications": 1,
+      "genre:simulation": 1,
+      "genre:ui_design": 1,
+      "style:dashboard": 1,
+      "style:robotics": 1,
+      "lighting:lighting_and_shadow": 1,
+      "style:artistic_style": 1,
+      "style:collage": 1,
+      "style:pop_art": 1,
+      "style:street_photography": 1,
+      "subject:subjects": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "genre:scifi": {
+      "lighting:lighting_and_fx": 1,
+      "style:atmospheric": 1,
+      "style:cinematic": 1,
+      "style:concept_art": 1,
+      "style:dystopian": 1,
+      "genre:surreal_comedy": 1,
+      "genre:time_travel": 1,
+      "style:artistic_style_parameters": 1,
+      "style:vector_art": 1,
+      "subject:subject_architecture": 1,
+      "subject:topographic_map": 1,
+      "technical_specs:technical_constraints": 2,
+      "style:artistic_direction": 1,
+      "style:flat_design": 1,
+      "style:multiverse": 1,
+      "style:surrealism": 2,
+      "style:vector_illustration": 1,
+      "lighting:lighting_and_shadows": 1,
+      "style:neon": 1,
+      "style:snowboard": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_specifications": 1,
+      "genre:simulation": 1,
+      "genre:ui_design": 1,
+      "style:dashboard": 1,
+      "style:robotics": 1,
+      "style:90s_aesthetic": 1,
+      "style:crt_monitor": 1,
+      "style:cyberpunk": 2,
+      "style:pixel_art": 2,
+      "style:vaporwave": 1,
+      "subject:geocities": 1,
+      "subject:webcore": 1,
+      "style:glitch_aesthetic": 1,
+      "style:retro_computing": 1,
+      "style:synthwave": 1,
+      "technical_specs:technical_rendering_specs": 1,
+      "lighting:lighting_and_shadow": 1,
+      "style:artistic_style": 1,
+      "style:collage": 1,
+      "style:pop_art": 1,
+      "style:street_photography": 1,
+      "subject:subjects": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "genre:simulation": {
+      "genre:ui_design": 1,
+      "style:dashboard": 1,
+      "style:robotics": 1
+    },
+    "genre:still_life": {
+      "lighting:lighting_and_atmosphere": 1,
+      "style:conceptual_art": 1,
+      "style:illusion": 1,
+      "style:papercraft": 1,
+      "style:whimsical": 1,
+      "subject:main_subject": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "genre:sunset": {
+      "style:art_style": 1,
+      "style:noise_texture": 1,
+      "style:retro_landscape": 1,
+      "style:stippling": 1,
+      "style:surrealism": 1,
+      "technical_specs:technical_details": 1
+    },
+    "genre:surreal_comedy": {
+      "genre:time_travel": 1,
+      "style:artistic_style_parameters": 1,
+      "style:vector_art": 1,
+      "subject:subject_architecture": 1,
+      "subject:topographic_map": 1,
+      "technical_specs:technical_constraints": 1
+    },
+    "genre:surreal_fashion": {
+      "style:90s_anime": 1,
+      "style:circuit_board": 1,
+      "style:cyberpunk": 1,
+      "style:retro": 1
+    },
+    "genre:symmetrical_portrait": {
+      "style:cinematic_lighting": 1,
+      "style:retro_luxury": 1,
+      "style:vintage_fashion": 1,
+      "style:wes_anderson_style": 1,
+      "subject:subjects": 1
+    },
+    "genre:thriller": {
+      "style:3d_render": 1,
+      "style:backlighting": 1,
+      "subject:object": 1
+    },
+    "genre:time_travel": {
+      "style:artistic_style_parameters": 1,
+      "style:vector_art": 1,
+      "subject:subject_architecture": 1,
+      "subject:topographic_map": 1,
+      "technical_specs:technical_constraints": 1
+    },
+    "genre:ui_design": {
+      "style:dashboard": 1,
+      "style:robotics": 1
+    },
+    "genre:wildlife": {
+      "lighting:lighting_and_atmosphere": 1,
+      "style:cute": 1,
+      "style:fisheye": 1,
+      "style:macro": 1,
+      "style:otter": 1,
+      "style:photorealistic": 1,
+      "subject:subject_analysis": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "genre:youtube_logo": {
+      "style:macro_photography": 1,
+      "subject:fabric_detail": 1
+    },
+    "lighting:lighting_and_atmosphere": {
+      "negative_constraints:negative_constraints": 2,
+      "style:artistic_style": 2,
+      "style:biohazard": 1,
+      "style:diorama": 2,
+      "style:papercraft": 2,
+      "style:solarpunk": 1,
+      "style:wwii": 1,
+      "subject:main_subject": 2,
+      "style:minimalism": 1,
+      "style:spiral": 1,
+      "style:surreal": 1,
+      "style:white": 1,
+      "subject:architecture": 2,
+      "subject:subject_human": 1,
+      "style:bokeh": 1,
+      "style:garden_party": 1,
+      "style:product_photography": 1,
+      "style:strawberry_cream": 1,
+      "subject:subject_details": 3,
+      "technical_specs:camera_settings_simulation": 1,
+      "perspective:composition_and_perspective": 1,
+      "style:flash_photography": 1,
+      "style:luxury": 1,
+      "style:snowmobile": 1,
+      "style:stylistic_references": 1,
+      "style:winter": 1,
+      "subject:subjects": 1,
+      "style:cute": 2,
+      "style:fisheye": 2,
+      "style:macro": 1,
+      "style:otter": 1,
+      "style:photorealistic": 1,
+      "subject:subject_analysis": 1,
+      "technical_specs:technical_specifications": 1,
+      "style:cinematic_lighting": 1,
+      "style:film_noir": 1,
+      "style:jazz_singer": 1,
+      "style:low_key": 1,
+      "style:vintage": 1,
+      "technical_specs:technical_specs": 1,
+      "style:asian_art": 1,
+      "style:paper_cut": 1,
+      "style:red": 1,
+      "style:silhouette": 1,
+      "style:traditional": 1,
+      "subject:subject_matter": 1,
+      "technical_specs:technical_details": 2,
+      "style:artistic_style_and_technique": 1,
+      "style:esoteric": 1,
+      "style:sketch": 1,
+      "style:surrealism": 1,
+      "style:bauhaus": 1,
+      "style:rococo": 1,
+      "style:shadowy": 1,
+      "style:art_style_specifications": 1,
+      "style:candlelight": 1,
+      "style:coding": 1,
+      "style:low_poly": 1,
+      "style:top_down": 1,
+      "style:voxel_art": 1,
+      "text_content:typography_and_code_elements": 1,
+      "style:behind_the_scenes": 1,
+      "style:cinematic": 1,
+      "subject:characters": 2,
+      "technical_specs:technical_equipment": 1,
+      "style:3d_render": 1,
+      "style:isometric": 1,
+      "style:mcdonalds": 1,
+      "style:miniature": 1,
+      "subject:central_structure": 1,
+      "style:conceptual_art": 1,
+      "style:illusion": 1,
+      "style:whimsical": 1,
+      "technical_specs:technical_execution": 1,
+      "style:automaton": 1,
+      "style:macro_photography": 1,
+      "style:steampunk": 1,
+      "style:violinist": 1,
+      "style:woodcarving": 1,
+      "subject:automaton_character": 1
+    },
+    "lighting:lighting_and_effects": {
+      "style:anime": 1,
+      "style:battle": 1,
+      "style:digital_art": 1,
+      "subject:subject_character": 1
+    },
+    "lighting:lighting_and_fx": {
+      "style:atmospheric": 1,
+      "style:cinematic": 1,
+      "style:concept_art": 1,
+      "style:dystopian": 1
+    },
+    "lighting:lighting_and_rendering": {
+      "style:hokusai": 1,
+      "style:japanese_bath": 1,
+      "style:surrealism": 3,
+      "style:vaporwave": 1,
+      "style:diorama": 1,
+      "style:food_art": 1,
+      "style:miniature_photography": 1,
+      "subject:characters": 1,
+      "subject:main_subject": 1,
+      "style:artistic_style": 1,
+      "style:chrome_fashion": 1,
+      "style:sky_aesthetic": 1,
+      "style:y2k": 1,
+      "subject:subject_analysis": 1
+    },
+    "lighting:lighting_and_shadow": {
+      "mood:emotional_tone": 1,
+      "style:charcoal_sketch": 1,
+      "style:medium_and_style": 1,
+      "style:monochrome": 1,
+      "style:sad_clown": 1,
+      "subject:portrait": 1,
+      "subject:subject_character": 1,
+      "style:artistic_style": 1,
+      "style:collage": 1,
+      "style:pop_art": 1,
+      "style:street_photography": 1,
+      "style:surrealism": 1,
+      "subject:subjects": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "lighting:lighting_and_shadows": {
+      "style:neon": 1,
+      "style:snowboard": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "lighting:lighting_setup": {
+      "style:commercial": 1,
+      "style:exploded_view": 1,
+      "style:food_photography": 1,
+      "subject:hamburger": 1,
+      "subject:infographic": 1,
+      "technical_specs:technical_specs": 1,
+      "text_content:typography_and_graphics": 1,
+      "style:advertising": 1,
+      "style:coca_cola": 1,
+      "style:product_photography": 1,
+      "style:splash_art": 1,
+      "subject:central_subject": 1,
+      "subject:hyper_realistic": 1
+    },
+    "lighting:sky_and_lighting": {
+      "style:3d_render": 1,
+      "style:pastel_aesthetic": 1,
+      "style:surrealism": 1,
+      "style:whimsical": 1,
+      "subject:desert": 1,
+      "subject:main_subject": 1
+    },
+    "mood:emotional_tone": {
+      "style:charcoal_sketch": 1,
+      "style:medium_and_style": 1,
+      "style:monochrome": 1,
+      "style:sad_clown": 1,
+      "subject:portrait": 1,
+      "subject:subject_character": 1
+    },
+    "mood:mood_and_atmosphere": {
+      "style:geometric": 1,
+      "style:memphis_style": 1,
+      "style:product_photography": 1,
+      "style:studio_lighting": 1,
+      "subject:subjects": 1
+    },
+    "negative_constraints:blur": {
+      "technical_specs:8k": 20,
+      "style:photography": 18,
+      "technical_specs:shallow_dof": 15
+    },
+    "negative_constraints:low_quality": {
+      "technical_specs:8k": 22,
+      "technical_specs:unreal_engine": 14,
+      "style:3d_render": 12
+    },
+    "negative_constraints:negative_constraints": {
+      "style:artistic_style": 1,
+      "style:biohazard": 1,
+      "style:diorama": 1,
+      "style:papercraft": 1,
+      "style:solarpunk": 1,
+      "style:wwii": 1,
+      "subject:main_subject": 1,
+      "style:bauhaus": 1,
+      "style:fisheye": 1,
+      "style:rococo": 1,
+      "style:shadowy": 1,
+      "subject:architecture": 1
+    },
+    "negative_constraints:negative_prompt_concepts": {
+      "style:artistic_direction": 1,
+      "style:mixed_media": 1,
+      "style:pop_surrealism": 1,
+      "style:rococo": 1,
+      "style:top_down": 1,
+      "subject:subject_characterization": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "negative_constraints:text_error": {
+      "text_content:title": 12,
+      "text_content:labels": 10,
+      "genre:poster": 8
+    },
+    "perspective:composition_and_perspective": {
+      "style:flash_photography": 1,
+      "style:luxury": 1,
+      "style:snowmobile": 1,
+      "style:stylistic_references": 1,
+      "style:winter": 1,
+      "subject:subjects": 1
+    },
+    "style:3d_abstract": {
+      "style:art_style_parameters": 1,
+      "style:occult": 1,
+      "style:pop_art": 1,
+      "style:surrealism": 1,
+      "style:wide_angle": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_constraints": 1
+    },
+    "style:3d_render": {
+      "style:cake_art": 1,
+      "style:food_photography": 2,
+      "style:surrealism": 3,
+      "technical_specs:technical_execution": 2,
+      "style:advertising": 1,
+      "style:backlighting": 1,
+      "subject:object": 1,
+      "style:pastel_aesthetic": 1,
+      "style:whimsical": 1,
+      "subject:desert": 1,
+      "subject:main_subject": 1,
+      "style:aesthetic_fusion": 1,
+      "style:android": 1,
+      "style:artistic_nuance": 1,
+      "style:cyberpunk": 1,
+      "style:porcelain": 1,
+      "subject:subject_breakdown": 1,
+      "style:anime_style": 1,
+      "style:macro_photography": 1,
+      "subject:cute_character": 1,
+      "subject:winter_landscape": 1,
+      "style:cute": 1,
+      "style:isometric": 1,
+      "style:mcdonalds": 1,
+      "style:miniature": 1,
+      "subject:central_structure": 1,
+      "subject:characters": 1,
+      "technical_specs:technical_details": 1
+    },
+    "style:90s_aesthetic": {
+      "style:crt_monitor": 1,
+      "style:cyberpunk": 1,
+      "style:pixel_art": 1,
+      "style:vaporwave": 1,
+      "subject:geocities": 1,
+      "subject:webcore": 1,
+      "style:candid_snapshot": 1,
+      "style:film_photography": 1,
+      "style:vintage": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:90s_anime": {
+      "style:circuit_board": 1,
+      "style:cyberpunk": 1,
+      "style:retro": 1
+    },
+    "style:90s_style": {
+      "style:aesthetic_style": 1,
+      "style:anime": 1,
+      "style:cel_shaded": 1,
+      "style:vintage": 1,
+      "subject:portrait": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_prompts": 1
+    },
+    "style:abstract_figure": {
+      "style:cartography": 1,
+      "style:collage": 1,
+      "style:glitch_art": 1,
+      "style:surrealism": 1
+    },
+    "style:abstract_realism": {
+      "style:elephant": 1,
+      "style:splatter_art": 1,
+      "style:watercolor": 1
+    },
+    "style:advertising": {
+      "style:coca_cola": 1,
+      "style:product_photography": 1,
+      "style:splash_art": 1,
+      "subject:central_subject": 1,
+      "subject:hyper_realistic": 1,
+      "style:food_photography": 1
+    },
+    "style:aesthetic_fusion": {
+      "style:android": 1,
+      "style:artistic_nuance": 1,
+      "style:cyberpunk": 1,
+      "style:porcelain": 1,
+      "style:surrealism": 1,
+      "subject:subject_breakdown": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "style:aesthetic_style": {
+      "style:cyberpunk": 1,
+      "style:glitch_art": 1,
+      "style:pastel_aesthetic": 1,
+      "style:samurai": 1,
+      "style:vaporwave": 1,
+      "subject:subject_details": 2,
+      "style:anime": 1,
+      "style:cel_shaded": 1,
+      "style:vintage": 1,
+      "subject:portrait": 1,
+      "technical_specs:technical_prompts": 1
+    },
+    "style:amigurumi": {
+      "style:felt_art": 1,
+      "style:pastel_aesthetics": 1,
+      "style:product_photography": 1,
+      "style:skincare_theme": 1,
+      "style:soft_sculpture": 1,
+      "style:whimsical": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:android": {
+      "style:artistic_nuance": 1,
+      "style:cyberpunk": 1,
+      "style:porcelain": 1,
+      "style:surrealism": 1,
+      "subject:subject_breakdown": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "style:anime": {
+      "style:battle": 1,
+      "style:digital_art": 1,
+      "subject:subject_character": 1,
+      "style:cel_shaded": 2,
+      "style:studio_ghibli": 1,
+      "style:wizard": 1,
+      "style:vintage": 1,
+      "subject:portrait": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_prompts": 1
+    },
+    "style:anime_style": {
+      "style:macro_photography": 1,
+      "subject:cute_character": 1,
+      "subject:winter_landscape": 1,
+      "style:concept_art": 1,
+      "style:reference_sheet": 1,
+      "subject:central_figure": 1,
+      "subject:inventory_breakdown": 1
+    },
+    "style:art_style": {
+      "style:noise_texture": 1,
+      "style:retro_landscape": 1,
+      "style:stippling": 1,
+      "style:surrealism": 1,
+      "technical_specs:technical_details": 1
+    },
+    "style:art_style_parameters": {
+      "style:occult": 1,
+      "style:pop_art": 1,
+      "style:surrealism": 1,
+      "style:wide_angle": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_constraints": 1
+    },
+    "style:art_style_specifications": {
+      "style:candlelight": 1,
+      "style:coding": 1,
+      "style:low_poly": 1,
+      "style:top_down": 1,
+      "style:voxel_art": 1,
+      "subject:subject_details": 1,
+      "text_content:typography_and_code_elements": 1
+    },
+    "style:artistic_direction": {
+      "style:mixed_media": 1,
+      "style:pop_surrealism": 1,
+      "style:rococo": 1,
+      "style:top_down": 1,
+      "subject:subject_characterization": 1,
+      "technical_specs:technical_parameters": 1,
+      "style:flat_design": 1,
+      "style:multiverse": 1,
+      "style:surrealism": 1,
+      "style:vector_illustration": 1,
+      "technical_specs:technical_constraints": 1
+    },
+    "style:artistic_nuance": {
+      "style:cyberpunk": 1,
+      "style:porcelain": 1,
+      "style:surrealism": 1,
+      "subject:subject_breakdown": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "style:artistic_style": {
+      "style:biohazard": 1,
+      "style:diorama": 2,
+      "style:papercraft": 1,
+      "style:solarpunk": 1,
+      "style:wwii": 1,
+      "subject:main_subject": 1,
+      "style:asian_art": 1,
+      "style:paper_cut": 1,
+      "style:red": 1,
+      "style:silhouette": 1,
+      "style:traditional": 1,
+      "subject:subject_matter": 1,
+      "technical_specs:technical_details": 1,
+      "style:chrome_fashion": 1,
+      "style:sky_aesthetic": 1,
+      "style:surrealism": 2,
+      "style:y2k": 1,
+      "subject:subject_analysis": 1,
+      "style:collage": 1,
+      "style:pop_art": 1,
+      "style:street_photography": 1,
+      "subject:subjects": 1,
+      "technical_specs:technical_execution": 1,
+      "style:illustration": 1,
+      "style:paper_art": 1,
+      "style:textured": 1,
+      "subject:subject_character": 1
+    },
+    "style:artistic_style_and_technique": {
+      "style:esoteric": 1,
+      "style:sketch": 1,
+      "style:surrealism": 1
+    },
+    "style:artistic_style_keywords": {
+      "style:collage": 1,
+      "style:lebron_james": 1,
+      "style:silhouette": 1,
+      "style:sports_illustration": 1,
+      "subject:lakers": 1,
+      "subject:subject_details": 1
+    },
+    "style:artistic_style_parameters": {
+      "style:vector_art": 1,
+      "subject:subject_architecture": 1,
+      "subject:topographic_map": 1,
+      "technical_specs:technical_constraints": 1
+    },
+    "style:asian_art": {
+      "style:paper_cut": 1,
+      "style:red": 1,
+      "style:silhouette": 1,
+      "style:traditional": 1,
+      "subject:subject_matter": 1,
+      "technical_specs:technical_details": 1
+    },
+    "style:atmospheric": {
+      "style:cinematic": 1,
+      "style:concept_art": 1,
+      "style:dystopian": 1,
+      "style:monochromatic": 1,
+      "subject:desert_landscape": 1,
+      "subject:subject_entity": 1,
+      "technical_specs:technical_aesthetics": 1
+    },
+    "style:automaton": {
+      "style:macro_photography": 1,
+      "style:steampunk": 1,
+      "style:violinist": 1,
+      "style:woodcarving": 1,
+      "subject:automaton_character": 1
+    },
+    "style:automotive_photography": {
+      "style:cinematic_collage": 1,
+      "style:red_aesthetic": 1,
+      "style:surrealism": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:azulejo": {
+      "style:baroque": 1,
+      "style:blue_skin": 1,
+      "style:ceramic_tile": 1,
+      "style:folk_art": 1
+    },
+    "style:backlighting": {
+      "subject:object": 1
+    },
+    "style:baroque": {
+      "style:blue_skin": 1,
+      "style:ceramic_tile": 1,
+      "style:folk_art": 1
+    },
+    "style:battle": {
+      "style:digital_art": 1,
+      "subject:subject_character": 1
+    },
+    "style:bauhaus": {
+      "style:fisheye": 1,
+      "style:rococo": 1,
+      "style:shadowy": 1,
+      "subject:architecture": 1
+    },
+    "style:bauhaus_style": {
+      "style:isometric": 1,
+      "style:product_photography": 1,
+      "style:retro_futuristic": 1
+    },
+    "style:behind_the_scenes": {
+      "style:cinematic": 1,
+      "style:diorama": 1,
+      "subject:characters": 1,
+      "technical_specs:technical_equipment": 1
+    },
+    "style:biohazard": {
+      "style:diorama": 1,
+      "style:papercraft": 1,
+      "style:solarpunk": 1,
+      "style:wwii": 1,
+      "subject:main_subject": 1
+    },
+    "style:black_and_white": {
+      "style:long_exposure": 1,
+      "style:motion_blur": 1,
+      "style:street_photography": 1,
+      "subject:portrait": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "style:blue_skin": {
+      "style:ceramic_tile": 1,
+      "style:folk_art": 1
+    },
+    "style:bokeh": {
+      "style:garden_party": 1,
+      "style:product_photography": 1,
+      "style:strawberry_cream": 1,
+      "subject:subject_details": 1,
+      "technical_specs:camera_settings_simulation": 1
+    },
+    "style:cake_art": {
+      "style:food_photography": 1,
+      "style:surrealism": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "style:candid_snapshot": {
+      "style:film_photography": 1,
+      "style:vintage": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:candlelight": {
+      "style:coding": 1,
+      "style:low_poly": 1,
+      "style:top_down": 1,
+      "style:voxel_art": 1,
+      "subject:subject_details": 1,
+      "text_content:typography_and_code_elements": 1
+    },
+    "style:cartography": {
+      "style:collage": 1,
+      "style:glitch_art": 1,
+      "style:surrealism": 1
+    },
+    "style:cat": {
+      "style:digital_art": 1,
+      "style:japanese_style": 1,
+      "style:samurai": 1,
+      "subject:subject_breakdown": 1,
+      "technical_specs:technical_prompts": 1,
+      "style:cute": 1,
+      "style:humorous": 1,
+      "style:studio_lighting": 1,
+      "subject:portrait": 1,
+      "subject:subjects": 1,
+      "technical_specs:technical_specs": 1
+    },
+    "style:cel_shaded": {
+      "style:studio_ghibli": 1,
+      "style:wizard": 1,
+      "style:vintage": 1,
+      "subject:portrait": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_prompts": 1
+    },
+    "style:celebrity": {
+      "style:collectibles": 1,
+      "style:macro_photography": 1,
+      "style:miniature": 1
+    },
+    "style:ceramic_tile": {
+      "style:folk_art": 1
+    },
+    "style:charcoal_sketch": {
+      "style:medium_and_style": 1,
+      "style:monochrome": 1,
+      "style:sad_clown": 1,
+      "subject:portrait": 1,
+      "subject:subject_character": 1
+    },
+    "style:chrome_fashion": {
+      "style:sky_aesthetic": 1,
+      "style:surrealism": 1,
+      "style:y2k": 1,
+      "subject:subject_analysis": 1
+    },
+    "style:cinematic": {
+      "style:concept_art": 1,
+      "style:dystopian": 1,
+      "style:diorama": 1,
+      "subject:characters": 1,
+      "technical_specs:technical_equipment": 1
+    },
+    "style:cinematic_collage": {
+      "style:red_aesthetic": 1,
+      "style:surrealism": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:cinematic_lighting": {
+      "style:film_noir": 1,
+      "style:jazz_singer": 1,
+      "style:low_key": 1,
+      "style:vintage": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_specs": 1,
+      "style:retro_luxury": 1,
+      "style:vintage_fashion": 1,
+      "style:wes_anderson_style": 1,
+      "subject:subjects": 1
+    },
+    "style:circuit_board": {
+      "style:cyberpunk": 1,
+      "style:retro": 1
+    },
+    "style:claymation": {
+      "style:humorous": 1,
+      "style:stop_motion": 1,
+      "style:surreal": 1,
+      "style:whimsical": 1,
+      "subject:subjects": 1
+    },
+    "style:coca_cola": {
+      "style:product_photography": 1,
+      "style:splash_art": 1,
+      "subject:central_subject": 1,
+      "subject:hyper_realistic": 1
+    },
+    "style:coding": {
+      "style:low_poly": 1,
+      "style:top_down": 1,
+      "style:voxel_art": 1,
+      "subject:subject_details": 1,
+      "text_content:typography_and_code_elements": 1
+    },
+    "style:collage": {
+      "style:poster_art": 1,
+      "style:typography": 1,
+      "style:vintage": 2,
+      "technical_specs:technical_specs": 1,
+      "style:glitch_art": 3,
+      "style:pop_art": 3,
+      "style:street_art": 1,
+      "technical_specs:technical_specifications": 1,
+      "style:lebron_james": 1,
+      "style:silhouette": 1,
+      "style:sports_illustration": 1,
+      "subject:lakers": 1,
+      "subject:subject_details": 1,
+      "style:surrealism": 2,
+      "style:digital_distortion": 1,
+      "style:mixed_media": 1,
+      "subject:portrait": 1,
+      "technical_specs:technical_parameters": 1,
+      "style:retro": 1,
+      "technical_specs:technical_rendering_specs": 1,
+      "style:street_photography": 1,
+      "subject:subjects": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "style:collage_art": {
+      "style:retro_80s": 1,
+      "style:typography": 1,
+      "subject:movie_poster": 1,
+      "subject:subject_analysis": 1,
+      "text_content:typography_and_text": 1
+    },
+    "style:collectibles": {
+      "style:macro_photography": 1,
+      "style:miniature": 1
+    },
+    "style:commercial": {
+      "style:exploded_view": 1,
+      "style:food_photography": 1,
+      "subject:hamburger": 1,
+      "subject:infographic": 1,
+      "technical_specs:technical_specs": 1,
+      "text_content:typography_and_graphics": 1
+    },
+    "style:concept_art": {
+      "style:dystopian": 1,
+      "style:winter": 1,
+      "subject:architecture": 1,
+      "subject:blueprint": 1,
+      "subject:street_scene": 1,
+      "style:reference_sheet": 1,
+      "subject:central_figure": 1,
+      "subject:inventory_breakdown": 1
+    },
+    "style:conceptual": {
+      "style:dating": 1,
+      "style:social_media": 1,
+      "style:top_down": 1,
+      "style:whatsapp": 1,
+      "subject:central_subject": 1,
+      "subject:characters": 1
+    },
+    "style:conceptual_art": {
+      "style:elemental": 1,
+      "style:hyperrealistic": 1,
+      "style:macro_photography": 1,
+      "style:surrealism": 1,
+      "technical_specs:technical_execution": 2,
+      "style:illusion": 1,
+      "style:papercraft": 1,
+      "style:whimsical": 1,
+      "subject:main_subject": 1
+    },
+    "style:conceptual_photography": {
+      "style:flat_lay": 1,
+      "style:food_art": 1,
+      "style:miniature_world": 1,
+      "subject:culinary_map": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:crt_monitor": {
+      "style:cyberpunk": 1,
+      "style:pixel_art": 1,
+      "style:vaporwave": 1,
+      "subject:geocities": 1,
+      "subject:webcore": 1
+    },
+    "style:cute": {
+      "style:fisheye": 1,
+      "style:macro": 1,
+      "style:otter": 1,
+      "style:photorealistic": 1,
+      "subject:subject_analysis": 1,
+      "technical_specs:technical_specifications": 1,
+      "style:isometric": 1,
+      "style:mcdonalds": 1,
+      "style:miniature": 1,
+      "subject:central_structure": 1,
+      "subject:characters": 1,
+      "technical_specs:technical_details": 1,
+      "style:humorous": 1,
+      "style:studio_lighting": 1,
+      "subject:portrait": 1,
+      "subject:subjects": 1,
+      "technical_specs:technical_specs": 1
+    },
+    "style:cyberpunk": {
+      "style:glitch_art": 1,
+      "style:pastel_aesthetic": 1,
+      "style:samurai": 1,
+      "style:vaporwave": 2,
+      "subject:subject_details": 2,
+      "style:porcelain": 1,
+      "style:surrealism": 1,
+      "subject:subject_breakdown": 1,
+      "technical_specs:technical_execution": 1,
+      "style:surveillance": 1,
+      "subject:interface": 1,
+      "subject:streetwear": 1,
+      "style:pixel_art": 2,
+      "subject:geocities": 1,
+      "subject:webcore": 1,
+      "style:glitch_aesthetic": 1,
+      "style:retro_computing": 1,
+      "style:synthwave": 1,
+      "technical_specs:technical_rendering_specs": 1,
+      "style:retro": 1
+    },
+    "style:cyberpunk_western": {
+      "style:pixel_art": 1,
+      "style:virus_theme": 1,
+      "subject:portrait": 1
+    },
+    "style:dashboard": {
+      "style:robotics": 1
+    },
+    "style:dating": {
+      "style:social_media": 1,
+      "style:top_down": 1,
+      "style:whatsapp": 1,
+      "subject:central_subject": 1,
+      "subject:characters": 1
+    },
+    "style:demon": {
+      "style:digital_art": 1,
+      "style:gothic": 1
+    },
+    "style:digital_art": {
+      "subject:subject_character": 1,
+      "style:japanese_style": 1,
+      "style:samurai": 1,
+      "subject:subject_breakdown": 1,
+      "technical_specs:technical_prompts": 1,
+      "style:gothic": 1
+    },
+    "style:digital_distortion": {
+      "style:glitch_art": 1,
+      "style:mixed_media": 1,
+      "subject:portrait": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "style:diorama": {
+      "style:papercraft": 1,
+      "style:solarpunk": 1,
+      "style:wwii": 1,
+      "subject:main_subject": 2,
+      "style:food_art": 1,
+      "style:miniature_photography": 1,
+      "style:surrealism": 1,
+      "subject:characters": 2,
+      "technical_specs:technical_equipment": 1,
+      "style:illustration": 1,
+      "style:paper_art": 1,
+      "style:textured": 1,
+      "subject:subject_character": 1
+    },
+    "style:elemental": {
+      "style:hyperrealistic": 1,
+      "style:macro_photography": 1,
+      "style:surrealism": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "style:elephant": {
+      "style:splatter_art": 1,
+      "style:watercolor": 1
+    },
+    "style:esoteric": {
+      "style:sketch": 1,
+      "style:surrealism": 1
+    },
+    "style:exploded_view": {
+      "style:food_photography": 1,
+      "subject:hamburger": 1,
+      "subject:infographic": 1,
+      "technical_specs:technical_specs": 1,
+      "text_content:typography_and_graphics": 1
+    },
+    "style:felt_art": {
+      "style:pastel_aesthetics": 1,
+      "style:product_photography": 1,
+      "style:skincare_theme": 1,
+      "style:soft_sculpture": 1,
+      "style:whimsical": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:film_noir": {
+      "style:jazz_singer": 1,
+      "style:low_key": 1,
+      "style:vintage": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_specs": 1
+    },
+    "style:film_photography": {
+      "style:vintage": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:fisheye": {
+      "style:macro": 1,
+      "style:otter": 1,
+      "style:photorealistic": 1,
+      "subject:subject_analysis": 1,
+      "technical_specs:technical_specifications": 1,
+      "style:rococo": 1,
+      "style:shadowy": 1,
+      "subject:architecture": 1
+    },
+    "style:flash_photography": {
+      "style:luxury": 1,
+      "style:snowmobile": 1,
+      "style:stylistic_references": 1,
+      "style:winter": 1,
+      "subject:subjects": 1,
+      "style:glamour": 1,
+      "style:sequin_dress": 1,
+      "style:vintage": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "style:flat_design": {
+      "style:multiverse": 1,
+      "style:surrealism": 1,
+      "style:vector_illustration": 1,
+      "technical_specs:technical_constraints": 1
+    },
+    "style:flat_lay": {
+      "style:food_art": 1,
+      "style:miniature_world": 1,
+      "subject:culinary_map": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:food_art": {
+      "style:miniature_photography": 1,
+      "style:surrealism": 1,
+      "subject:characters": 1,
+      "subject:main_subject": 1,
+      "style:miniature_world": 1,
+      "subject:culinary_map": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:food_photography": {
+      "subject:hamburger": 1,
+      "subject:infographic": 1,
+      "technical_specs:technical_specs": 1,
+      "text_content:typography_and_graphics": 1,
+      "style:surrealism": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "style:funny": {
+      "style:hamster": 1,
+      "style:meme": 1,
+      "style:photography_style": 1,
+      "style:pistol": 1,
+      "style:sunglasses": 1,
+      "subject:main_subject": 1
+    },
+    "style:garden_party": {
+      "style:product_photography": 1,
+      "style:strawberry_cream": 1,
+      "subject:subject_details": 1,
+      "technical_specs:camera_settings_simulation": 1
+    },
+    "style:geometric": {
+      "style:memphis_style": 1,
+      "style:product_photography": 1,
+      "style:studio_lighting": 1,
+      "subject:subjects": 1
+    },
+    "style:giantess": {
+      "style:pastel_aesthetic": 1,
+      "style:surrealism": 1,
+      "subject:subject_details": 1,
+      "subject:tokyo_street": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "style:glamour": {
+      "style:sequin_dress": 1,
+      "style:vintage": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "style:glitch_aesthetic": {
+      "style:pixel_art": 1,
+      "style:retro_computing": 1,
+      "style:synthwave": 1,
+      "technical_specs:technical_rendering_specs": 1
+    },
+    "style:glitch_art": {
+      "style:pop_art": 1,
+      "style:street_art": 1,
+      "technical_specs:technical_specifications": 1,
+      "style:surrealism": 1,
+      "style:pastel_aesthetic": 1,
+      "style:samurai": 1,
+      "style:vaporwave": 1,
+      "subject:subject_details": 1,
+      "style:mixed_media": 1,
+      "subject:portrait": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "style:hamster": {
+      "style:meme": 1,
+      "style:photography_style": 1,
+      "style:pistol": 1,
+      "style:sunglasses": 1,
+      "subject:main_subject": 1
+    },
+    "style:hokusai": {
+      "style:japanese_bath": 1,
+      "style:surrealism": 1,
+      "style:vaporwave": 1
+    },
+    "style:humorous": {
+      "style:stop_motion": 1,
+      "style:surreal": 1,
+      "style:whimsical": 1,
+      "subject:subjects": 2,
+      "style:studio_lighting": 1,
+      "subject:portrait": 1,
+      "technical_specs:technical_specs": 1
+    },
+    "style:hyperrealistic": {
+      "style:macro_photography": 1,
+      "style:surrealism": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "style:illusion": {
+      "style:papercraft": 1,
+      "style:whimsical": 1,
+      "subject:main_subject": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "style:illustration": {
+      "style:paper_art": 1,
+      "style:textured": 1,
+      "subject:subject_character": 1
+    },
+    "style:isometric": {
+      "style:product_photography": 1,
+      "style:retro_futuristic": 1,
+      "style:mcdonalds": 1,
+      "style:miniature": 1,
+      "subject:central_structure": 1,
+      "subject:characters": 1,
+      "technical_specs:technical_details": 1
+    },
+    "style:japanese_bath": {
+      "style:surrealism": 1,
+      "style:vaporwave": 1
+    },
+    "style:japanese_style": {
+      "style:samurai": 1,
+      "subject:subject_breakdown": 1,
+      "technical_specs:technical_prompts": 1
+    },
+    "style:jazz_singer": {
+      "style:low_key": 1,
+      "style:vintage": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_specs": 1
+    },
+    "style:lebron_james": {
+      "style:silhouette": 1,
+      "style:sports_illustration": 1,
+      "subject:lakers": 1,
+      "subject:subject_details": 1
+    },
+    "style:long_exposure": {
+      "style:motion_blur": 1,
+      "style:street_photography": 1,
+      "subject:portrait": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "style:low_key": {
+      "style:vintage": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_specs": 1
+    },
+    "style:low_poly": {
+      "style:top_down": 1,
+      "style:voxel_art": 1,
+      "subject:subject_details": 1,
+      "text_content:typography_and_code_elements": 1
+    },
+    "style:luxury": {
+      "style:snowmobile": 1,
+      "style:stylistic_references": 1,
+      "style:winter": 1,
+      "subject:subjects": 1
+    },
+    "style:macro": {
+      "style:otter": 1,
+      "style:photorealistic": 1,
+      "subject:subject_analysis": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:macro_photography": {
+      "subject:fabric_detail": 1,
+      "style:surrealism": 1,
+      "technical_specs:technical_execution": 1,
+      "subject:cute_character": 1,
+      "subject:winter_landscape": 1,
+      "style:steampunk": 1,
+      "style:violinist": 1,
+      "style:woodcarving": 1,
+      "subject:automaton_character": 1,
+      "style:miniature": 1
+    },
+    "style:mcdonalds": {
+      "style:miniature": 1,
+      "subject:central_structure": 1,
+      "subject:characters": 1,
+      "technical_specs:technical_details": 1
+    },
+    "style:medium_and_style": {
+      "style:monochrome": 1,
+      "style:sad_clown": 1,
+      "subject:portrait": 1,
+      "subject:subject_character": 1
+    },
+    "style:meme": {
+      "style:photography_style": 1,
+      "style:pistol": 1,
+      "style:sunglasses": 1,
+      "subject:main_subject": 1
+    },
+    "style:memphis_style": {
+      "style:product_photography": 1,
+      "style:studio_lighting": 1,
+      "subject:subjects": 1
+    },
+    "style:miniature": {
+      "subject:central_structure": 1,
+      "subject:characters": 1,
+      "technical_specs:technical_details": 1
+    },
+    "style:miniature_photography": {
+      "style:surrealism": 1,
+      "subject:characters": 1,
+      "subject:main_subject": 1
+    },
+    "style:miniature_world": {
+      "subject:culinary_map": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:minimalism": {
+      "style:spiral": 1,
+      "style:surreal": 1,
+      "style:white": 1,
+      "subject:architecture": 1,
+      "subject:subject_human": 1
+    },
+    "style:mixed_media": {
+      "subject:portrait": 1,
+      "technical_specs:technical_parameters": 2,
+      "style:pop_surrealism": 1,
+      "style:rococo": 1,
+      "style:top_down": 1,
+      "subject:subject_characterization": 1
+    },
+    "style:monochromatic": {
+      "subject:desert_landscape": 1,
+      "subject:subject_entity": 1,
+      "technical_specs:technical_aesthetics": 1
+    },
+    "style:monochrome": {
+      "style:sad_clown": 1,
+      "subject:portrait": 1,
+      "subject:subject_character": 1
+    },
+    "style:motion_blur": {
+      "style:street_photography": 1,
+      "subject:portrait": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "style:multiverse": {
+      "style:surrealism": 1,
+      "style:vector_illustration": 1,
+      "technical_specs:technical_constraints": 1
+    },
+    "style:neon": {
+      "style:snowboard": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:noise_texture": {
+      "style:retro_landscape": 1,
+      "style:stippling": 1,
+      "style:surrealism": 1,
+      "technical_specs:technical_details": 1
+    },
+    "style:occult": {
+      "style:pop_art": 1,
+      "style:surrealism": 1,
+      "style:wide_angle": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_constraints": 1
+    },
+    "style:otter": {
+      "style:photorealistic": 1,
+      "subject:subject_analysis": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:paper_art": {
+      "style:textured": 1,
+      "subject:subject_character": 1
+    },
+    "style:paper_cut": {
+      "style:red": 1,
+      "style:silhouette": 1,
+      "style:traditional": 1,
+      "subject:subject_matter": 1,
+      "technical_specs:technical_details": 1
+    },
+    "style:papercraft": {
+      "style:solarpunk": 1,
+      "style:wwii": 1,
+      "subject:main_subject": 2,
+      "style:whimsical": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "style:pastel_aesthetic": {
+      "style:samurai": 1,
+      "style:vaporwave": 1,
+      "subject:subject_details": 2,
+      "style:surrealism": 2,
+      "style:whimsical": 1,
+      "subject:desert": 1,
+      "subject:main_subject": 1,
+      "subject:tokyo_street": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "style:pastel_aesthetics": {
+      "style:product_photography": 1,
+      "style:skincare_theme": 1,
+      "style:soft_sculpture": 1,
+      "style:whimsical": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:photography_style": {
+      "style:pistol": 1,
+      "style:sunglasses": 1,
+      "subject:main_subject": 1
+    },
+    "style:photorealistic": {
+      "subject:subject_analysis": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:pistol": {
+      "style:sunglasses": 1,
+      "subject:main_subject": 1
+    },
+    "style:pixel_art": {
+      "style:virus_theme": 1,
+      "subject:portrait": 1,
+      "style:vaporwave": 1,
+      "subject:geocities": 1,
+      "subject:webcore": 1,
+      "style:retro_computing": 1,
+      "style:synthwave": 1,
+      "technical_specs:technical_rendering_specs": 1
+    },
+    "style:pop_art": {
+      "style:street_art": 1,
+      "technical_specs:technical_specifications": 1,
+      "style:surrealism": 2,
+      "style:wide_angle": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_constraints": 1,
+      "style:retro": 1,
+      "style:vintage": 1,
+      "technical_specs:technical_rendering_specs": 1,
+      "style:street_photography": 1,
+      "subject:subjects": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "style:pop_surrealism": {
+      "style:rococo": 1,
+      "style:top_down": 1,
+      "subject:subject_characterization": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "style:porcelain": {
+      "style:surrealism": 1,
+      "subject:subject_breakdown": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "style:poster_art": {
+      "style:typography": 1,
+      "style:vintage": 1,
+      "technical_specs:technical_specs": 1
+    },
+    "style:product_photography": {
+      "style:strawberry_cream": 1,
+      "subject:subject_details": 1,
+      "technical_specs:camera_settings_simulation": 1,
+      "style:splash_art": 1,
+      "subject:central_subject": 1,
+      "subject:hyper_realistic": 1,
+      "style:retro_futuristic": 1,
+      "style:studio_lighting": 1,
+      "subject:subjects": 1,
+      "style:skincare_theme": 1,
+      "style:soft_sculpture": 1,
+      "style:whimsical": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:red": {
+      "style:silhouette": 1,
+      "style:traditional": 1,
+      "subject:subject_matter": 1,
+      "technical_specs:technical_details": 1
+    },
+    "style:red_aesthetic": {
+      "style:surrealism": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:reference_sheet": {
+      "subject:central_figure": 1,
+      "subject:inventory_breakdown": 1
+    },
+    "style:retro": {
+      "style:vintage": 1,
+      "technical_specs:technical_rendering_specs": 1
+    },
+    "style:retro_80s": {
+      "style:typography": 1,
+      "subject:movie_poster": 1,
+      "subject:subject_analysis": 1,
+      "text_content:typography_and_text": 1
+    },
+    "style:retro_computing": {
+      "style:synthwave": 1,
+      "technical_specs:technical_rendering_specs": 1
+    },
+    "style:retro_landscape": {
+      "style:stippling": 1,
+      "style:surrealism": 1,
+      "technical_specs:technical_details": 1
+    },
+    "style:retro_luxury": {
+      "style:vintage_fashion": 1,
+      "style:wes_anderson_style": 1,
+      "subject:subjects": 1
+    },
+    "style:rococo": {
+      "style:top_down": 1,
+      "subject:subject_characterization": 1,
+      "technical_specs:technical_parameters": 1,
+      "style:silhouette": 1,
+      "style:surrealism": 1,
+      "subject:ocean": 1,
+      "style:shadowy": 1,
+      "subject:architecture": 1
+    },
+    "style:sad_clown": {
+      "subject:portrait": 1,
+      "subject:subject_character": 1
+    },
+    "style:samurai": {
+      "subject:subject_breakdown": 1,
+      "technical_specs:technical_prompts": 1,
+      "style:vaporwave": 1,
+      "subject:subject_details": 1
+    },
+    "style:sequin_dress": {
+      "style:vintage": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_parameters": 1
+    },
+    "style:shadowy": {
+      "subject:architecture": 1
+    },
+    "style:silhouette": {
+      "style:sports_illustration": 1,
+      "subject:lakers": 1,
+      "subject:subject_details": 1,
+      "style:traditional": 1,
+      "subject:subject_matter": 1,
+      "technical_specs:technical_details": 1,
+      "style:surrealism": 1,
+      "subject:ocean": 1
+    },
+    "style:sketch": {
+      "style:surrealism": 1
+    },
+    "style:skincare_theme": {
+      "style:soft_sculpture": 1,
+      "style:whimsical": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:sky_aesthetic": {
+      "style:surrealism": 1,
+      "style:y2k": 1,
+      "subject:subject_analysis": 1
+    },
+    "style:snowboard": {
+      "subject:subject_details": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:snowmobile": {
+      "style:stylistic_references": 1,
+      "style:winter": 1,
+      "subject:subjects": 1
+    },
+    "style:social_media": {
+      "style:top_down": 1,
+      "style:whatsapp": 1,
+      "subject:central_subject": 1,
+      "subject:characters": 1
+    },
+    "style:soft_sculpture": {
+      "style:whimsical": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:solarpunk": {
+      "style:wwii": 1,
+      "subject:main_subject": 1
+    },
+    "style:spiral": {
+      "style:surreal": 1,
+      "style:white": 1,
+      "subject:architecture": 1,
+      "subject:subject_human": 1
+    },
+    "style:splash_art": {
+      "subject:central_subject": 1,
+      "subject:hyper_realistic": 1
+    },
+    "style:splatter_art": {
+      "style:watercolor": 1
+    },
+    "style:sports_illustration": {
+      "subject:lakers": 1,
+      "subject:subject_details": 1
+    },
+    "style:steampunk": {
+      "style:violinist": 1,
+      "style:woodcarving": 1,
+      "subject:automaton_character": 1
+    },
+    "style:stippling": {
+      "style:surrealism": 1,
+      "technical_specs:technical_details": 1
+    },
+    "style:stop_motion": {
+      "style:surreal": 1,
+      "style:whimsical": 1,
+      "subject:subjects": 1
+    },
+    "style:strawberry_cream": {
+      "subject:subject_details": 1,
+      "technical_specs:camera_settings_simulation": 1
+    },
+    "style:street_art": {
+      "technical_specs:technical_specifications": 1
+    },
+    "style:street_photography": {
+      "subject:portrait": 1,
+      "subject:subject_details": 1,
+      "technical_specs:technical_execution": 2,
+      "style:surrealism": 1,
+      "subject:subjects": 1
+    },
+    "style:studio_ghibli": {
+      "style:wizard": 1
+    },
+    "style:studio_lighting": {
+      "subject:subjects": 2,
+      "subject:portrait": 1,
+      "technical_specs:technical_specs": 1
+    },
+    "style:stylistic_references": {
+      "style:winter": 1,
+      "subject:subjects": 1
+    },
+    "style:sunglasses": {
+      "subject:main_subject": 1
+    },
+    "style:surreal": {
+      "style:white": 1,
+      "subject:architecture": 1,
+      "subject:subject_human": 1,
+      "style:whimsical": 1,
+      "subject:subjects": 1
+    },
+    "style:surrealism": {
+      "style:vaporwave": 1,
+      "subject:characters": 1,
+      "subject:main_subject": 2,
+      "technical_specs:technical_execution": 4,
+      "subject:ocean": 1,
+      "style:wide_angle": 1,
+      "subject:subject_details": 2,
+      "technical_specs:technical_constraints": 2,
+      "style:vector_illustration": 1,
+      "style:y2k": 1,
+      "subject:subject_analysis": 1,
+      "style:whimsical": 1,
+      "subject:desert": 1,
+      "technical_specs:technical_details": 1,
+      "subject:subject_breakdown": 1,
+      "technical_specs:technical_specifications": 1,
+      "subject:tokyo_street": 1,
+      "technical_specs:technical_parameters": 1,
+      "subject:subjects": 1
+    },
+    "style:surveillance": {
+      "subject:interface": 1,
+      "subject:streetwear": 1,
+      "subject:subject_details": 1
+    },
+    "style:synthwave": {
+      "technical_specs:technical_rendering_specs": 1
+    },
+    "style:textured": {
+      "subject:subject_character": 1
+    },
+    "style:top_down": {
+      "style:whatsapp": 1,
+      "subject:central_subject": 1,
+      "subject:characters": 1,
+      "subject:subject_characterization": 1,
+      "technical_specs:technical_parameters": 1,
+      "style:voxel_art": 1,
+      "subject:subject_details": 1,
+      "text_content:typography_and_code_elements": 1
+    },
+    "style:traditional": {
+      "subject:subject_matter": 1,
+      "technical_specs:technical_details": 1
+    },
+    "style:typography": {
+      "style:vintage": 1,
+      "technical_specs:technical_specs": 1,
+      "subject:movie_poster": 1,
+      "subject:subject_analysis": 1,
+      "text_content:typography_and_text": 1
+    },
+    "style:vaporwave": {
+      "subject:subject_details": 1,
+      "subject:geocities": 1,
+      "subject:webcore": 1
+    },
+    "style:vector_art": {
+      "subject:subject_architecture": 1,
+      "subject:topographic_map": 1,
+      "technical_specs:technical_constraints": 1
+    },
+    "style:vector_illustration": {
+      "technical_specs:technical_constraints": 1
+    },
+    "style:vintage": {
+      "technical_specs:technical_specs": 2,
+      "subject:subject_details": 3,
+      "technical_specs:technical_parameters": 1,
+      "subject:portrait": 1,
+      "technical_specs:technical_prompts": 1,
+      "technical_specs:technical_rendering_specs": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "style:vintage_aesthetic": {
+      "style:whimsical": 1,
+      "subject:animals": 1,
+      "subject:hyper_realistic": 1,
+      "subject:surreal_portrait": 1
+    },
+    "style:vintage_fashion": {
+      "style:wes_anderson_style": 1,
+      "subject:subjects": 1
+    },
+    "style:vintage_ledger": {
+      "style:hand_drawn": 15,
+      "style:vintage": 12,
+      "mood:nostalgic": 14,
+      "mood:warm": 10,
+      "mood:playful": 8,
+      "genre:infographic": 12,
+      "genre:poster": 6,
+      "composition:horizontal": 10,
+      "subject:character": 8,
+      "typography:handwritten": 12
+    },
+    "style:violinist": {
+      "style:woodcarving": 1,
+      "subject:automaton_character": 1
+    },
+    "style:virus_theme": {
+      "subject:portrait": 1
+    },
+    "style:voxel_art": {
+      "subject:subject_details": 1,
+      "text_content:typography_and_code_elements": 1
+    },
+    "style:wes_anderson_style": {
+      "subject:subjects": 1
+    },
+    "style:whatsapp": {
+      "subject:central_subject": 1,
+      "subject:characters": 1
+    },
+    "style:whimsical": {
+      "subject:desert": 1,
+      "subject:main_subject": 2,
+      "subject:subjects": 1,
+      "technical_specs:technical_execution": 1,
+      "technical_specs:technical_specifications": 1,
+      "subject:animals": 1,
+      "subject:hyper_realistic": 1,
+      "subject:surreal_portrait": 1
+    },
+    "style:white": {
+      "subject:architecture": 1,
+      "subject:subject_human": 1
+    },
+    "style:wide_angle": {
+      "subject:subject_details": 1,
+      "technical_specs:technical_constraints": 1
+    },
+    "style:winter": {
+      "subject:subjects": 1,
+      "subject:architecture": 1,
+      "subject:blueprint": 1,
+      "subject:street_scene": 1
+    },
+    "style:woodcarving": {
+      "subject:automaton_character": 1
+    },
+    "style:wwii": {
+      "subject:main_subject": 1
+    },
+    "style:y2k": {
+      "subject:subject_analysis": 1
+    },
+    "subject:animals": {
+      "subject:hyper_realistic": 1,
+      "subject:surreal_portrait": 1
+    },
+    "subject:architecture": {
+      "subject:subject_human": 1,
+      "subject:blueprint": 1,
+      "subject:street_scene": 1
+    },
+    "subject:blueprint": {
+      "subject:street_scene": 1
+    },
+    "subject:central_figure": {
+      "subject:inventory_breakdown": 1
+    },
+    "subject:central_structure": {
+      "subject:characters": 1,
+      "technical_specs:technical_details": 1
+    },
+    "subject:central_subject": {
+      "subject:characters": 1,
+      "subject:hyper_realistic": 1
+    },
+    "subject:characters": {
+      "subject:main_subject": 1,
+      "technical_specs:technical_equipment": 1,
+      "technical_specs:technical_details": 1
+    },
+    "subject:culinary_map": {
+      "technical_specs:technical_specifications": 1
+    },
+    "subject:cute_character": {
+      "subject:winter_landscape": 1
+    },
+    "subject:desert": {
+      "subject:main_subject": 1
+    },
+    "subject:desert_landscape": {
+      "subject:subject_entity": 1,
+      "technical_specs:technical_aesthetics": 1
+    },
+    "subject:geocities": {
+      "subject:webcore": 1
+    },
+    "subject:hamburger": {
+      "subject:infographic": 1,
+      "technical_specs:technical_specs": 1,
+      "text_content:typography_and_graphics": 1
+    },
+    "subject:hyper_realistic": {
+      "subject:surreal_portrait": 1
+    },
+    "subject:infographic": {
+      "technical_specs:technical_specs": 1,
+      "text_content:typography_and_graphics": 1
+    },
+    "subject:interface": {
+      "subject:streetwear": 1,
+      "subject:subject_details": 1
+    },
+    "subject:lakers": {
+      "subject:subject_details": 1
+    },
+    "subject:main_subject": {
+      "technical_specs:technical_execution": 1
+    },
+    "subject:movie_poster": {
+      "subject:subject_analysis": 1,
+      "text_content:typography_and_text": 1
+    },
+    "subject:portrait": {
+      "subject:subject_character": 1,
+      "subject:subject_details": 2,
+      "technical_specs:technical_execution": 1,
+      "technical_specs:technical_parameters": 1,
+      "technical_specs:technical_prompts": 1,
+      "subject:subjects": 1,
+      "technical_specs:technical_specs": 1
+    },
+    "subject:streetwear": {
+      "subject:subject_details": 1
+    },
+    "subject:subject_analysis": {
+      "text_content:typography_and_text": 1,
+      "technical_specs:technical_specifications": 1
+    },
+    "subject:subject_architecture": {
+      "subject:topographic_map": 1,
+      "technical_specs:technical_constraints": 1
+    },
+    "subject:subject_breakdown": {
+      "technical_specs:technical_prompts": 1,
+      "technical_specs:technical_execution": 1
+    },
+    "subject:subject_characterization": {
+      "technical_specs:technical_parameters": 1
+    },
+    "subject:subject_details": {
+      "technical_specs:camera_settings_simulation": 1,
+      "technical_specs:technical_execution": 1,
+      "technical_specs:technical_parameters": 2,
+      "technical_specs:technical_specs": 1,
+      "technical_specs:technical_constraints": 1,
+      "technical_specs:technical_specifications": 1,
+      "text_content:typography_and_code_elements": 1,
+      "technical_specs:technical_prompts": 1,
+      "subject:tokyo_street": 1
+    },
+    "subject:subject_entity": {
+      "technical_specs:technical_aesthetics": 1
+    },
+    "subject:subject_matter": {
+      "technical_specs:technical_details": 1
+    },
+    "subject:subjects": {
+      "technical_specs:technical_execution": 1,
+      "technical_specs:technical_specs": 1
+    },
+    "subject:tokyo_street": {
+      "technical_specs:technical_parameters": 1
+    },
+    "subject:topographic_map": {
+      "technical_specs:technical_constraints": 1
+    },
+    "technical_specs:85mm": {
+      "style:photography": 16,
+      "composition:vertical": 12,
+      "subject:character": 14,
+      "technical_specs:shallow_dof": 10
+    },
+    "technical_specs:8k": {
+      "style:3d_render": 25,
+      "style:photography": 28,
+      "mood:luxurious": 18,
+      "negative_constraints:low_quality": 22,
+      "negative_constraints:blur": 20
+    },
+    "technical_specs:technical_specs": {
+      "text_content:typography_and_graphics": 1
+    },
+    "technical_specs:unreal_engine": {
+      "style:3d_render": 20,
+      "background:city": 12,
+      "mood:dramatic": 14,
+      "color_palette:neon": 6
+    },
+    "text_content:credits": {
+      "genre:poster": 12,
+      "style:retro_poster": 6,
+      "mood:nostalgic": 8
+    },
+    "text_content:title": {
+      "genre:poster": 18,
+      "genre:branding": 12,
+      "style:miniature": 8,
+      "negative_constraints:text_error": 12
+    },
+    "text_content:ui_text": {
+      "genre:infographic": 10,
+      "style:flat_design": 8,
+      "background:abstract": 6
+    },
+    "typography:top": {
+      "genre:poster": 20,
+      "genre:infographic": 15,
+      "mood:dramatic": 12,
+      "style:3d_render": 10,
+      "typography:large_text": 18
+    },
+    "typography:center": {
+      "genre:poster": 22,
+      "mood:dramatic": 15,
+      "style:pop_art": 12,
+      "typography:extra_large_title": 20,
+      "typography:embossed_3d": 14
+    },
+    "typography:bottom_center": {
+      "genre:poster": 14,
+      "style:3d_render": 10,
+      "typography:circular_frame": 12,
+      "typography:glowing_border": 10
+    },
+    "typography:second_line": {
+      "genre:poster": 16,
+      "genre:infographic": 12
+    },
+    "typography:extra_large_title": {
+      "genre:poster": 18,
+      "mood:dramatic": 14,
+      "style:pop_art": 12,
+      "color_palette:gold": 10,
+      "color_palette:yellow": 10
+    },
+    "typography:bold_text": {
+      "genre:poster": 16,
+      "mood:dramatic": 12,
+      "style:vintage": 10
+    },
+    "typography:brush_calligraphy": {
+      "style:vintage": 14,
+      "style:hand_drawn": 12,
+      "mood:nostalgic": 10,
+      "color_palette:black": 12,
+      "color_palette:gold": 8
+    },
+    "typography:embossed_3d": {
+      "style:3d_render": 16,
+      "genre:poster": 14,
+      "mood:luxurious": 10,
+      "color_palette:gold": 12,
+      "typography:drop_shadow": 14
+    },
+    "typography:gradient_text": {
+      "genre:poster": 12,
+      "style:pop_art": 10,
+      "mood:dramatic": 10,
+      "color_palette:orange_red": 10,
+      "color_palette:yellow": 8
+    },
+    "typography:neon_glow": {
+      "style:cyberpunk": 16,
+      "lighting:neon": 14,
+      "mood:futuristic": 12,
+      "color_palette:cyan": 10,
+      "color_palette:magenta": 10
+    },
+    "typography:halftone_texture": {
+      "style:pop_art": 18,
+      "style:vintage": 12,
+      "genre:poster": 14
+    },
+    "typography:red_seal": {
+      "style:vintage": 14,
+      "style:hand_drawn": 10,
+      "mood:nostalgic": 10
+    },
+    "typography:four_corner_seal": {
+      "style:vintage": 12,
+      "style:hand_drawn": 10,
+      "genre:poster": 10
+    },
+    "typography:circular_frame": {
+      "genre:poster": 12,
+      "style:3d_render": 10,
+      "style:digital_art": 8
+    },
+    "typography:glowing_border": {
+      "style:3d_render": 14,
+      "lighting:neon": 10,
+      "genre:poster": 10
+    },
+    "confrontation:left_vs_right": {
+      "genre:comparison": 18,
+      "genre:poster": 14,
+      "mood:dramatic": 12,
+      "composition:horizontal": 14,
+      "style:cinematic": 10
+    },
+    "confrontation:top_vs_bottom": {
+      "genre:comparison": 12,
+      "genre:infographic": 10,
+      "mood:dramatic": 8,
+      "composition:vertical": 12
+    },
+    "color_palette:pink": {
+      "mood:playful": 12,
+      "style:pastel_aesthetic": 10,
+      "mood:warm": 8
+    },
+    "color_palette:gold": {
+      "mood:luxurious": 14,
+      "style:3d_render": 10,
+      "mood:dramatic": 8,
+      "typography:embossed_3d": 10
+    },
+    "color_palette:black": {
+      "mood:dark": 16,
+      "style:cinematic": 10,
+      "genre:poster": 10,
+      "typography:bold_text": 8
+    },
+    "color_palette:blue": {
+      "mood:serene": 10,
+      "style:cinematic": 8,
+      "mood:cool": 8
+    },
+    "color_palette:orange_red": {
+      "mood:dramatic": 12,
+      "style:pop_art": 10,
+      "mood:warm": 10,
+      "typography:gradient_text": 8
+    },
+    "color_palette:yellow": {
+      "mood:warm": 12,
+      "style:pop_art": 8,
+      "mood:playful": 8,
+      "typography:extra_large_title": 8
+    },
+    "color_palette:purple": {
+      "mood:dark": 10,
+      "style:vaporwave": 12,
+      "mood:futuristic": 8
+    },
+    "color_palette:cyan": {
+      "style:cyberpunk": 12,
+      "lighting:neon": 10,
+      "mood:futuristic": 10
+    }
+  }
+}

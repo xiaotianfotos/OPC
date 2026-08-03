@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "format": "opc_image_prompt_v1",
+    "version": "1.0",
+    "source": "user_request"
+  },
+  "subject": {
+    "main": "a young European woman with sleek dark hair in a tight low bun, wearing a crisp white ruffled-collar shirt, eyes closed in serene contemplation",
+    "details": "side-profile, medium shot portrait, minimalist composition"
+  },
+  "style": {
+    "medium": "cinematic portrait photography",
+    "techniques": ["high-fashion editorial", "stylized color grading"],
+    "references": []
+  },
+  "composition": {
+    "framing": "medium shot",
+    "angle": "side-profile",
+    "focus": "ultra-sharp focus on subject"
+  },
+  "lighting": {
+    "type": "neon rim light",
+    "direction": "side",
+    "quality": "sharp, intense, vivid",
+    "color_temperature": "mixed cool and warm"
+  },
+  "background": {
+    "setting": "outdoor",
+    "environment": "moody dark gradient deep indigo-blue twilight sky with layered misty mountain silhouettes",
+    "depth": "atmospheric perspective"
+  },
+  "color_palette": {
+    "dominant": ["#191970", "#00CED1"],
+    "accent": ["#FF1493", "#FF4500"],
+    "scheme": "complementary",
+    "mood": "cool with neon warm accents"
+  },
+  "mood": {
+    "atmosphere": "tranquil introspective",
+    "emotional_tone": "serene contemplation"
+  },
+  "negative_constraints": [
+    "overexposure",
+    "blurry",
+    "low quality",
+    "deformed hands"
+  ],
+  "technical_specs": {
+    "quality": "8K, ultra-sharp, highly detailed",
+    "camera": "85mm portrait lens, shallow depth of field"
+  }
+}

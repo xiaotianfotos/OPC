@@ -7,6 +7,8 @@ import Docs from './views/Docs.vue';
 import Home from './views/Home.vue';
 import CutEditor from './views/CutEditor.vue';
 import CutEditorView from './views/CutEditorView.vue';
+import KGView from './views/KGView.vue';
+import ModelCompare from './views/ModelCompare.vue';
 
 const routes = [
   { path: '/', name: 'Landing', component: Landing },
@@ -14,7 +16,9 @@ const routes = [
   { path: '/dashboard', name: 'Home', component: Home },
   { path: '/skill/cut', name: 'Cut', component: CutEditor },
   { path: '/skill/cut/editor', name: 'CutEditor', component: CutEditorView },
-  { path: '/skill/cut/editor/:fileId', name: 'CutEditorFile', component: CutEditorView }
+  { path: '/skill/cut/editor/:fileId', name: 'CutEditorFile', component: CutEditorView },
+  { path: '/kg', name: 'KnowledgeGraph', component: KGView },
+  { path: '/evaluate', name: 'Evaluate', component: ModelCompare }
 ];
 
 const router = createRouter({

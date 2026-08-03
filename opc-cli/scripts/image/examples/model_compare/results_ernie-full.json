@@ -1,0 +1,50 @@
+[
+  {
+    "prompt_id": "portrait_1",
+    "prompt_title": "Portrait: Cyberpunk Girl",
+    "model": "ernie-full",
+    "file": null,
+    "status": "error",
+    "error": "[Errno 18] Invalid cross-device link: '/tmp/portrait_1_ernie_full_20260418_102724_0.png' -> '/vol2/1000/work/OPC/opc-cli/scripts/image/examples/model_compare/portrait_1_ernie_full_20260418_102724_0.png'"
+  },
+  {
+    "prompt_id": "landscape_1",
+    "prompt_title": "Landscape: Floating Islands",
+    "model": "ernie-full",
+    "file": null,
+    "status": "error",
+    "error": "[Errno 18] Invalid cross-device link: '/tmp/landscape_1_ernie_full_20260418_102839_0.png' -> '/vol2/1000/work/OPC/opc-cli/scripts/image/examples/model_compare/landscape_1_ernie_full_20260418_102839_0.png'"
+  },
+  {
+    "prompt_id": "product_1",
+    "prompt_title": "Product: Minimal Watch",
+    "model": "ernie-full",
+    "file": null,
+    "status": "error",
+    "error": "[Errno 18] Invalid cross-device link: '/tmp/product_1_ernie_full_20260418_102954_0.png' -> '/vol2/1000/work/OPC/opc-cli/scripts/image/examples/model_compare/product_1_ernie_full_20260418_102954_0.png'"
+  },
+  {
+    "prompt_id": "fashion_1",
+    "prompt_title": "Fashion: Retro Poster",
+    "model": "ernie-full",
+    "file": null,
+    "status": "error",
+    "error": "[Errno 18] Invalid cross-device link: '/tmp/fashion_1_ernie_full_20260418_103144_0.png' -> '/vol2/1000/work/OPC/opc-cli/scripts/image/examples/model_compare/fashion_1_ernie_full_20260418_103144_0.png'"
+  },
+  {
+    "prompt_id": "food_1",
+    "prompt_title": "Food: Ramen Bowl",
+    "model": "ernie-full",
+    "file": null,
+    "status": "error",
+    "error": "ComfyUI execution error: [['execution_start', {'prompt_id': 'c7640e97-ed8e-4ce5-85f1-e98b0730e6ea', 'timestamp': 1776479572169}], ['execution_cached', {'nodes': ['88:76'], 'prompt_id': 'c7640e97-ed8e-4ce5-85f1-e98b0730e6ea', 'timestamp': 1776479572770}], ['execution_interrupted', {'prompt_id': 'c7640e97-ed8e-4ce5-85f1-e98b0730e6ea', 'node_id': '88:74', 'node_type': 'TextGenerate', 'executed': ['88:78', '88:83', '88:95', '88:92', '88:94', '88:91', '88:63'], 'timestamp': 1776479581656}]]"
+  },
+  {
+    "prompt_id": "architecture_1",
+    "prompt_title": "Architecture: Modern Museum",
+    "model": "ernie-full",
+    "file": null,
+    "status": "error",
+    "error": "[Errno 18] Invalid cross-device link: '/tmp/architecture_1_ernie_full_20260418_103418_0.png' -> '/vol2/1000/work/OPC/opc-cli/scripts/image/examples/model_compare/architecture_1_ernie_full_20260418_103418_0.png'"
+  }
+]

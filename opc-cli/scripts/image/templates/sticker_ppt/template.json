@@ -1,0 +1,60 @@
+{
+  "name": "sticker_ppt",
+  "description": "手账贴纸风格 PPT 场景模板。温暖柔和水彩笔触，适合口播视频 B-roll。",
+  "version": "1.0",
+  "source": "PromptKG 推荐: style:hand_drawn + genre:sticker + mood:warm",
+  "resolution": { "width": 1376, "height": 768 },
+  "style_prefix": "手账贴纸风格，水彩笔触，温暖柔和色调，手写体，和纸胶带装饰感，生活化涂鸦，",
+  "scenes": {
+    "title": {
+      "desc": "标题/开场卡",
+      "template": "两只可爱的卡通龙虾面对面，左边紫色的标着\"{left_name}\"，右边绿色的标着\"{right_name}\"，中间一个大大的VS。背景是饭桌，桌上有瓜子花生。顶部标题\"{left_name} VS {right_name}\"，底部写着\"{subtitle}\"。温馨有趣。",
+      "params": ["left_name", "right_name", "subtitle"]
+    },
+    "hype": {
+      "desc": "戳破炒作/营销泡泡",
+      "template": "一个巨大的彩色泡泡，泡泡上写着{buzzwords}等词。泡泡里面是普通的东西。一个人用手去戳泡泡。右上角标题\"{title}\"。背景是社交媒体图标和转发箭头。",
+      "params": ["title", "buzzwords"]
+    },
+    "debunk": {
+      "desc": "揭秘/拆解",
+      "template": "一个魔术师舞台，掀开幕布，幕布后面没有神奇的东西，只有{reality}。观众席上有人举着牌子\"{reaction}\"。顶部标题\"{title}\"。",
+      "params": ["title", "reality", "reaction"]
+    },
+    "timeline": {
+      "desc": "时间线/对比时间轴",
+      "template": "两条平行时间轴从左到右。上面{color_a}线标注\"{name_a}\"有个较早的里程碑。下面{color_b}线标注\"{name_b}\"有个较晚的里程碑，虚线箭头指向上面的节点。{extra}标题\"{title}\"。",
+      "params": ["title", "name_a", "color_a", "name_b", "color_b", "extra"]
+    },
+    "comparison": {
+      "desc": "左右对比",
+      "template": "左右对比图。左边{color_a}区域：{left_content}。右边{color_b}区域：{right_content}。中间手写\"{center_text}\"。",
+      "params": ["color_a", "left_content", "color_b", "right_content", "center_text"]
+    },
+    "architecture": {
+      "desc": "架构图（积木拼图 vs 屎山代码）",
+      "template": "左右对比图。左边标题\"{name_a}\"绿色标签\"解耦\"：{modules}五个彩色积木块像拼图微微分开，整齐排列在基座上，接口对齐，井然有序。右边标题\"{name_b}\"紫色标签\"重构\"：一个大紫色方块，上面箭头线条纠缠一团，标注\"{bad_label}\"。",
+      "params": ["name_a", "name_b", "modules", "bad_label"]
+    },
+    "pipeline": {
+      "desc": "流程/流水线对比",
+      "template": "左右对比图。左边绿色：流水线从{steps_a}，每个环节有机器人检查。标题\"{title_a}\"。右边紫色：{right_scene}。标题\"{title_b}\"。",
+      "params": ["steps_a", "title_a", "right_scene", "title_b"]
+    },
+    "danger_vs_safe": {
+      "desc": "危险 vs 安全 对比",
+      "template": "左右对比图。左边画一个危险骷髅标志，旁边\"{danger_text}\"，标题\"{danger_title}\"。右边画三个绿色通道标\"{safe_channels}\"，标题\"{safe_title}\"，配盾牌图标。",
+      "params": ["danger_text", "danger_title", "safe_channels", "safe_title"]
+    },
+    "verdict": {
+      "desc": "天平裁决/结论",
+      "template": "天平称重。左边{color_a}盘子里放着{light_items}小方块，稍微翘起。右边{color_b}盘子里放着{heavy_items}大方块，明显更重。天平上方标题\"{title}\"。底部小字\"{subtitle}\"。",
+      "params": ["title", "subtitle", "color_a", "light_items", "color_b", "heavy_items"]
+    },
+    "sandbox": {
+      "desc": "沙盒/容器架构",
+      "template": "等距视角的Docker容器图。一个主控机器人周围围着多个容器方框，容器里有{container_contents}图标。容器间有箭头连线。标题\"{title}\"。标注\"{label_a}\"和\"{label_b}\"都指向容器。",
+      "params": ["title", "container_contents", "label_a", "label_b"]
+    }
+  }
+}

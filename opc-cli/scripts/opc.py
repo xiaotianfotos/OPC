@@ -24,7 +24,11 @@ from tts.qwen_engine import tts_qwen, QWEN_MODELS, QWEN_SPEAKERS, QWEN_SPEAKER_I
 from asr.qwen_asr_engine import asr_transcribe, asr_align, result_to_dict, ASR_MODELS
 from asr.subtitle_gen import generate_srt, generate_ass_karaoke
 from asr.pipeline import run_pipeline, split_line_after, _load_lines, _save_lines, stage_check
-from video.comfyui import check_connection, generate_video, get_server_url, upload_file
+from image.comfyui import generate_image, check_connection, get_server_url, describe_image, compare_images, extract_comfyui_metadata
+from image.workflow import discover_workflows, load_workflow, inject_params, analyze_workflow, import_workflow
+from image.kg.engine import PromptKG
+from image.json_prompt import json_prompt_to_text, validate_json_prompt
+from video.comfyui import generate_video, upload_file
 from video.h3 import WORKFLOWS as VIDEO_WORKFLOWS, build_h3_workflow, duration_to_frames
 
 
@@ -381,6 +385,432 @@ def cmd_cut_start_server(args):
     cmd_cut(args)
 
 
+def cmd_image(args):
+    """Handle 'opc image' command."""
+    image_action = getattr(args, "image_action", None)
+    if image_action == "list":
+        _cmd_image_list(args)
+    elif image_action == "info":
+        _cmd_image_info(args)
+    elif image_action == "import_wf":
+        _cmd_image_import(args)
+    elif image_action == "analyze":
+        _cmd_image_analyze(args)
+    elif image_action == "test":
+        _cmd_image_test(args)
+    elif image_action == "kg":
+        _cmd_image_kg(args)
+    else:
+        _cmd_image_generate(args)
+
+
+def _cmd_image_list(args):
+    workflows = discover_workflows()
+    if not workflows:
+        print("No workflows found. Use 'opc image import <file> --name <alias>' to add one.")
+        return
+    for alias, meta in workflows:
+        desc = meta.get("description", "")
+        print(f"  {alias:20s} {desc}")
+    print(f"\n{len(workflows)} workflow(s) available.")
+
+
+def _cmd_image_info(args):
+    alias = args.alias
+    try:
+        workflow, meta = load_workflow(alias)
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+    print(f"Alias: {meta.get('alias', alias)}")
+    print(f"Description: {meta.get('description', '')}")
+    print(f"\nParameters:")
+    for name, spec in meta.get("params", {}).items():
+        ptype = spec.get("type", "?")
+        required = "required" if spec.get("required") else "optional"
+        default = spec.get("default", "")
+        desc = spec.get("description", "")
+        parts = f"  --{name} ({ptype}, {required})"
+        if default != "" and default is not None:
+            parts += f", default={default}"
+        if desc:
+            parts += f" -- {desc}"
+        print(parts)
+
+
+def _cmd_image_import(args):
+    try:
+        dest = import_workflow(args.file, args.name)
+        print(f"Imported: {dest}")
+        print(f"Next step: create a meta.json file for this workflow.")
+        print(f"  Use 'opc image analyze {dest}' to understand its structure.")
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
+
+def _cmd_image_analyze(args):
+    if getattr(args, "describe", False):
+        _cmd_image_describe(args)
+        return
+    try:
+        report = analyze_workflow(args.file)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+    print(json.dumps(report, indent=2, ensure_ascii=False))
+
+
+def _validate_image_file(path):
+    """Validate that path exists and is an image file."""
+    if not os.path.exists(path):
+        print(f"Error: File not found: {path}")
+        sys.exit(1)
+    ext = os.path.splitext(path)[1].lower()
+    if ext not in (".png", ".jpg", ".jpeg", ".webp"):
+        print(f"Error: Only supports image files (PNG/JPG/WEBP), got: {ext}")
+        sys.exit(1)
+
+
+def _cmd_image_describe(args):
+    cfg = load_config()
+    image_path = args.file
+    _validate_image_file(image_path)
+
+    compare_path = getattr(args, "compare", None)
+    if compare_path:
+        _validate_image_file(compare_path)
+
+    prompt = args.prompt or ""
+
+    # Try ComfyUI metadata extraction first
+    comfy_meta = extract_comfyui_metadata(image_path)
+    if comfy_meta:
+        print("=== ComfyUI Metadata Found ===", file=sys.stderr)
+        if "positive_prompt" in comfy_meta:
+            print(f"Positive prompt ({len(comfy_meta['positive_prompt'])} chars):", file=sys.stderr)
+            print(comfy_meta["positive_prompt"], file=sys.stderr)
+        if "negative_prompt" in comfy_meta:
+            print(f"\nNegative prompt: {comfy_meta['negative_prompt']}", file=sys.stderr)
+        if "resolution" in comfy_meta:
+            r = comfy_meta["resolution"]
+            print(f"\nResolution: {r['width']}x{r['height']}", file=sys.stderr)
+        for k in ["seed", "steps", "cfg", "sampler", "scheduler", "batch_size"]:
+            if k in comfy_meta:
+                print(f"  {k}: {comfy_meta[k]}", file=sys.stderr)
+        print(file=sys.stderr)
+
+    if compare_path:
+        prompt = prompt or (
+            "I'm showing you two images. The FIRST image is the reference/target, "
+            "the SECOND image is the generated attempt. "
+            "Please compare them in detail:\n"
+            "1. What are the key differences in style, composition, and color?\n"
+            "2. What elements does the generated image capture well?\n"
+            "3. What elements are missing or different from the reference?\n"
+            "4. Rate the similarity from 1-10.\n"
+            "5. Provide specific suggestions to make the generated image closer to the reference."
+        )
+        print(f"Comparing images with vision model...", file=sys.stderr)
+        try:
+            result = compare_images(image_path, compare_path, prompt, cfg)
+            if comfy_meta:
+                result["comfyui_metadata"] = comfy_meta
+            print(json.dumps(result, indent=2, ensure_ascii=False))
+        except ValueError as e:
+            print(f"Config error: {e}")
+            sys.exit(1)
+        except Exception as e:
+            print(f"Error: {e}")
+            sys.exit(1)
+    else:
+        prompt = prompt or (
+            "Describe this image in detail. Include: main subject, style, composition, "
+            "lighting, colors, mood, and any notable details. "
+            "If this appears to be an AI-generated image, note any artifacts or issues."
+        )
+        print(f"Analyzing image with vision model...", file=sys.stderr)
+        try:
+            result = describe_image(image_path, prompt, cfg)
+            print(json.dumps(result, indent=2, ensure_ascii=False))
+        except ValueError as e:
+            print(f"Config error: {e}")
+            sys.exit(1)
+        except Exception as e:
+            print(f"Error: {e}")
+            sys.exit(1)
+
+
+def _cmd_image_test(args):
+    cfg = load_config()
+    print("Checking ComfyUI connection...")
+    if not check_connection(cfg):
+        print(f"Error: Cannot connect to ComfyUI at {get_server_url(cfg)}")
+        print("Make sure ComfyUI is running. Configure with:")
+        print("  opc config --set-comfyui-host <host>")
+        print("  opc config --set-comfyui-port <port>")
+        sys.exit(1)
+    print(f"Connected to ComfyUI at {get_server_url(cfg)}")
+
+    alias = args.alias
+    try:
+        workflow, meta = load_workflow(alias)
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
+    raw_prompt = args.prompt.strip()
+    is_json = raw_prompt.startswith("{")
+    prompt_text = raw_prompt
+    negative_text = ""
+
+    if is_json:
+        try:
+            prompt_json = json.loads(raw_prompt)
+            issues = validate_json_prompt(prompt_json)
+            if issues:
+                print(f"JSON prompt warnings: {issues}", file=sys.stderr)
+            converted = json_prompt_to_text(prompt_json)
+            prompt_text = converted["positive"]
+            negative_text = converted["negative"]
+            if negative_text:
+                print(f"Note: negative prompt detected but current workflow may not support it: {negative_text[:100]}...", file=sys.stderr)
+            print(f"JSON prompt converted to: {prompt_text[:100]}...", file=sys.stderr)
+        except json.JSONDecodeError as e:
+            print(f"Error: Prompt looks like JSON but failed to parse: {e}")
+            sys.exit(1)
+
+    params = {}
+    for name, spec in meta.get("params", {}).items():
+        if spec.get("required"):
+            params[name] = prompt_text if name == "prompt" else spec.get("default", "")
+        elif spec.get("default") is not None:
+            params[name] = spec["default"]
+
+    # Auto-inject negative prompt from JSON conversion if workflow supports it
+    if negative_text and "negative_prompt" in meta.get("params", {}):
+        params["negative_prompt"] = negative_text
+        print(f"Auto-injected negative prompt ({len(negative_text)} chars)", file=sys.stderr)
+
+    print(f"Testing workflow '{alias}' with prompt: {prompt_text[:50]}...")
+    try:
+        prepared = inject_params(workflow, meta, params)
+        output_prefix = meta.get("alias", "test")
+        result = generate_image(prepared, cfg, filename_prefix=output_prefix)
+        print(json.dumps(result, ensure_ascii=False))
+    except Exception as e:
+        print(f"Test failed: {e}")
+        sys.exit(1)
+
+
+def _cmd_image_generate(args):
+    cfg = load_config()
+    alias = args.alias
+    if not alias:
+        print("Error: Specify a workflow alias. Use 'opc image list' to see available workflows.")
+        sys.exit(1)
+
+    try:
+        workflow, meta = load_workflow(alias)
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
+    params = {}
+    raw_prompt = getattr(args, "prompt", None)
+    if not raw_prompt:
+        print("Error: --prompt is required for generation.")
+        print("  JSON example: -p '{\"subject\":\"a cat\",\"style\":\"digital art\"}'")
+        print("  Text example:  --text -p \"a beautiful sunset\"")
+        sys.exit(1)
+    prompt_text = raw_prompt
+    negative_text = ""
+
+    if raw_prompt:
+        raw_prompt = raw_prompt.strip()
+        if args.text:
+            # Plain text mode
+            prompt_text = raw_prompt
+        else:
+            # Default: JSON structured prompt mode
+            try:
+                prompt_json = json.loads(raw_prompt)
+            except json.JSONDecodeError:
+                print("\n" + "=" * 60)
+                print("  JSON PROMPT FORMAT REQUIRED")
+                print("=" * 60)
+                print("\nYour prompt could not be parsed as JSON structured format.")
+                print("\nIf you want to use plain text, add the --text flag:")
+                print("  opc image -w <alias> --text -p \"your plain text prompt\"")
+                print("\n--- Why use JSON structured prompts? ---")
+                print("  1. 8-15% higher CLIP score & 20-30% lower FID")
+                print("  2. Automatic negative prompt injection")
+                print("  3. Semantic token weighting")
+                print("  4. Model-agnostic structure (works across SD/Flux/DALL-E)")
+                print("  5. Better token efficiency (~12% fewer tokens)")
+                print("  6. Built-in style control and multi-subject isolation")
+                print("  7. Easier to edit, version, and programmatically generate")
+                print("  8. Reusable templates with parameter substitution")
+                print("\n--- Explore prompt structure with Knowledge Graph ---")
+                print("  opc image kg list              # Show all categories")
+                print("  opc image kg skeleton subject:food lighting:neon")
+                print("  opc image kg search portrait")
+                print("\n--- Quick JSON example ---")
+                print('{\"subject\": \"a cyberpunk cat\", \"style\": \"digital art\"}')
+                print("=" * 60 + "\n")
+                sys.exit(1)
+
+            issues = validate_json_prompt(prompt_json)
+            if issues:
+                print(f"JSON prompt warnings: {issues}", file=sys.stderr)
+
+            # Extract negative_constraints for negative prompt
+            nc = prompt_json.get("negative_constraints", [])
+            if isinstance(nc, list):
+                negative_text = ", ".join(nc)
+            elif isinstance(nc, str):
+                negative_text = nc
+            else:
+                negative_text = ""
+            # Remove negative_constraints from JSON before sending as prompt
+            prompt_json_clean = {k: v for k, v in prompt_json.items() if k != "negative_constraints"}
+            prompt_text = json.dumps(prompt_json_clean, ensure_ascii=False)
+            if negative_text:
+                print(f"Note: negative prompt extracted ({len(negative_text)} chars)", file=sys.stderr)
+            print(f"JSON prompt passed as-is ({len(prompt_text)} chars)", file=sys.stderr)
+        params["prompt"] = prompt_text
+
+    param_list = getattr(args, "param", []) or []
+    for pv in param_list:
+        if "=" not in pv:
+            print(f"Error: --param requires key=value format, got: {pv}")
+            sys.exit(1)
+        key, value = pv.split("=", 1)
+        params[key.strip()] = value.strip()
+
+    # Auto-inject negative prompt from JSON conversion if workflow supports it
+    if negative_text and "negative_prompt" in meta.get("params", {}):
+        params["negative_prompt"] = negative_text
+        print(f"Auto-injected negative prompt ({len(negative_text)} chars)", file=sys.stderr)
+
+    for name, spec in meta.get("params", {}).items():
+        if spec.get("required") and name not in params:
+            print(f"Error: Missing required parameter '{name}'")
+            print(f"  Use: --prompt \"text\" or --param {name}=value")
+            sys.exit(1)
+
+    try:
+        prepared = inject_params(workflow, meta, params)
+        output_prefix = meta.get("alias", alias)
+        # Override output directory if -o is specified
+        output_dir = getattr(args, "output", None)
+        if output_dir:
+            cfg["image_output_dir"] = output_dir
+        result = generate_image(prepared, cfg, filename_prefix=output_prefix)
+        print(json.dumps(result, ensure_ascii=False))
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+def _cmd_image_kg(args):
+    kg = PromptKG()
+    kg_action = getattr(args, "kg_action", None)
+
+    if kg_action == "list":
+        cat = getattr(args, "category", None)
+        if cat:
+            items = kg.list_category(cat)
+            if not items:
+                print(f"No entities in category '{cat}'. Available: {', '.join(kg.categories)}")
+                sys.exit(1)
+            print(json.dumps(items, ensure_ascii=False, indent=2))
+        else:
+            for c in kg.categories:
+                items = kg.list_category(c)
+                names = ", ".join(f"{i['name']}({i['count']})" for i in items)
+                print(f"  {c:15s} {names}")
+
+    elif kg_action == "info":
+        r = kg.info(args.entity)
+        if not r:
+            print(f"Entity '{args.entity}' not found. Use 'opc image kg search <keyword>'.")
+            sys.exit(1)
+        print(json.dumps(r, ensure_ascii=False, indent=2))
+
+    elif kg_action == "search":
+        results = kg.search(args.keyword)
+        if not results:
+            print(f"No entities matching '{args.keyword}'.")
+            sys.exit(1)
+        print(json.dumps(results, ensure_ascii=False, indent=2))
+
+    elif kg_action == "query":
+        recs = kg.neighbors(args.entity,
+                            category=getattr(args, "category", None),
+                            top_n=getattr(args, "top", 10))
+        if not recs:
+            print(f"No relations for '{args.entity}'.")
+            sys.exit(1)
+        print(json.dumps(recs, ensure_ascii=False, indent=2))
+
+    elif kg_action == "skeleton":
+        if not args.entities:
+            print("Error: Provide at least one entity. e.g. opc image kg skeleton subject:food")
+            sys.exit(1)
+        result = kg.skeleton(args.entities)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+
+    elif kg_action == "validate":
+        if len(args.entities) < 2:
+            print("Error: Provide at least 2 entities to validate.")
+            sys.exit(1)
+        result = kg.validate(args.entities)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+
+    elif kg_action == "similar":
+        if not args.entities:
+            print("Error: Provide at least one entity.")
+            sys.exit(1)
+        results = kg.find_prompts(args.entities, top_n=getattr(args, "top", 5))
+        if not results:
+            print("No matching prompts found.")
+            sys.exit(1)
+        print(json.dumps(results, ensure_ascii=False, indent=2))
+
+    elif kg_action == "templates":
+        entity = getattr(args, "entity", None)
+        if entity:
+            results = kg.find_templates(entity)
+            if not results:
+                print(f"No templates related to '{entity}'.")
+                sys.exit(1)
+            print(json.dumps(results, ensure_ascii=False, indent=2))
+        else:
+            templates = kg.list_templates()
+            if not templates:
+                print("No templates available.")
+                sys.exit(1)
+            for t in templates:
+                scenes = ", ".join(t["scenes"])
+                res = t.get("resolution", {})
+                print(f"  {t['name']:20s} {t['description'][:60]}")
+                print(f"  {'':20s} scenes: {scenes}")
+                print(f"  {'':20s} resolution: {res.get('width', '?')}x{res.get('height', '?')}")
+                print()
+
+    else:
+        print("Usage: opc image kg <list|info|search|query|skeleton|validate|similar|templates>")
+        print("  list [--category CAT]          Show all entities")
+        print("  info <entity>                   Entity details")
+        print("  search <keyword>                Fuzzy search")
+        print("  query <entity> [--category C]    What goes with X?")
+        print("  skeleton <e1> [e2] ...          Full prompt plan")
+        print("  validate <e1> <e2> [e3] ...     Check combination")
+        print("  similar <e1> [e2] ...           Find similar prompts")
+        print("  templates [--entity E]           List templates or find by entity")
+
+
 def cmd_video(args):
     """Handle local ComfyUI video generation workflows."""
     action = getattr(args, "video_action", None)
@@ -423,24 +853,24 @@ def _cmd_video_generate(args):
         print("Error: Provide --prompt, --prompt-file, or --stdin.", file=sys.stderr)
         sys.exit(1)
 
-    media_args = []
+    image_args = []
     if getattr(args, "first_frame", None):
-        media_args.append(("first_frame", args.first_frame))
+        image_args.append(("first_frame", args.first_frame))
     if getattr(args, "last_frame", None):
-        media_args.append(("last_frame", args.last_frame))
-    media_args.extend(
+        image_args.append(("last_frame", args.last_frame))
+    image_args.extend(
         ("reference_image", path)
         for path in (getattr(args, "reference_image", None) or [])
     )
-    media_args.extend(
+    image_args.extend(
         ("reference_video", path)
         for path in (getattr(args, "reference_video", None) or [])
     )
-    media_args.extend(
+    image_args.extend(
         ("reference_audio", path)
         for path in (getattr(args, "reference_audio", None) or [])
     )
-    for _, media_path in media_args:
+    for _, media_path in image_args:
         if not os.path.isfile(media_path):
             print(f"Error: Input file not found: {media_path}", file=sys.stderr)
             sys.exit(1)
@@ -448,7 +878,7 @@ def _cmd_video_generate(args):
     try:
         if args.dry_run:
             uploaded = {}
-            for key, media_path in media_args:
+            for key, media_path in image_args:
                 if key.startswith("reference_"):
                     uploaded.setdefault(key, []).append(Path(media_path).name)
                 else:
@@ -457,13 +887,16 @@ def _cmd_video_generate(args):
             if not check_connection(cfg):
                 raise ConnectionError(f"Cannot connect to ComfyUI at {get_server_url(cfg)}")
             uploaded = {}
-            for key, media_path in media_args:
+            for key, media_path in image_args:
                 remote_name = upload_file(media_path, get_server_url(cfg))
                 if key.startswith("reference_"):
                     uploaded.setdefault(key, []).append(remote_name)
                 else:
                     uploaded[key] = remote_name
 
+        references = uploaded.get("reference_image", [])
+        if isinstance(references, str):
+            references = [references]
         workflow = build_h3_workflow(
             alias=alias,
             prompt=prompt,
@@ -474,7 +907,7 @@ def _cmd_video_generate(args):
             seed=args.seed,
             first_frame=uploaded.get("first_frame"),
             last_frame=uploaded.get("last_frame"),
-            reference_images=uploaded.get("reference_image", []),
+            reference_images=references,
             reference_videos=uploaded.get("reference_video", []),
             reference_audios=uploaded.get("reference_audio", []),
             include_reference_video_audio=args.reference_video_audio,
@@ -578,9 +1011,21 @@ def cmd_config(args):
     if args.set_comfyui_port:
         save_config("comfyui_port", args.set_comfyui_port)
         print(f"comfyui_port = {args.set_comfyui_port}")
+    if args.set_image_output_dir:
+        save_config("image_output_dir", args.set_image_output_dir)
+        print(f"image_output_dir = {args.set_image_output_dir}")
     if args.set_video_output_dir:
         save_config("video_output_dir", args.set_video_output_dir)
         print(f"video_output_dir = {args.set_video_output_dir}")
+    if args.set_vision_api_url:
+        save_config("vision_api_url", args.set_vision_api_url)
+        print(f"vision_api_url = {args.set_vision_api_url}")
+    if args.set_vision_api_key:
+        save_config("vision_api_key", args.set_vision_api_key)
+        print(f"vision_api_key = {args.set_vision_api_key}")
+    if args.set_vision_model:
+        save_config("vision_model", args.set_vision_model)
+        print(f"vision_model = {args.set_vision_model}")
     if args.show:
         # Show backend info alongside config
         backend = get_backend()
@@ -771,8 +1216,16 @@ examples:
                         help="Set ComfyUI server host (default: 127.0.0.1)")
     p_conf.add_argument("--set-comfyui-port", type=int, metavar="PORT",
                         help="Set ComfyUI server port (default: 8188)")
+    p_conf.add_argument("--set-image-output-dir", metavar="PATH",
+                        help="Set image output directory (empty = reuse output_dir)")
     p_conf.add_argument("--set-video-output-dir", metavar="PATH",
                         help="Set video output directory (empty = reuse output_dir)")
+    p_conf.add_argument("--set-vision-api-url", metavar="URL",
+                        help="Set vision model API URL (OpenAI-compatible)")
+    p_conf.add_argument("--set-vision-api-key", metavar="KEY",
+                        help="Set vision model API key (leave empty for local models)")
+    p_conf.add_argument("--set-vision-model", metavar="NAME",
+                        help="Set vision model name (e.g. qwen3.5)")
 
     # ── opc asr ──
     p_asr = subparsers.add_parser("asr", help="Speech recognition - transcribe audio to text or subtitles",
@@ -883,6 +1336,106 @@ examples:
     p_cut_start.add_argument("--host", "-H", default=None, help="Server host")
     p_cut_start.add_argument("--no-browser", action="store_true", help="Do not open browser")
 
+    # ── opc image ──
+    p_image = subparsers.add_parser("image", help="Generate images via ComfyUI workflows",
+                                    formatter_class=argparse.RawDescriptionHelpFormatter,
+                                    epilog="""\
+examples:
+  # Generate image with JSON structured prompt (DEFAULT)
+  opc image -w ernie-turbo -p '{"subject":"a cat","style":"digital art"}'
+  opc image -w ernie-turbo -p '{"subject":"cyberpunk city","lighting":"neon","mood":"dystopian"}'
+
+  # Generate with plain text (add --text flag)
+  opc image -w ernie-turbo --text -p "a beautiful sunset over mountains"
+
+  # Override workflow parameters
+  opc image -w ernie-turbo -p '{"subject":"a cat"}' --param width=512 --param seed=42
+
+  # List available workflows
+  opc image list
+
+  # Show workflow parameters
+  opc image info ernie-turbo
+
+  # Import a workflow file
+  opc image import workflow.json --name my-workflow
+
+  # Analyze a workflow file (for meta.json creation)
+  opc image analyze workflow.json
+
+  # Test workflow connectivity and basic generation
+  opc image test ernie-turbo --prompt "test image"
+
+  # Explore prompt structure with Knowledge Graph
+  opc image kg list              # Show all categories
+  opc image kg skeleton subject:food lighting:neon
+""")
+    image_subparsers = p_image.add_subparsers(dest="image_action", help="Image sub-commands")
+
+    p_img_list = image_subparsers.add_parser("list", help="List available workflows")
+
+    p_img_info = image_subparsers.add_parser("info", help="Show workflow parameter details")
+    p_img_info.add_argument("alias", help="Workflow alias name")
+    p_img_info.set_defaults(image_action="info")
+
+    p_img_import = image_subparsers.add_parser("import", help="Import a workflow JSON file")
+    p_img_import.add_argument("file", help="Path to workflow JSON file")
+    p_img_import.add_argument("--name", "-n", required=True, help="Workflow alias name")
+
+    p_img_analyze = image_subparsers.add_parser("analyze", help="Analyze workflow structure or describe an image")
+    p_img_analyze.add_argument("file", help="Path to workflow JSON file or image file (PNG/JPG)")
+    p_img_analyze.add_argument("--describe", action="store_true",
+                               help="Use vision model to describe the image")
+    p_img_analyze.add_argument("--compare", "-c", metavar="IMAGE",
+                               help="Compare with a second image (reference vs generated)")
+    p_img_analyze.add_argument("--prompt", "-p", default="",
+                               help="Custom prompt for vision model (with --describe)")
+
+    p_img_test = image_subparsers.add_parser("test", help="Test workflow with minimal params")
+    p_img_test.add_argument("alias", help="Workflow alias name")
+    p_img_test.add_argument("--prompt", "-p", required=True, help="Test prompt text")
+
+    # ── opc image kg ──
+    p_img_kg = image_subparsers.add_parser("kg", help="Prompt knowledge graph engine")
+    p_img_kg.set_defaults(image_action="kg")
+    kg_sub = p_img_kg.add_subparsers(dest="kg_action", help="KG sub-commands")
+
+    kg_list = kg_sub.add_parser("list", help="List all entities by category")
+    kg_list.add_argument("--category", "-c", help="Filter to a specific category")
+
+    kg_info = kg_sub.add_parser("info", help="Show entity details and relations")
+    kg_info.add_argument("entity", help="Entity tag (e.g. style:photography)")
+
+    kg_search = kg_sub.add_parser("search", help="Fuzzy search entities")
+    kg_search.add_argument("keyword", help="Search keyword")
+
+    kg_query = kg_sub.add_parser("query", help="What goes with an entity?")
+    kg_query.add_argument("entity", help="Entity tag")
+    kg_query.add_argument("--category", "-c", help="Filter results to a category")
+    kg_query.add_argument("--top", "-n", type=int, default=10, help="Top N results")
+
+    kg_skeleton = kg_sub.add_parser("skeleton", help="Generate prompt construction plan")
+    kg_skeleton.add_argument("entities", nargs="+", help="Seed entity tags")
+
+    kg_validate = kg_sub.add_parser("validate", help="Check if entity combination is common")
+    kg_validate.add_argument("entities", nargs="+", help="Entity tags to validate")
+
+    kg_similar = kg_sub.add_parser("similar", help="Find similar prompts")
+    kg_similar.add_argument("entities", nargs="+", help="Entity tags to match")
+    kg_similar.add_argument("--top", "-n", type=int, default=5, help="Top N results")
+
+    kg_templates = kg_sub.add_parser("templates", help="List available templates or find by entity")
+    kg_templates.add_argument("--entity", "-e", help="Find templates related to a specific entity")
+
+    # Default generate action when no subcommand is used
+    p_image.add_argument("--workflow", "-w", dest="alias", help="Workflow alias for generation")
+    p_image.add_argument("--prompt", "-p",
+                         help="Prompt for generation. Defaults to JSON structured format. Use --text for plain text.")
+    p_image.add_argument("--text", action="store_true",
+                         help="Treat prompt as plain text instead of JSON structured prompt")
+    p_image.add_argument("--param", "-P", action="append", help="Workflow parameter as key=value")
+    p_image.add_argument("--output", "-o", help="Output directory for generated images (overrides config)")
+
     # ── opc video ──
     p_video = subparsers.add_parser(
         "video",
@@ -981,6 +1534,8 @@ examples:
         else:
             # Direct call to cmd_cut (new behavior)
             cmd_cut(args)
+    elif args.command == "image":
+        cmd_image(args)
     elif args.command == "video":
         cmd_video(args)
 

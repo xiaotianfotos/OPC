@@ -1,0 +1,146 @@
+[
+  {
+    "prompt_id": "portrait_1",
+    "prompt_title": "Portrait: Cyberpunk Girl",
+    "model": "ernie-full",
+    "file": null,
+    "status": "error",
+    "error": "Task timed out (300s)"
+  },
+  {
+    "prompt_id": "portrait_1",
+    "prompt_title": "Portrait: Cyberpunk Girl",
+    "model": "z-image",
+    "file": null,
+    "status": "error",
+    "error": "[Errno 18] Invalid cross-device link: '/tmp/portrait_1_zimage_20260418_102020_0.png' -> '/vol2/1000/"
+  },
+  {
+    "prompt_id": "portrait_1",
+    "prompt_title": "Portrait: Cyberpunk Girl",
+    "model": "qwen-image",
+    "file": null,
+    "status": "error",
+    "error": "[Errno 18] Invalid cross-device link: '/tmp/portrait_1_qwen_20260418_102420_0.png' -> '/vol2/1000/wo"
+  },
+  {
+    "prompt_id": "landscape_1",
+    "prompt_title": "Landscape: Floating Islands",
+    "model": "ernie-full",
+    "file": null,
+    "status": "error",
+    "error": "Task timed out (300s)"
+  },
+  {
+    "prompt_id": "landscape_1",
+    "prompt_title": "Landscape: Floating Islands",
+    "model": "z-image",
+    "file": null,
+    "status": "error",
+    "error": "[Errno 18] Invalid cross-device link: '/tmp/landscape_1_zimage_20260418_103021_0.png' -> '/vol2/1000"
+  },
+  {
+    "prompt_id": "landscape_1",
+    "prompt_title": "Landscape: Floating Islands",
+    "model": "qwen-image",
+    "file": null,
+    "status": "error",
+    "error": "[Errno 18] Invalid cross-device link: '/tmp/landscape_1_qwen_20260418_103252_0.png' -> '/vol2/1000/w"
+  },
+  {
+    "prompt_id": "product_1",
+    "prompt_title": "Product: Minimal Watch",
+    "model": "ernie-full",
+    "file": null,
+    "status": "error",
+    "error": "Task timed out (300s)"
+  },
+  {
+    "prompt_id": "product_1",
+    "prompt_title": "Product: Minimal Watch",
+    "model": "z-image",
+    "file": null,
+    "status": "error",
+    "error": "[Errno 18] Invalid cross-device link: '/tmp/product_1_zimage_20260418_103816_0.png' -> '/vol2/1000/w"
+  },
+  {
+    "prompt_id": "product_1",
+    "prompt_title": "Product: Minimal Watch",
+    "model": "qwen-image",
+    "file": null,
+    "status": "error",
+    "error": "ComfyUI execution error: [['execution_start', {'prompt_id': 'bbc270d2-2168-4145-abee-e569893fdd14', "
+  },
+  {
+    "prompt_id": "fashion_1",
+    "prompt_title": "Fashion: Retro Poster",
+    "model": "ernie-full",
+    "file": null,
+    "status": "error",
+    "error": "Task timed out (300s)"
+  },
+  {
+    "prompt_id": "fashion_1",
+    "prompt_title": "Fashion: Retro Poster",
+    "model": "z-image",
+    "file": null,
+    "status": "error",
+    "error": "[Errno 18] Invalid cross-device link: '/tmp/fashion_1_zimage_20260418_104429_0.png' -> '/vol2/1000/w"
+  },
+  {
+    "prompt_id": "fashion_1",
+    "prompt_title": "Fashion: Retro Poster",
+    "model": "qwen-image",
+    "file": null,
+    "status": "error",
+    "error": "[Errno 18] Invalid cross-device link: '/tmp/fashion_1_qwen_20260418_104658_0.png' -> '/vol2/1000/wor"
+  },
+  {
+    "prompt_id": "food_1",
+    "prompt_title": "Food: Ramen Bowl",
+    "model": "ernie-full",
+    "file": null,
+    "status": "error",
+    "error": "ComfyUI execution error: [['execution_start', {'prompt_id': '37ae712c-cfbf-4962-936c-1ac5a15e5ef1', "
+  },
+  {
+    "prompt_id": "food_1",
+    "prompt_title": "Food: Ramen Bowl",
+    "model": "z-image",
+    "file": null,
+    "status": "error",
+    "error": "ComfyUI execution error: [['execution_start', {'prompt_id': '350ec4ce-544e-4b82-843a-b49f496521f5', "
+  },
+  {
+    "prompt_id": "food_1",
+    "prompt_title": "Food: Ramen Bowl",
+    "model": "qwen-image",
+    "file": null,
+    "status": "error",
+    "error": "ComfyUI execution error: [['execution_start', {'prompt_id': '36400b2f-36c7-49c6-af88-2cd5fc9b2eda', "
+  },
+  {
+    "prompt_id": "architecture_1",
+    "prompt_title": "Architecture: Modern Museum",
+    "model": "ernie-full",
+    "file": null,
+    "status": "error",
+    "error": "Task timed out (300s)"
+  },
+  {
+    "prompt_id": "architecture_1",
+    "prompt_title": "Architecture: Modern Museum",
+    "model": "z-image",
+    "file": null,
+    "status": "error",
+    "error": "[Errno 18] Invalid cross-device link: '/tmp/architecture_1_zimage_20260418_105448_0.png' -> '/vol2/1"
+  },
+  {
+    "prompt_id": "architecture_1",
+    "prompt_title": "Architecture: Modern Museum",
+    "model": "qwen-image",
+    "file": null,
+    "status": "error",
+    "error": "ComfyUI execution error: [['execution_start', {'prompt_id': '0ba82785-c08b-464b-bd2a-dcd8915d36a3', "
+  }
+]

@@ -1,0 +1,69 @@
+{
+  "alias": "z-image",
+  "description": "Z-Image (z_image_bf16) text-to-image. AuraFlow sampling, lumina2 clip, SD3 latent. 50 steps, cfg=4. Supports structured JSON prompts and negative prompts.",
+  "params": {
+    "prompt": {
+      "node": "76:67",
+      "field": "text",
+      "type": "string",
+      "required": true,
+      "description": "Text or JSON prompt for image generation"
+    },
+    "negative_prompt": {
+      "node": "76:71",
+      "field": "text",
+      "type": "string",
+      "default": "",
+      "description": "Negative prompt — things to avoid"
+    },
+    "width": {
+      "node": "76:68",
+      "field": "width",
+      "type": "int",
+      "default": 1024
+    },
+    "height": {
+      "node": "76:68",
+      "field": "height",
+      "type": "int",
+      "default": 1024
+    },
+    "steps": {
+      "node": "76:69",
+      "field": "steps",
+      "type": "int",
+      "default": 50
+    },
+    "cfg": {
+      "node": "76:69",
+      "field": "cfg",
+      "type": "float",
+      "default": 4
+    },
+    "seed": {
+      "node": "76:69",
+      "field": "seed",
+      "type": "int",
+      "default": -1,
+      "description": "-1 = random seed"
+    },
+    "shift": {
+      "node": "76:70",
+      "field": "shift",
+      "type": "float",
+      "default": 3,
+      "description": "AuraFlow sampling shift parameter"
+    },
+    "batch_size": {
+      "node": "76:68",
+      "field": "batch_size",
+      "type": "int",
+      "default": 1,
+      "description": "Number of images to generate per batch"
+    }
+  },
+  "output_prefix": {
+    "node": "9",
+    "field": "filename_prefix"
+  }
+}

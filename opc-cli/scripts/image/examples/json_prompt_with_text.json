@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "format": "opc_image_prompt_v1",
+    "version": "1.0",
+    "source": "poster_design"
+  },
+  "subject": {
+    "main": "a retro Chinese propaganda poster with bold typography",
+    "details": "high contrast composition, halftone dot texture, aged paper background"
+  },
+  "style": {
+    "medium": "digital illustration",
+    "techniques": ["pop art", "halftone dot texture", "screen printing effect"],
+    "era": "1960s Chinese propaganda poster"
+  },
+  "composition": {
+    "framing": "full frame poster",
+    "focus": "centered title text"
+  },
+  "lighting": {
+    "type": "flat studio lighting",
+    "quality": "even, high contrast"
+  },
+  "background": {
+    "setting": "abstract",
+    "environment": "aged paper texture with red and orange gradient",
+    "details": "faint star patterns in corners"
+  },
+  "color_palette": {
+    "dominant": ["#FF4500", "#FFD700", "#8B0000"],
+    "scheme": "warm complementary",
+    "mood": "vibrant and energetic"
+  },
+  "mood": "revolutionary enthusiasm, bold and uplifting",
+  "text_content": {
+    "visible_text": [
+      "伟大的",
+      "光荣的",
+      "正确的"
+    ],
+    "typography": "bold sans-serif Chinese characters, red and gold gradient fill, thick black outlines",
+    "language": "Chinese"
+  },
+  "technical_specs": {
+    "quality": "high resolution print-ready",
+    "render_engine": "vector-like sharp edges"
+  },
+  "negative_constraints": [
+    "modern UI elements",
+    "watermarks",
+    "photorealistic textures",
+    "3D render look"
+  ]
+}
