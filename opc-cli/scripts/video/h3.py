@@ -10,6 +10,10 @@ H3_VIDEO_VAE = "minimax_h3_video_vae_fp16.safetensors"
 H3_AUDIO_VAE = "minimax_h3_audio_vae_fp32.safetensors"
 SEEDVR2_MODEL = "seedvr2_3b_int8_convrot.safetensors"
 SEEDVR2_VAE = "seedvr2_ema_vae_fp16.safetensors"
+SEEDVR2_VAE_TILE_SIZE = 1024
+SEEDVR2_VAE_OVERLAP = 128
+SEEDVR2_VAE_TEMPORAL_SIZE = 64
+SEEDVR2_VAE_TEMPORAL_OVERLAP = 8
 H3_TRAINED_MAX_DURATION = 15
 H3_MAX_DURATION = 20
 
@@ -203,10 +207,10 @@ def _add_seedvr2(workflow, factor, seed):
             "inputs": {
                 "pixels": ["16", 0],
                 "vae": ["17", 0],
-                "tile_size": 512,
-                "overlap": 128,
-                "temporal_size": 64,
-                "temporal_overlap": 8,
+                "tile_size": SEEDVR2_VAE_TILE_SIZE,
+                "overlap": SEEDVR2_VAE_OVERLAP,
+                "temporal_size": SEEDVR2_VAE_TEMPORAL_SIZE,
+                "temporal_overlap": SEEDVR2_VAE_TEMPORAL_OVERLAP,
             },
         },
         "19": {
@@ -249,10 +253,10 @@ def _add_seedvr2(workflow, factor, seed):
             "inputs": {
                 "samples": ["23", 0],
                 "vae": ["17", 0],
-                "tile_size": 512,
-                "overlap": 128,
-                "temporal_size": 64,
-                "temporal_overlap": 8,
+                "tile_size": SEEDVR2_VAE_TILE_SIZE,
+                "overlap": SEEDVR2_VAE_OVERLAP,
+                "temporal_size": SEEDVR2_VAE_TEMPORAL_SIZE,
+                "temporal_overlap": SEEDVR2_VAE_TEMPORAL_OVERLAP,
             },
         },
         "25": {

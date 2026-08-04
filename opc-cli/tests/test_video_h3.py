@@ -134,6 +134,20 @@ class H3WorkflowTests(unittest.TestCase):
             "auto",
         )
         self.assertEqual(workflow["20"]["inputs"]["vae_conditioning"], ["21", 0])
+        expected_tiling = {
+            "tile_size": 1024,
+            "overlap": 128,
+            "temporal_size": 64,
+            "temporal_overlap": 8,
+        }
+        for node_id in ("18", "24"):
+            self.assertEqual(
+                {
+                    key: workflow[node_id]["inputs"][key]
+                    for key in expected_tiling
+                },
+                expected_tiling,
+            )
         self.assertEqual(workflow["26"]["inputs"]["audio"], ["12", 0])
         self.assertNotIn("14", workflow)
         self.assertEqual(workflow["27"]["class_type"], "SaveVideo")
