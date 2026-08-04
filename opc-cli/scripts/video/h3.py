@@ -10,6 +10,8 @@ H3_VIDEO_VAE = "minimax_h3_video_vae_fp16.safetensors"
 H3_AUDIO_VAE = "minimax_h3_audio_vae_fp32.safetensors"
 SEEDVR2_MODEL = "seedvr2_3b_int8_convrot.safetensors"
 SEEDVR2_VAE = "seedvr2_ema_vae_fp16.safetensors"
+H3_TRAINED_MAX_DURATION = 15
+H3_MAX_DURATION = 20
 
 WORKFLOWS = {
     "h3-t2v": {
@@ -56,8 +58,10 @@ def _validate(
         raise ValueError("Prompt must not be empty")
     if width < 32 or height < 32 or width % 32 or height % 32:
         raise ValueError("Width and height must be positive multiples of 32")
-    if not 5 <= float(duration) <= 15:
-        raise ValueError("H3 duration must be between 5 and 15 seconds")
+    if not 5 <= float(duration) <= H3_MAX_DURATION:
+        raise ValueError(
+            f"H3 duration must be between 5 and {H3_MAX_DURATION} seconds"
+        )
     if not 1 <= int(steps) <= 100:
         raise ValueError("Steps must be between 1 and 100")
     if upscale and not 1 < float(upscale_factor) <= 4:

@@ -24,6 +24,12 @@ by the standard workflow.
 The safe test preset is `864x480`, 5 seconds, 20 steps. H3 converts five
 seconds to 124 frames on its required `17k+5` frame grid.
 
+The CLI accepts 5-20 seconds. Durations above 15 seconds are experimental:
+the ComfyUI nodes accept the resulting frame count, but H3 documents roughly
+124-362 frames as its trained range. A 20-second request becomes 481 frames.
+Expect substantially higher VRAM use and verify temporal consistency before
+shipping the result.
+
 EasyCache is enabled by default for every H3 workflow. The conservative
 default uses a `0.05` reuse threshold between 20% and 90% of the sampling
 schedule. Disable it for exact baseline comparisons with `--no-easy-cache`.
@@ -36,6 +42,11 @@ opc config --set-video-output-dir /vol2/1000/temp/opc-video
 opc video -w h3-t2v \
   -p "A five-second continuous cinematic shot of a violinist in a rainy neon alley." \
   --width 864 --height 480 --duration 5 --steps 20
+
+# Experimental native 20-second generation (481 frames; not post-stitched)
+opc video -w h3-t2v \
+  -p "A continuous twenty-second cinematic shot." \
+  --width 864 --height 480 --duration 20 --steps 20
 
 opc video -w h3-t2v -p "The same shot without model-step caching." \
   --no-easy-cache

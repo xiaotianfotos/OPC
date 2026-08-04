@@ -223,6 +223,12 @@ opc cut --video video.mp4        # 启动剪辑 Web 界面
 
 MiniMax H3 本地文生视频、首尾帧图生视频、参考图视频，以及 SeedVR2 超分。详见 [references/video.md](references/video.md)。
 
+### H3 创意规划路由
+
+- 用户只查询 H3/OPC 的工作流、参数、安装、连接、缓存、报错或给出完整 Prompt 要直接执行时，读取 [references/video.md](references/video.md)，以其中当前 CLI 规范为准。
+- 用户需要 H3 创意策划、中文 Prompt 设计、参考图/视频/音频编排、首尾帧设计、角色或物体替换、动作与运镜迁移、声音与对白、TVC、片头、MG、短剧、产品、电商、游戏 UI、动画、风格化影像，或要求“酷炫”“惊艳”“反复优化”时，必须先读取内置 [H3 Guide](references/h3-guide/SKILL.md)，再按指南路由到所需参考文件。
+- `h3-guide` 负责创意决策、素材职责、Prompt、测试矩阵和质检；`opc` 负责实际命令与生成执行。二者冲突时，CLI 参数和工作流能力以 [references/video.md](references/video.md) 为准。
+
 ```bash
 opc video list
 opc video -w h3-t2v -p "..." --width 864 --height 480 --duration 5
@@ -230,7 +236,10 @@ opc video -w h3-i2v -p "..." --first-frame first.png --last-frame last.png
 opc video -w h3-r2v -p "..." --reference-image subject.png
 opc video -w h3-t2v-upscale -p "..." --upscale-factor 2
 opc video -w h3-t2v -p "..." --no-easy-cache  # 精确原版基线
+opc video -w h3-t2v -p "..." --duration 20  # 实验性原生 20 秒（481 帧）
 ```
+
+CLI 支持 5–20 秒。超过 15 秒属于 ComfyUI 节点允许、但超出 H3 已验证训练区间的实验模式；需要预留更多显存并重点检查长时一致性。
 
 H3 默认启用原生 EasyCache，保守阈值为 `0.05`。可通过
 `--easy-cache-threshold` 调整速度/质量权衡，并用

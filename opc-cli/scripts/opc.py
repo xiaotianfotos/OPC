@@ -29,7 +29,13 @@ from image.workflow import discover_workflows, load_workflow, inject_params, ana
 from image.kg.engine import PromptKG
 from image.json_prompt import json_prompt_to_text, validate_json_prompt
 from video.comfyui import generate_video as generate_h3_video, upload_file
-from video.h3 import WORKFLOWS as VIDEO_WORKFLOWS, build_h3_workflow, duration_to_frames
+from video.h3 import (
+    H3_MAX_DURATION,
+    H3_TRAINED_MAX_DURATION,
+    WORKFLOWS as VIDEO_WORKFLOWS,
+    build_h3_workflow,
+    duration_to_frames,
+)
 from audio.compressor import compress_audio, analyze_loudness, apply_preset, list_presets
 from video.generator import generate_video as generate_workflow_video, check_connection as video_check_connection, get_server_url as video_get_server_url, upload_image as video_upload_image
 from video.transcribe import download_video, extract_audio, transcribe_audio, save_transcript, summarize_text
@@ -957,6 +963,14 @@ def _cmd_video_generate(args):
     if not prompt:
         print("Error: Provide --prompt, --prompt-file, or --stdin.", file=sys.stderr)
         sys.exit(1)
+
+    if args.duration > H3_TRAINED_MAX_DURATION:
+        print(
+            f"Warning: H3 durations above {H3_TRAINED_MAX_DURATION} seconds "
+            "are experimental; "
+            "ComfyUI accepts them, but temporal consistency and VRAM use are unverified.",
+            file=sys.stderr,
+        )
 
     image_args = []
     if getattr(args, "first_frame", None):
@@ -1978,7 +1992,15 @@ examples:
     p_video.add_argument("--stdin", action="store_true", help="Read the video prompt from stdin")
     p_video.add_argument("--width", type=int, default=864, help="Base width, multiple of 32 (default: 864)")
     p_video.add_argument("--height", type=int, default=480, help="Base height, multiple of 32 (default: 480)")
-    p_video.add_argument("--duration", type=float, default=5, help="Duration in seconds, 5-15 (default: 5)")
+    p_video.add_argument(
+        "--duration",
+        type=float,
+        default=5,
+        help=(
+            f"Duration in seconds, 5-{H3_MAX_DURATION}; above "
+            f"{H3_TRAINED_MAX_DURATION} is experimental (default: 5)"
+        ),
+    )
     p_video.add_argument("--steps", type=int, default=20, help="H3 sampling steps (default: 20)")
     p_video.add_argument("--seed", type=int, default=-1, help="Seed; -1 selects a random seed")
     p_video.add_argument(

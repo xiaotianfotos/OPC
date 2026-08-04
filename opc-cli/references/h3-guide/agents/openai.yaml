@@ -1,0 +1,4 @@
+interface:
+  display_name: "H3 Guide"
+  short_description: "规划 MiniMax H3 视频风格、参考素材与高质量 Prompt"
+  default_prompt: "使用 $h3-guide 为这个视频目标选择工作流、组织参考素材并生成可执行的 H3 Prompt。"

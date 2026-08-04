@@ -16,6 +16,13 @@ class H3WorkflowTests(unittest.TestCase):
     def test_duration_uses_h3_frame_grid(self):
         self.assertEqual(duration_to_frames(5), 124)
         self.assertEqual(duration_to_frames(15), 362)
+        self.assertEqual(duration_to_frames(20), 481)
+
+    def test_experimental_twenty_second_workflow(self):
+        workflow = build_h3_workflow(
+            "h3-t2v", "test", duration=20, seed=42
+        )
+        self.assertEqual(workflow["5"]["inputs"]["length"], 481)
 
     def test_text_to_video_has_native_audio(self):
         workflow = build_h3_workflow("h3-t2v", "test", seed=42)
@@ -163,8 +170,10 @@ class H3WorkflowTests(unittest.TestCase):
             build_h3_workflow("h3-t2v", "test", width=853)
         with self.assertRaisesRegex(ValueError, "requires"):
             build_h3_workflow("h3-r2v", "test")
-        with self.assertRaisesRegex(ValueError, "between 5 and 15"):
+        with self.assertRaisesRegex(ValueError, "between 5 and 20"):
             build_h3_workflow("h3-t2v", "test", duration=4)
+        with self.assertRaisesRegex(ValueError, "between 5 and 20"):
+            build_h3_workflow("h3-t2v", "test", duration=21)
         with self.assertRaisesRegex(ValueError, "only valid for h3-i2v"):
             build_h3_workflow("h3-t2v", "test", first_frame="first.png")
         with self.assertRaisesRegex(ValueError, "greater than 1"):
