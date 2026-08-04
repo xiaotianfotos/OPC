@@ -16,7 +16,7 @@ H3_MAX_DURATION = 20
 WORKFLOWS = {
     "h3-t2v": {
         "description": "MiniMax H3 text-to-video with native stereo audio",
-        "inputs": "prompt; EasyCache enabled by default; optional --upscale",
+        "inputs": "prompt; optional --easy-cache and --upscale",
     },
     "h3-i2v": {
         "description": "MiniMax H3 first/last-frame image-to-video with native audio",
@@ -78,7 +78,7 @@ def _base_workflow(
     steps,
     seed,
     output_node="14",
-    easy_cache=True,
+    easy_cache=False,
     easy_cache_threshold=0.05,
     easy_cache_start_percent=0.20,
     easy_cache_end_percent=0.90,
@@ -301,7 +301,7 @@ def build_h3_workflow(
     ref_image_size="match",
     upscale=False,
     upscale_factor=2.0,
-    easy_cache=True,
+    easy_cache=False,
     easy_cache_threshold=0.05,
     easy_cache_start_percent=0.20,
     easy_cache_end_percent=0.90,

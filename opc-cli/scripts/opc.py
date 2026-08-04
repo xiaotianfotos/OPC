@@ -2006,8 +2006,8 @@ examples:
     p_video.add_argument(
         "--easy-cache",
         action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Enable or disable EasyCache model-step reuse (default: enabled)",
+        default=False,
+        help="Enable or disable EasyCache model-step reuse (default: disabled)",
     )
     p_video.add_argument(
         "--easy-cache-threshold",
