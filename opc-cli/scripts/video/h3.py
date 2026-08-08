@@ -8,6 +8,8 @@ H3_REF2VA_MODEL = "minimax_h3_ref2va_int8_convrot.safetensors"
 H3_TEXT_ENCODER = "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"
 H3_VIDEO_VAE = "minimax_h3_video_vae_fp16.safetensors"
 H3_AUDIO_VAE = "minimax_h3_audio_vae_fp32.safetensors"
+H3_TURBO_LORA = "minimax_h3_turbo_v4_step600_ema.safetensors"
+H3_TURBO_DEFAULT_STEPS = 8
 SEEDVR2_MODEL = "seedvr2_3b_int8_convrot.safetensors"
 SEEDVR2_VAE = "seedvr2_ema_vae_fp16.safetensors"
 SEEDVR2_VAE_TILE_SIZE = 1024
@@ -89,8 +91,11 @@ def _base_workflow(
     easy_cache_end_percent=0.90,
     easy_cache_verbose=False,
     first_block_cache=True,
+    turbo=False,
 ):
-    if easy_cache:
+    if turbo:
+        model_link = ["90", 0]
+    elif easy_cache:
         model_link = ["28", 0]
     elif first_block_cache:
         model_link = ["29", 0]
@@ -131,8 +136,8 @@ def _base_workflow(
             },
         },
         "8": {
-            "class_type": "KSamplerSelect",
-            "inputs": {"sampler_name": "res_multistep"},
+            "class_type": "MiniMaxH3TurboSampler" if turbo else "KSamplerSelect",
+            "inputs": {} if turbo else {"sampler_name": "res_multistep"},
         },
         "9": {
             "class_type": "RandomNoise",
@@ -169,13 +174,26 @@ def _base_workflow(
             "class_type": "SaveVideo",
             "inputs": {
                 "video": ["13", 0],
-                "filename_prefix": "video/OPC_MiniMax_H3",
+                "filename_prefix": (
+                    "video/OPC_MiniMax_H3_Turbo"
+                    if turbo else "video/OPC_MiniMax_H3"
+                ),
                 "format": "mp4",
                 "codec": "auto",
             },
         },
     }
-    if easy_cache:
+    if turbo:
+        workflow["90"] = {
+            "class_type": "MiniMaxH3TurboLoRA",
+            "inputs": {
+                "model": ["1", 0],
+                "lora_name": H3_TURBO_LORA,
+                "strength": 1.0,
+                "low_vram": False,
+            },
+        }
+    elif easy_cache:
         workflow["28"] = {
             "class_type": "EasyCache",
             "inputs": {
@@ -314,7 +332,7 @@ def build_h3_workflow(
     width=864,
     height=480,
     duration=5,
-    steps=20,
+    steps=None,
     seed=-1,
     first_frame=None,
     last_frame=None,
@@ -331,11 +349,18 @@ def build_h3_workflow(
     easy_cache_end_percent=0.90,
     easy_cache_verbose=False,
     first_block_cache=True,
+    turbo=False,
 ):
     """Build a ComfyUI API workflow for a MiniMax H3 CLI alias."""
     legacy_upscale_alias = alias == "h3-t2v-upscale"
     base_alias = "h3-t2v" if legacy_upscale_alias else alias
     upscale = bool(upscale or legacy_upscale_alias)
+    steps = H3_TURBO_DEFAULT_STEPS if turbo and steps is None else steps
+    steps = 20 if steps is None else int(steps)
+    if turbo and base_alias == "h3-r2v":
+        raise ValueError("H3 Turbo is not validated for h3-r2v reference-video editing")
+    if turbo and not 4 <= steps <= 8:
+        raise ValueError("H3 Turbo steps must be between 4 and 8")
     _validate(
         alias,
         prompt,
@@ -384,7 +409,8 @@ def build_h3_workflow(
         easy_cache_start_percent=easy_cache_start_percent,
         easy_cache_end_percent=easy_cache_end_percent,
         easy_cache_verbose=easy_cache_verbose,
-        first_block_cache=first_block_cache,
+        first_block_cache=first_block_cache and not turbo,
+        turbo=turbo,
     )
 
     if base_alias == "h3-r2v":

@@ -59,6 +59,13 @@ hits). Pass `--no-fbc` for a strict uncached baseline. EasyCache remains
 disabled by default; enabling `--easy-cache` automatically omits FirstBlockCache
 so the two approximate caches cannot be stacked.
 
+For fast prompt validation, `--turbo` applies Larryvrh's H3 Turbo v4 step-600
+EMA LoRA and its matching sampler. It defaults to eight steps and automatically
+disables FirstBlockCache and EasyCache. Use Turbo for T2VA/I2VA previews, then
+remove it and return to the 20-step base workflow for final renders. Ref2VA is
+intentionally rejected because this Turbo checkpoint has not been validated for
+reference-video editing.
+
 ```bash
 opc config --set-comfyui-host 192.168.100.10
 opc config --set-comfyui-port 8188
@@ -67,6 +74,11 @@ opc config --set-video-output-dir /vol2/1000/temp/opc-video
 opc video -w h3-t2v \
   -p "A five-second continuous cinematic shot of a violinist in a rainy neon alley." \
   --width 864 --height 480 --duration 5 --steps 20
+
+# Fast prompt preview: eight-step Turbo, no cache nodes
+opc video -w h3-t2v \
+  -p "A five-second continuous cinematic shot of a violinist in a rainy neon alley." \
+  --width 608 --height 352 --duration 5 --turbo
 
 # Experimental native 20-second generation (481 frames; not post-stitched)
 opc video -w h3-t2v \
@@ -134,6 +146,7 @@ prompt.
 | `h3-r2v` | 72.06 s | 864x480 H.264 + stereo AAC |
 | `h3-r2v`, one 5 s video + audio reference | 218.16 s | 864x480 H.264 + stereo AAC |
 | SeedVR2 2x stage | 69.30 s | 1728x960 H.264 + original stereo AAC |
+| `h3-t2v --turbo`, 8 steps | 17.20 s | 608x352 H.264 + stereo AAC |
 
 The upscale test reused a cached H3 base generation. A practical cold estimate
 for `h3-t2v-upscale` is therefore about 143 seconds (74 seconds H3 + 69 seconds

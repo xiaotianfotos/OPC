@@ -47,6 +47,30 @@ class H3WorkflowTests(unittest.TestCase):
         self.assertEqual(workflow["6"]["inputs"]["model"], ["1", 0])
         self.assertEqual(workflow["7"]["inputs"]["model"], ["1", 0])
 
+    def test_turbo_uses_lora_sampler_and_disables_cache(self):
+        workflow = build_h3_workflow("h3-t2v", "test", seed=42, turbo=True)
+        self.assertEqual(workflow["7"]["inputs"]["steps"], 8)
+        self.assertEqual(workflow["8"]["class_type"], "MiniMaxH3TurboSampler")
+        self.assertEqual(workflow["6"]["inputs"]["model"], ["90", 0])
+        self.assertEqual(
+            workflow["90"]["inputs"]["lora_name"],
+            "minimax_h3_turbo_v4_step600_ema.safetensors",
+        )
+        self.assertNotIn("28", workflow)
+        self.assertNotIn("29", workflow)
+        self.assertIn("Turbo", workflow["14"]["inputs"]["filename_prefix"])
+
+    def test_turbo_rejects_unsupported_steps_and_reference_editing(self):
+        with self.assertRaisesRegex(ValueError, "between 4 and 8"):
+            build_h3_workflow("h3-t2v", "test", steps=20, turbo=True)
+        with self.assertRaisesRegex(ValueError, "not validated"):
+            build_h3_workflow(
+                "h3-r2v",
+                "test",
+                reference_images=["reference.png"],
+                turbo=True,
+            )
+
     def test_easycache_can_be_enabled_tuned_or_disabled(self):
         tuned = build_h3_workflow(
             "h3-t2v",

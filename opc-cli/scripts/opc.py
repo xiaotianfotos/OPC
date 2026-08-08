@@ -32,6 +32,7 @@ from video.comfyui import generate_video as generate_h3_video, upload_file
 from video.h3 import (
     H3_MAX_DURATION,
     H3_TRAINED_MAX_DURATION,
+    H3_TURBO_DEFAULT_STEPS,
     WORKFLOWS as VIDEO_WORKFLOWS,
     build_h3_workflow,
     duration_to_frames,
@@ -1022,7 +1023,11 @@ def _cmd_video_generate(args):
             width=args.width,
             height=args.height,
             duration=args.duration,
-            steps=args.steps,
+            steps=(
+                args.steps
+                if args.steps is not None
+                else (H3_TURBO_DEFAULT_STEPS if args.turbo else 20)
+            ),
             seed=args.seed,
             first_frame=uploaded.get("first_frame"),
             last_frame=uploaded.get("last_frame"),
@@ -1033,12 +1038,13 @@ def _cmd_video_generate(args):
             ref_image_size=args.ref_image_size,
             upscale=args.upscale,
             upscale_factor=args.upscale_factor,
-            easy_cache=args.easy_cache,
+            easy_cache=args.easy_cache and not args.turbo,
             easy_cache_threshold=args.easy_cache_threshold,
             easy_cache_start_percent=args.easy_cache_start_percent,
             easy_cache_end_percent=args.easy_cache_end_percent,
             easy_cache_verbose=args.easy_cache_verbose,
-            first_block_cache=args.first_block_cache,
+            first_block_cache=args.first_block_cache and not args.turbo,
+            turbo=args.turbo,
         )
         if args.dry_run:
             print(json.dumps(workflow, indent=2, ensure_ascii=False))
@@ -1055,9 +1061,16 @@ def _cmd_video_generate(args):
             "resolution": f"{args.width}x{args.height}",
             "duration_seconds": args.duration,
             "frames": duration_to_frames(args.duration),
-            "steps": args.steps,
-            "easy_cache": args.easy_cache,
-            "first_block_cache": args.first_block_cache and not args.easy_cache,
+            "steps": (
+                args.steps
+                if args.steps is not None
+                else (H3_TURBO_DEFAULT_STEPS if args.turbo else 20)
+            ),
+            "turbo": args.turbo,
+            "easy_cache": args.easy_cache and not args.turbo,
+            "first_block_cache": (
+                args.first_block_cache and not args.easy_cache and not args.turbo
+            ),
         })
         if args.upscale or alias == "h3-t2v-upscale":
             result["upscaled_resolution"] = (
@@ -2003,7 +2016,18 @@ examples:
             f"{H3_TRAINED_MAX_DURATION} is experimental (default: 5)"
         ),
     )
-    p_video.add_argument("--steps", type=int, default=20, help="H3 sampling steps (default: 20)")
+    p_video.add_argument(
+        "--steps",
+        type=int,
+        default=None,
+        help="H3 sampling steps (default: 20, or 8 with --turbo)",
+    )
+    p_video.add_argument(
+        "--turbo",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Use the H3 Turbo LoRA at 4-8 steps; disables cache nodes (default: disabled)",
+    )
     p_video.add_argument("--seed", type=int, default=-1, help="Seed; -1 selects a random seed")
     p_video.add_argument(
         "--easy-cache",
