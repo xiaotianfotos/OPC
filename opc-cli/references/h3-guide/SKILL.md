@@ -35,7 +35,7 @@ description: "MiniMax H3 视频创意规划、参考素材编排、Prompt 设计
 | 固定首帧，或规定首尾状态 | `h3-i2v` | 构图/主体外观由首帧决定，或必须到达尾帧 |
 | 多图联合、动作/镜头参考、视频编辑、声音参考 | `h3-r2v` | 任意图片、视频、音频需要作为独立条件 |
 
-默认先做 `864x480`、5 秒、20 steps 的低成本测试。H3 在 24 fps 的帧网格上会把 5 秒请求输出为约 5.167 秒；用户指定其他规格时遵从用户并用 `opc video info` 核实现时支持。
+默认采用两阶段生成。抽卡、试 Prompt、筛选 seed 时先做低分辨率 5 秒 Turbo 8 steps 预览；确定方案后保持 Prompt、参考素材顺序和 seed 不变，移除 `--turbo`，用 Base 20 steps 按用户目标分辨率最终出片。Turbo 是预览工具，不作为最终交付。H3 在 24 fps 的帧网格上会把 5 秒请求输出为约 5.167 秒；用户指定其他规格时遵从用户并用 `opc video info` 核实现时支持。
 
 ## 标准流程
 
@@ -79,7 +79,19 @@ description: "MiniMax H3 视频创意规划、参考素材编排、Prompt 设计
 
 ### 6. 测试与迭代
 
-先生成一版，做六格抽帧和关键局部对比，再决定重试。按 [qa-iteration.md](references/qa-iteration.md) 判断是改 Prompt、换参考、拆任务还是承认模型边界；不要仅凭首帧宣布成功。
+先用 `--turbo` 抽卡并筛选 Prompt/seed，做六格抽帧和关键局部对比，再决定重试。选中方案后必须用相同 Prompt、参考素材顺序和 seed 去掉 `--turbo` 重跑 Base 20 steps，并以 Base 成片完成最终质检。按 [qa-iteration.md](references/qa-iteration.md) 判断是改 Prompt、换参考、拆任务还是承认模型边界；不要仅凭首帧宣布成功。
+
+```bash
+# 抽卡：快速验证创意、Prompt 和 seed
+opc video -w h3-t2v --prompt-file prompt.txt \
+  --width 608 --height 352 --duration 5 --seed 42 --turbo
+
+# 最终出片：复用选中的 Prompt 和 seed，移除 --turbo
+opc video -w h3-t2v --prompt-file prompt.txt \
+  --width 1376 --height 768 --duration 5 --seed 42 --steps 20
+```
+
+`h3-r2v --turbo` 可用于编辑方案预览，但必须重点检查身份、动作、镜头方向和时序保留；最终 Ref2VA 成片同样移除 `--turbo`。
 
 每次运行前先记录一个“美感假设”和一个“最大风险”。技术规格通过不等于创意通过；失败运行保留为研究样本，下一轮只改变最可能的根因。
 
@@ -88,7 +100,7 @@ description: "MiniMax H3 视频创意规划、参考素材编排、Prompt 设计
 按下列顺序输出，缺少的项明确写“无”：
 
 1. 创意一句话与成功标准。
-2. 工作流、画幅、时长、分辨率、steps。
+2. 工作流、画幅、时长、分辨率、steps，以及当前属于 Turbo 抽卡还是 Base 最终出片。
 3. 参考素材映射表及命令行顺序。
 4. 可直接保存为文件的完整 Prompt。
 5. 可执行的 `opc video` 命令或 dry-run 命令。

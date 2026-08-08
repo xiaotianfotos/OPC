@@ -59,13 +59,15 @@ hits). Pass `--no-fbc` for a strict uncached baseline. EasyCache remains
 disabled by default; enabling `--easy-cache` automatically omits FirstBlockCache
 so the two approximate caches cannot be stacked.
 
-For fast prompt validation, `--turbo` applies Larryvrh's H3 Turbo v4 step-600
-EMA LoRA and its matching sampler. It defaults to eight steps and automatically
-disables FirstBlockCache and EasyCache. Use Turbo for T2VA/I2VA previews, then
-remove it and return to the 20-step base workflow for final renders. `h3-r2v`
-also accepts Turbo for experiments, but the checkpoint has not been formally
-validated for reference-video editing, so compare identity and motion retention
-against the 20-step Ref2VA result.
+For prompt exploration and seed auditions, `--turbo` applies Larryvrh's H3
+Turbo v4 step-600 EMA LoRA and its matching sampler. It defaults to eight steps
+and automatically disables FirstBlockCache and EasyCache. Treat Turbo as a
+preview workflow: use it to shortlist prompts and seeds, then keep the chosen
+prompt, references, media order, and seed unchanged, remove `--turbo`, and run
+the 20-step base workflow at the target resolution for the final render. Do not
+ship the Turbo preview as the final result. `h3-r2v` also accepts Turbo for
+experiments, but its preview must be checked for identity, motion, camera
+direction, and timing retention before the final 20-step Ref2VA run.
 
 ```bash
 opc config --set-comfyui-host 192.168.100.10
@@ -79,7 +81,12 @@ opc video -w h3-t2v \
 # Fast prompt preview: eight-step Turbo, no cache nodes
 opc video -w h3-t2v \
   -p "A five-second continuous cinematic shot of a violinist in a rainy neon alley." \
-  --width 608 --height 352 --duration 5 --turbo
+  --width 608 --height 352 --duration 5 --seed 42 --turbo
+
+# Final render: same prompt and seed, Base 20 steps, no --turbo
+opc video -w h3-t2v \
+  -p "A five-second continuous cinematic shot of a violinist in a rainy neon alley." \
+  --width 1376 --height 768 --duration 5 --seed 42 --steps 20
 
 # Experimental native 20-second generation (481 frames; not post-stitched)
 opc video -w h3-t2v \

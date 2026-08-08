@@ -11,10 +11,22 @@
 
 ## 首轮策略
 
-- 使用低成本安全测试：864x480、5 秒、20 steps、固定 seed。
+- 抽卡阶段使用低成本 Turbo 预览：低分辨率、5 秒、8 steps、固定 seed。
+- 选中 Prompt 和 seed 后，保持 Prompt、参考素材及顺序、seed 不变，移除 `--turbo`，使用 Base 20 steps 和目标分辨率最终出片。
+- Turbo 结果只用于判断创意方向和候选 seed，不直接作为最终交付，也不能代替 Base 质量检查。
 - 先验证最危险约束：身份、产品几何、文字、动作接触或编辑不变量。
 - 一个测试只改变一个主要变量，记录 seed、Prompt、媒体顺序和输出路径。
 - 参考媒体多时，先做最小可行组合；确认后再增加风格/音频参考。
+
+```bash
+# Turbo 抽卡
+opc video -w h3-t2v --prompt-file prompt.txt \
+  --width 608 --height 352 --duration 5 --seed 42 --turbo
+
+# Base 最终出片
+opc video -w h3-t2v --prompt-file prompt.txt \
+  --width 1376 --height 768 --duration 5 --seed 42 --steps 20
+```
 
 ## 视觉质检
 
@@ -63,6 +75,7 @@
 
 ## 交付检查
 
+- 最终成片确认未启用 Turbo，工作流为 Base 20 steps；Turbo 预览与最终版本分开命名。
 - 最终文件位于用户指定目录，命名能区分 Prompt/seed/版本。
 - H.264/yuv420p 等兼容规格、分辨率、24 fps、音轨和时长符合预期。
 - `ffmpeg -v error -i final.mp4 -f null -` 无错误。

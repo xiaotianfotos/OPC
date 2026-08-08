@@ -230,10 +230,13 @@ MiniMax H3 本地文生视频、首尾帧图生视频、参考图视频，以及
 - 用户还需要创意策划、参考素材分工、审美设计、测试矩阵或生成后质检时，在官方 Skill 之后读取内置 [H3 Guide](references/h3-guide/SKILL.md)。内置指南补充创意决策，不替换官方 Prompt 结构。
 - 用户只查询工作流、参数、安装、连接、缓存和报错，或已经给出符合官方结构的完整 Prompt 要直接执行时，读取 [references/video.md](references/video.md)。
 - 冲突优先级：官方 `h3-prompt-writing` 管 Prompt 结构；[references/video.md](references/video.md) 管 CLI 与本机工作流能力；内置 `h3-guide` 管创意规划和质检。
+- H3 默认采用两阶段生成：抽卡、试 Prompt 和筛选 seed 时使用 `--turbo`；确定方案后保持 Prompt、参考素材和 seed 不变，移除 `--turbo`，使用 Base 20 steps 按目标分辨率最终出片。不要把 Turbo 预览直接当最终交付。
 
 ```bash
 opc video list
 opc video -w h3-t2v -p "..." --width 864 --height 480 --duration 5
+opc video -w h3-t2v -p "..." --width 608 --height 352 --duration 5 --seed 42 --turbo  # 抽卡/筛 Prompt
+opc video -w h3-t2v -p "..." --width 1376 --height 768 --duration 5 --seed 42 --steps 20  # 最终出片，不用 Turbo
 opc video -w h3-i2v -p "..." --first-frame first.png --last-frame last.png
 opc video -w h3-r2v -p "..." --reference-image subject.png
 opc video -w h3-t2v-upscale -p "..." --upscale-factor 2
