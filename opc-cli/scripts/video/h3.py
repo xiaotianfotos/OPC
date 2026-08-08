@@ -357,8 +357,6 @@ def build_h3_workflow(
     upscale = bool(upscale or legacy_upscale_alias)
     steps = H3_TURBO_DEFAULT_STEPS if turbo and steps is None else steps
     steps = 20 if steps is None else int(steps)
-    if turbo and base_alias == "h3-r2v":
-        raise ValueError("H3 Turbo is not validated for h3-r2v reference-video editing")
     if turbo and not 4 <= steps <= 8:
         raise ValueError("H3 Turbo steps must be between 4 and 8")
     _validate(

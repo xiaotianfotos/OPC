@@ -62,9 +62,10 @@ so the two approximate caches cannot be stacked.
 For fast prompt validation, `--turbo` applies Larryvrh's H3 Turbo v4 step-600
 EMA LoRA and its matching sampler. It defaults to eight steps and automatically
 disables FirstBlockCache and EasyCache. Use Turbo for T2VA/I2VA previews, then
-remove it and return to the 20-step base workflow for final renders. Ref2VA is
-intentionally rejected because this Turbo checkpoint has not been validated for
-reference-video editing.
+remove it and return to the 20-step base workflow for final renders. `h3-r2v`
+also accepts Turbo for experiments, but the checkpoint has not been formally
+validated for reference-video editing, so compare identity and motion retention
+against the 20-step Ref2VA result.
 
 ```bash
 opc config --set-comfyui-host 192.168.100.10

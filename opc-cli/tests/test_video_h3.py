@@ -60,16 +60,23 @@ class H3WorkflowTests(unittest.TestCase):
         self.assertNotIn("29", workflow)
         self.assertIn("Turbo", workflow["14"]["inputs"]["filename_prefix"])
 
-    def test_turbo_rejects_unsupported_steps_and_reference_editing(self):
+    def test_turbo_rejects_unsupported_steps(self):
         with self.assertRaisesRegex(ValueError, "between 4 and 8"):
             build_h3_workflow("h3-t2v", "test", steps=20, turbo=True)
-        with self.assertRaisesRegex(ValueError, "not validated"):
-            build_h3_workflow(
-                "h3-r2v",
-                "test",
-                reference_images=["reference.png"],
-                turbo=True,
-            )
+
+    def test_turbo_reference_editing_is_available_as_an_experiment(self):
+        workflow = build_h3_workflow(
+            "h3-r2v",
+            "test",
+            reference_videos=["reference.mp4"],
+            turbo=True,
+            seed=42,
+        )
+        self.assertEqual(workflow["1"]["inputs"]["unet_name"],
+                         "minimax_h3_ref2va_int8_convrot.safetensors")
+        self.assertEqual(workflow["5"]["class_type"], "MiniMaxH3ReferenceToVideo")
+        self.assertEqual(workflow["6"]["inputs"]["model"], ["90", 0])
+        self.assertNotIn("29", workflow)
 
     def test_easycache_can_be_enabled_tuned_or_disabled(self):
         tuned = build_h3_workflow(
