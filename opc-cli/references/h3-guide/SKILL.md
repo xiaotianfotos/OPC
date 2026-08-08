@@ -5,14 +5,27 @@ description: "MiniMax H3 视频创意规划、参考素材编排、Prompt 设计
 
 # H3 Guide
 
-把模糊创意转成可执行的 MiniMax H3 方案，并通过现有 `opc` skill 运行。不要复制或替代 `opc` 的命令规范；本 skill 负责创意决策、素材分工、Prompt、测试矩阵和质检。
+把模糊创意转成可执行的 MiniMax H3 方案，并通过现有 `opc` skill 运行。本 skill 负责创意决策、素材分工、测试矩阵和质检；Prompt 的最终结构由 MiniMax 官方 `h3-prompt-writing` skill 负责。
 
 ## 前置规则
 
-1. 需要真正生成或编辑视频时，先完整读取可用的 `opc` skill 及其 `references/video.md`，以当前 CLI 能力为准。
-2. 先检查用户提供的图片、视频和音频。视频至少读取时长、尺寸、帧率和音轨，并抽帧观察；图片实际查看后再分配角色。
-3. 用户只要求策划或 Prompt 时，不提交生成任务。用户要求生成、测试或继续迭代时，完成安全的生成、质检和交付。
-4. 不把风格词当方案。明确故事或功能、时间节拍、参考素材职责、镜头、声音、不变量和禁止项。
+1. 创建、改写或扩写 Prompt 时，先完整读取官方 `h3-prompt-writing` skill；Base 模式读取其 `references/base-en.txt`，Ref2VA 读取其 `references/ref-en.txt`。
+2. 需要真正生成或编辑视频时，再读取可用的 `opc` skill 及其 `references/video.md`，以当前 CLI 能力为准。
+3. 先检查用户提供的图片、视频和音频。视频至少读取时长、尺寸、帧率和音轨，并抽帧观察；图片实际查看后再分配角色。
+4. 用户只要求策划或 Prompt 时，不提交生成任务。用户要求生成、测试或继续迭代时，完成安全的生成、质检和交付。
+5. 不把风格词当方案。明确故事或功能、时间节拍、参考素材职责、镜头、声音、不变量和禁止项。
+
+## Prompt 格式归属
+
+| OPC 工作流 | 官方模式 | 最终结构 |
+|---|---|---|
+| `h3-t2v` | T2VA | `integrated_multimodal_description`、`overall_soundscape`、`non_diegetic_music` |
+| `h3-i2v` + 首帧 | I2VA | 官方首帧对齐句 + Base 三字段 |
+| `h3-i2v` + 首尾帧 | FL2VA | 官方首尾帧对齐句 + Base 三字段 |
+| `h3-i2v` + 尾帧 | L2VA | 官方尾帧对齐句 + Base 三字段 |
+| `h3-r2v` | Ref2VA | `subject_definitions`、`summary`、`retention_analysis`、`detailed_description`、`overall_soundscape`、`non_diegetic_music` |
+
+最终 Prompt 使用英文；对白、歌词和画面内文字保留原语言。官方字段、顺序、`[Shot N]`、时间戳、`<Subject N>`、`<Picture N>`、`<Video N>`、`<Audio N>`、`(S1)` 和 `<d>` 语法不得由本指南另行发明或改写。
 
 ## 工作流选择
 
@@ -50,9 +63,9 @@ description: "MiniMax H3 视频创意规划、参考素材编排、Prompt 设计
 
 `h3-r2v` 的媒体序号由命令行出现顺序决定，Prompt 必须使用完全一致的 `<Picture 1>`、`<Video 1>`、`<Audio 1>`。上限和音轨编号规则以 `opc` 当前文档为准。
 
-### 3. 按固定骨架写 Prompt
+### 3. 按官方骨架写 Prompt
 
-依次写：输出合同 → 全局不变量 → 参考绑定 → 分秒动作 → 镜头/剪辑 → 视觉风格 → 声音 → 文字/MG → 禁止项。完整模板见 [prompt-framework.md](references/prompt-framework.md)。
+先把输出合同、全局不变量、参考绑定、分秒动作、镜头、视觉、声音、文字和禁止项整理为创意约束，再按官方 `h3-prompt-writing` 对应模式写入固定字段。完整的创意拆解方法见 [prompt-framework.md](references/prompt-framework.md)，但其中任何本地模板都不能覆盖官方字段名和顺序。
 
 ### 4. 选择风格语法
 

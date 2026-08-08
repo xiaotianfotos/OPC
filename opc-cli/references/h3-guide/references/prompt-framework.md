@@ -1,5 +1,7 @@
 # H3 Prompt Framework
 
+本文件只用于创意拆解，不是可直接提交给 H3 的 Prompt 模板。最终输出必须先读取 MiniMax 官方 `h3-prompt-writing` skill，并转换为对应模式的固定英文结构；对白、歌词和画面文字保留原语言。
+
 ## 目录
 
 - 通用结构
@@ -26,85 +28,59 @@
 
 让每个镜头包含“主体 + 动作 + 场景 + 镜头 + 声音”，避免只列名词。
 
-## T2V 模板
+## T2V 创意草稿
 
 ```text
-生成一支 [时长]、[画幅] 的 [类型]。
+integrated_multimodal_description: [Shot 1] [用英文写风格、构图、主体、动作、镜头、现场声音；后续切镜使用精确时间戳]
 
-核心概念：[一句话冲突、奇观或产品承诺]。
-场景与主体：[空间、人物/物体、材质、时间、天气]。
+overall_soundscape: [用英文写环境声、动作拟音和非语言人声，不重复对白与现场音乐]
 
-[0–Xs] [镜头1：景别、动作、运镜、转场触发]
-[X–Ys] [镜头2：景别、动作、运镜、转场触发]
-[Y–结束] [高潮、品牌/情绪落点、定格或结尾]
-
-视觉：[具体构图、光线、色彩、媒介、颗粒或动画工艺]。
-声音：[环境声、拟音、音乐节拍、对白及情绪]。
-文字：[精确字符串、出现一次、位置、动效、停留时长]。
-避免：[最关键的 3–6 个失败模式]。
+non_diegetic_music: [用英文写观众才能听见的配乐，或 N/A]
 ```
 
 适合纯文生的强项：真实生活中的异常事件、短片气氛、风格化动画、具有清晰动作弧线的一镜到底。没有固定资产时，不要为了“更丰富”强行添加参考图。
 
-## I2V 模板
+## I2V / FL2VA / L2VA 创意草稿
 
 ```text
-以首帧为严格的主体、构图、产品与色彩参考。[如有尾帧：以尾帧为严格的结束状态。]
+[先按官方 base-en.txt 写 I2VA、FL2VA 或 L2VA 的精确图片对齐句]
 
-保持：[身份、产品几何、Logo、服装、背景布局]。
-允许变化：[动作、镜头、光影或界面状态]。
+integrated_multimodal_description: [Shot 1] [从首帧发展、连接首尾帧，或逐渐落到尾帧]
 
-[分秒描述从首帧自然发生的动作]
-[如有尾帧：描述如何通过材质、遮挡、镜头或状态变化无缝到达尾帧]
+overall_soundscape: [环境声与动作拟音]
 
-镜头：[具体运动和速度曲线]。
-声音：[与动作同步的拟音/音乐/对白]。
-禁止：[画面开裂、硬切、身份漂移、产品变形、Logo 乱码等]。
+non_diegetic_music: [配乐或 N/A]
 ```
 
 首尾帧转场优先寻找两张图之间的“形态同构”：咖啡泡沫到沙丘、织物褶皱到山谷、玻璃反射到水面。把共同的纹理、方向和遮挡瞬间写清楚，比写“丝滑转场”有效。
 
-## R2V 生成模板
+## R2V 创意草稿
 
 ```text
-生成一支 [时长/画幅] 的 [类型]。
+subject_definitions:
+[只定义实际承担角色的 Subject、Picture、Video、Audio 标签]
 
-参考绑定：
-- <Picture 1>：严格身份/产品参考，只负责 [身份或产品]。
-- <Picture 2>：场景与光线参考，只负责 [场景]。
-- <Picture 3>：版式/材质风格参考，不改变主体身份。
-- <Video 1>：只参考动作、表演节奏和运镜；不要复制其中人物外观。
-- <Audio 1>：只参考音色/音乐结构/环境声。
+summary:
+[以官方任务类型前缀开头的一段摘要]
 
-全局保持：[身份、服装、产品、画幅等]。
-[分秒镜头与动作]
-视觉与声音：[具体要求]
-禁止：[参考职责串线、身份融合、场景带入错误等]。
+retention_analysis:
+[每个引用标签一行，使用官方固定 retention marker]
+
+detailed_description:
+[英文风格开场；随后按 Shot 和时间顺序写详细画面、动作、镜头与现场声音]
+
+overall_soundscape:
+[环境声与动作拟音]
+
+non_diegetic_music:
+[配乐或 N/A]
 ```
 
 一组多参考图不要全部写成“风格参考”。把人物三视图绑定为身份，把 moodboard 绑定为场景，把 storyboard 绑定为镜头顺序。
 
-## R2V 编辑模板
+## R2V 编辑约束
 
-```text
-Use <Video 1> as the strict source for camera, composition, timing, pose, motion path,
-occlusion, environment, lighting continuity and soundtrack.
-
-Make exactly these edits:
-1. [对象/区域] 从 [原状态] 改为 [目标状态]。
-2. [如有第二项，单独列出]。
-
-Target identity/appearance:
-- <Picture 1> strictly defines [脸/身体/服装/产品几何]。
-- <Picture 2> only defines [材质/背景/效果]。
-
-Preserve everything else unchanged: [列出最重要的不变量]。
-Keep all actions and occlusions temporally coherent. Synchronize mouth/action events to the retained or generated audio.
-
-Do not preserve [原对象最显著、容易残留的属性]。
-Do not introduce [参考图中的无关背景/人物/文字]。
-No morphing, flicker, duplicate subjects, reframing or unintended relighting.
-```
+在官方 Ref2VA 六字段结构内，把 `<Video 1>` 定义为源视频，并将 `summary` 的任务类型写为 `[video editing ...]`。摘要正文必须以 `The target video is an edited version of <Video 1>.` 开头，再把允许修改和必须保留的内容分别写进 `retention_analysis` 与 `detailed_description`。不要用 `[reference generation]` 代替真正的视频编辑关系。
 
 编辑主体与原主体外形差异大时，同时写“目标是什么”和“原对象哪些属性不得保留”。
 

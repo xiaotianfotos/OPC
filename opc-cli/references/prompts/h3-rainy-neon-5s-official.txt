@@ -1,0 +1,5 @@
+integrated_multimodal_description: [Shot 1] Live-action, cinematic, a continuous medium-wide tracking shot frames a young female street musician playing a wooden violin while walking slowly toward the camera through a narrow Tokyo alley at night. Warm light models her face against cool blue and red neon reflections on the rain-soaked pavement. The camera tracks backward at slow speed with small amplitude, keeping her centered as raindrops strike the violin body and strings and water splashes naturally beneath her measured steps. Her bowing remains physically coordinated with the audible violin performance. During the final second, the camera eases into a closer composition as she lifts her eyes and gives the lens a quiet, hopeful look. No visible text or watermark appears.
+
+overall_soundscape: Steady rain falls across the alley, with droplets striking the pavement, violin, and nearby metal awnings. Soft footsteps splash through shallow water while distant city traffic remains low in the background.
+
+non_diegetic_music: N/A

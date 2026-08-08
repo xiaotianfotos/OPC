@@ -3,6 +3,29 @@
 `opc video` uses the local ComfyUI server. Every H3 workflow generates 24 fps
 video with H3's native stereo audio.
 
+## Official Prompt Skill
+
+When authoring or rewriting an H3 prompt, use MiniMax's official
+`h3-prompt-writing` skill before the local creative guide. The official skill
+owns the final field names, section order, reference labels, speaker syntax,
+and timing notation. The local guide adds creative planning and QA only.
+
+| OPC workflow | Official prompt mode |
+|---|---|
+| `h3-t2v` | T2VA |
+| `h3-i2v` with first frame | I2VA |
+| `h3-i2v` with first and last frames | FL2VA |
+| `h3-i2v` with last frame | L2VA |
+| `h3-r2v` | Ref2VA |
+
+Base prompts use `integrated_multimodal_description`, `overall_soundscape`,
+and `non_diegetic_music`. Ref2VA prompts use the official six-section format:
+`subject_definitions`, `summary`, `retention_analysis`, `detailed_description`,
+`overall_soundscape`, and `non_diegetic_music`. Write the structure in English
+while preserving dialogue, lyrics, and visible text in their original language.
+The upstream source is
+[MiniMax-AI/MiniMax-H3](https://github.com/MiniMax-AI/MiniMax-H3/tree/main/skills/h3-prompt-writing).
+
 ## Workflows
 
 ```bash
@@ -125,3 +148,5 @@ licensed under CC BY 4.0. It was shortened from 15 seconds to one five-second
 shot and retains the rainy alley, violin performance, camera move, and native
 ambient/violin audio cues. The adapted prompt is stored at
 `references/prompts/h3-rainy-neon-5s.txt`.
+Its official-structure rewrite is stored at
+`references/prompts/h3-rainy-neon-5s-official.txt`.
