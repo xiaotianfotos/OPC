@@ -35,6 +35,15 @@ class H3WorkflowTests(unittest.TestCase):
     def test_easycache_is_disabled_by_default(self):
         workflow = build_h3_workflow("h3-t2v", "test", seed=42)
         self.assertNotIn("28", workflow)
+        self.assertEqual(workflow["29"]["class_type"], "ApplyMiniMaxH3FirstBlockCache")
+        self.assertEqual(workflow["6"]["inputs"]["model"], ["29", 0])
+        self.assertEqual(workflow["7"]["inputs"]["model"], ["29", 0])
+
+    def test_first_block_cache_can_be_disabled(self):
+        workflow = build_h3_workflow(
+            "h3-t2v", "test", seed=42, first_block_cache=False
+        )
+        self.assertNotIn("29", workflow)
         self.assertEqual(workflow["6"]["inputs"]["model"], ["1", 0])
         self.assertEqual(workflow["7"]["inputs"]["model"], ["1", 0])
 
@@ -59,9 +68,11 @@ class H3WorkflowTests(unittest.TestCase):
         })
         self.assertEqual(tuned["6"]["inputs"]["model"], ["28", 0])
         self.assertEqual(tuned["7"]["inputs"]["model"], ["28", 0])
+        self.assertNotIn("29", tuned)
 
         disabled = build_h3_workflow(
-            "h3-t2v", "test", seed=42, easy_cache=False
+            "h3-t2v", "test", seed=42, easy_cache=False,
+            first_block_cache=False,
         )
         self.assertNotIn("28", disabled)
         self.assertEqual(disabled["6"]["inputs"]["model"], ["1", 0])

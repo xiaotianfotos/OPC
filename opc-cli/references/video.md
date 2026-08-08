@@ -30,15 +30,11 @@ the ComfyUI nodes accept the resulting frame count, but H3 documents roughly
 Expect substantially higher VRAM use and verify temporal consistency before
 shipping the result.
 
-EasyCache is disabled by default so OPC does not silently combine it with a
-server-side cache such as FirstBlockCache. Enable it explicitly with
-`--easy-cache` only after validating output quality on the target server. Its
-default tuning uses a `0.05` reuse threshold between 20% and 90% of the
-sampling schedule.
-
-The local FBC server also enforces this rule at runtime: when an incoming
-workflow contains EasyCache, FirstBlockCache is bypassed for that workflow.
-This keeps old or manually authored workflows from stacking both caches.
+FirstBlockCache is enabled by default through the standalone MiniMax H3 node,
+using its conservative `H3 Safe` preset (`0.08`, at most two consecutive cache
+hits). Pass `--no-fbc` for a strict uncached baseline. EasyCache remains
+disabled by default; enabling `--easy-cache` automatically omits FirstBlockCache
+so the two approximate caches cannot be stacked.
 
 ```bash
 opc config --set-comfyui-host 192.168.100.10

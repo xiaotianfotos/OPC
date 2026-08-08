@@ -16,6 +16,7 @@ SEEDVR2_VAE_TEMPORAL_SIZE = 64
 SEEDVR2_VAE_TEMPORAL_OVERLAP = 8
 H3_TRAINED_MAX_DURATION = 15
 H3_MAX_DURATION = 20
+H3_FBC_SAFE_MODE = "H3 Safe \u2014 0.08 / max 2"
 
 WORKFLOWS = {
     "h3-t2v": {
@@ -87,8 +88,14 @@ def _base_workflow(
     easy_cache_start_percent=0.20,
     easy_cache_end_percent=0.90,
     easy_cache_verbose=False,
+    first_block_cache=True,
 ):
-    model_link = ["28", 0] if easy_cache else ["1", 0]
+    if easy_cache:
+        model_link = ["28", 0]
+    elif first_block_cache:
+        model_link = ["29", 0]
+    else:
+        model_link = ["1", 0]
     workflow = {
         "1": {
             "class_type": "UNETLoader",
@@ -177,6 +184,19 @@ def _base_workflow(
                 "start_percent": float(easy_cache_start_percent),
                 "end_percent": float(easy_cache_end_percent),
                 "verbose": bool(easy_cache_verbose),
+            },
+        }
+    elif first_block_cache:
+        workflow["29"] = {
+            "class_type": "ApplyMiniMaxH3FirstBlockCache",
+            "inputs": {
+                "model": ["1", 0],
+                "mode": H3_FBC_SAFE_MODE,
+                "threshold": 0.08,
+                "start_percent": 0.10,
+                "end_percent": 0.95,
+                "max_consecutive_hits": 2,
+                "temporal_guard": False,
             },
         }
     return workflow
@@ -310,6 +330,7 @@ def build_h3_workflow(
     easy_cache_start_percent=0.20,
     easy_cache_end_percent=0.90,
     easy_cache_verbose=False,
+    first_block_cache=True,
 ):
     """Build a ComfyUI API workflow for a MiniMax H3 CLI alias."""
     legacy_upscale_alias = alias == "h3-t2v-upscale"
@@ -363,6 +384,7 @@ def build_h3_workflow(
         easy_cache_start_percent=easy_cache_start_percent,
         easy_cache_end_percent=easy_cache_end_percent,
         easy_cache_verbose=easy_cache_verbose,
+        first_block_cache=first_block_cache,
     )
 
     if base_alias == "h3-r2v":

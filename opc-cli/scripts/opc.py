@@ -1038,6 +1038,7 @@ def _cmd_video_generate(args):
             easy_cache_start_percent=args.easy_cache_start_percent,
             easy_cache_end_percent=args.easy_cache_end_percent,
             easy_cache_verbose=args.easy_cache_verbose,
+            first_block_cache=args.first_block_cache,
         )
         if args.dry_run:
             print(json.dumps(workflow, indent=2, ensure_ascii=False))
@@ -1056,6 +1057,7 @@ def _cmd_video_generate(args):
             "frames": duration_to_frames(args.duration),
             "steps": args.steps,
             "easy_cache": args.easy_cache,
+            "first_block_cache": args.first_block_cache and not args.easy_cache,
         })
         if args.upscale or alias == "h3-t2v-upscale":
             result["upscaled_resolution"] = (
@@ -2008,6 +2010,13 @@ examples:
         action=argparse.BooleanOptionalAction,
         default=False,
         help="Enable or disable EasyCache model-step reuse (default: disabled)",
+    )
+    p_video.add_argument(
+        "--fbc",
+        dest="first_block_cache",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Enable or disable MiniMax H3 FirstBlockCache (default: enabled)",
     )
     p_video.add_argument(
         "--easy-cache-threshold",
