@@ -7,7 +7,13 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-from video.comfyui import check_connection, get_server_url, queue_prompt, wait_for_completion
+import numpy as np
+import soundfile as sf
+
+try:
+    from video.comfyui import check_connection, get_server_url, queue_prompt, wait_for_completion
+except ModuleNotFoundError:
+    from scripts.video.comfyui import check_connection, get_server_url, queue_prompt, wait_for_completion
 
 
 MUSIC3_DIT = "minimax_music3_dit_fp16.safetensors"
@@ -18,6 +24,16 @@ MUSIC3_DEFAULT_DURATION = 120.0
 MUSIC3_DEFAULT_STEPS = 30
 MUSIC3_DEFAULT_CFG = 1.7
 MUSIC3_DEFAULT_TOP_K = 50
+
+
+def build_instrumental_structure(duration):
+    """Give the AR model enough explicit sections to avoid premature EOS."""
+    sections = ["Intro", "Verse", "Chorus", "Bridge", "Chorus", "Outro"]
+    if duration > 90:
+        sections[3:3] = ["Instrumental", "Verse", "Chorus"]
+    if duration > 180:
+        sections[6:6] = ["Solo", "Verse", "Chorus", "Instrumental"]
+    return "\n\n".join(f"[{section}]\n[Instrumental]" for section in sections)
 
 
 def build_music3_workflow(
@@ -123,6 +139,54 @@ def generate_music3(workflow, cfg, output_path=None):
     }
 
 
+def inspect_music_file(file_path, min_duration=0.0):
+    samples, sample_rate = sf.read(file_path, dtype="float32", always_2d=True)
+    if not sample_rate or samples.size == 0:
+        raise ValueError("Generated audio is empty")
+
+    finite = bool(np.isfinite(samples).all())
+    absolute = np.abs(samples)
+    peak = float(np.max(absolute)) if finite else float("nan")
+    rms = float(np.sqrt(np.mean(np.square(samples)))) if finite else float("nan")
+    duration = len(samples) / sample_rate
+    frame_size = max(1, sample_rate // 20)
+    frame_count = len(samples) // frame_size
+    if frame_count:
+        framed = samples[:frame_count * frame_size].reshape(frame_count, frame_size, -1)
+        frame_rms = np.sqrt(np.mean(np.square(framed), axis=(1, 2)))
+        silence_ratio = float(np.mean(frame_rms < 0.001))
+    else:
+        silence_ratio = 0.0
+    clipping_ratio = float(np.mean(absolute >= 0.999)) if finite else 1.0
+
+    warnings = []
+    if clipping_ratio > 0.001:
+        warnings.append("possible clipping")
+    if silence_ratio > 0.10:
+        warnings.append("more than 10% near-silence")
+    if rms < 0.001:
+        warnings.append("audio level is nearly silent")
+    if not finite:
+        warnings.append("audio contains non-finite samples")
+
+    duration_ok = not min_duration or duration + 0.05 >= min_duration
+    technical_ok = finite and rms >= 0.001
+    return {
+        "status": "pass" if duration_ok and technical_ok else "fail",
+        "duration_seconds": round(duration, 2),
+        "minimum_duration_seconds": round(min_duration, 2),
+        "duration_ok": duration_ok,
+        "technical_ok": technical_ok,
+        "sample_rate": sample_rate,
+        "channels": samples.shape[1],
+        "peak": round(peak, 4),
+        "rms": round(rms, 4),
+        "clipping_ratio": round(clipping_ratio, 6),
+        "silence_ratio": round(silence_ratio, 4),
+        "warnings": warnings,
+    }
+
+
 def _download_audio(history_result, server_url, cfg, output_path):
     audio_items = []
     for node_output in history_result.get("outputs", {}).values():
@@ -179,6 +243,8 @@ __all__ = [
     "MUSIC3_DEFAULT_STEPS",
     "MUSIC3_DEFAULT_TOP_K",
     "MUSIC3_MAX_DURATION",
+    "build_instrumental_structure",
     "build_music3_workflow",
     "generate_music3",
+    "inspect_music_file",
 ]

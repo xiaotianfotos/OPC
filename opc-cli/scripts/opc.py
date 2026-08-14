@@ -45,8 +45,10 @@ from audio.music import (
     MUSIC3_DEFAULT_STEPS,
     MUSIC3_DEFAULT_TOP_K,
     MUSIC3_MAX_DURATION,
+    build_instrumental_structure,
     build_music3_workflow,
     generate_music3,
+    inspect_music_file,
 )
 from video.generator import generate_video as generate_workflow_video, check_connection as video_check_connection, get_server_url as video_get_server_url, upload_image as video_upload_image
 from video.transcribe import download_video, extract_audio, transcribe_audio, save_transcript, summarize_text
@@ -1121,7 +1123,17 @@ def cmd_music(args):
         print("Error: --instrumental cannot be combined with lyrics.", file=sys.stderr)
         sys.exit(1)
     if args.instrumental:
-        lyrics = "[Instrumental]"
+        lyrics = build_instrumental_structure(args.duration)
+
+    min_duration = args.min_duration
+    if min_duration is None:
+        min_duration = args.duration * 0.95
+    if min_duration < 0 or min_duration > args.duration:
+        print("Error: --min-duration must be between 0 and --duration.", file=sys.stderr)
+        sys.exit(1)
+    if args.attempts < 1:
+        print("Error: --attempts must be at least 1.", file=sys.stderr)
+        sys.exit(1)
 
     seed = args.seed if args.seed >= 0 else secrets.randbits(63)
     output_format = args.format
@@ -1154,15 +1166,50 @@ def cmd_music(args):
             return
 
         cfg = load_config()
-        result = generate_music3(workflow, cfg, output_path=args.output)
-        result.update({
-            "model": "MiniMax-Music3",
-            "duration_seconds": args.duration,
-            "seed": seed,
-            "steps": args.steps,
-            "format": output_format,
-        })
-        print(json.dumps(result, ensure_ascii=False))
+        attempt_results = []
+        attempts = args.attempts if min_duration else 1
+        for attempt in range(attempts):
+            attempt_seed = seed + attempt
+            workflow["4"]["inputs"]["seed"] = attempt_seed
+            workflow["7"]["inputs"]["seed"] = attempt_seed
+            result = generate_music3(workflow, cfg, output_path=args.output)
+            qc = inspect_music_file(result["filepath"], min_duration=min_duration)
+            attempt_results.append({
+                "attempt": attempt + 1,
+                "seed": attempt_seed,
+                "duration_seconds": qc["duration_seconds"],
+                "status": qc["status"],
+            })
+            if qc["status"] == "pass":
+                result.update({
+                    "model": "MiniMax-Music3",
+                    "requested_duration_seconds": args.duration,
+                    "seed": attempt_seed,
+                    "attempt": attempt + 1,
+                    "steps": args.steps,
+                    "format": output_format,
+                    "qc": qc,
+                    "attempts": attempt_results,
+                })
+                print(json.dumps(result, ensure_ascii=False))
+                return
+            reasons = []
+            if not qc["duration_ok"]:
+                reasons.append(
+                    f"duration {qc['duration_seconds']:.2f}s < {min_duration:.2f}s"
+                )
+            if not qc["technical_ok"]:
+                reasons.append("technical audio integrity check failed")
+            print(
+                f"Rejected attempt {attempt + 1}: {', '.join(reasons)}",
+                file=sys.stderr,
+            )
+
+        durations = ", ".join(f"{item['duration_seconds']:.2f}s" for item in attempt_results)
+        raise RuntimeError(
+            f"Music3 did not reach {min_duration:.2f}s after {attempts} attempts "
+            f"(actual: {durations})"
+        )
     except (OSError, ValueError, RuntimeError, ConnectionError) as error:
         print(f"Error: {error}", file=sys.stderr)
         sys.exit(1)
@@ -2355,6 +2402,17 @@ examples:
     p_music.add_argument("--steps", type=int, default=MUSIC3_DEFAULT_STEPS, help="Sampling steps (default: 30)")
     p_music.add_argument("--cfg", type=float, default=MUSIC3_DEFAULT_CFG, help="CFG scale (default: 1.7)")
     p_music.add_argument("--top-k", type=int, default=MUSIC3_DEFAULT_TOP_K, help="AR top-k (default: 50)")
+    p_music.add_argument(
+        "--min-duration",
+        type=float,
+        help="Minimum accepted real duration; default is 95%% of --duration, 0 disables retries",
+    )
+    p_music.add_argument(
+        "--attempts",
+        type=int,
+        default=3,
+        help="Maximum seed attempts when duration or technical QC fails (default: 3)",
+    )
     p_music.add_argument("--format", choices=["mp3", "flac"], help="Output format; inferred from -o, else mp3")
     p_music.add_argument("--output", "-o", help="Downloaded output file path")
     p_music.add_argument("--dry-run", action="store_true", help="Print the ComfyUI API workflow without running it")

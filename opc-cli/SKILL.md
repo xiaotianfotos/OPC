@@ -222,7 +222,7 @@ opc music --caption "Cinematic orchestral score" --instrumental --format flac
 opc music --caption-file caption.txt --lyrics-file lyrics.txt --dry-run
 ```
 
-优先使用英文三段式 Structured Caption：`Global Metadata`、`Vocal Details`、`Arrangement`；歌词单独传入并保留 `[Verse]`、`[Chorus]` 等段落标签。默认 30 steps、CFG 1.7、top-k 50，支持 0.04-360 秒非流式生成。
+优先使用英文三段式 Structured Caption：`Global Metadata`、`Vocal Details`、`Arrangement`；歌词单独传入并保留 `[Verse]`、`[Chorus]` 等段落标签。默认 30 steps、CFG 1.7、top-k 50，支持 0.04-360 秒非流式生成。输出默认必须达到目标时长的 95%，不足或音频损坏会自动换 seed 重试三次；`--min-duration` 和 `--attempts` 可调整验收门槛。
 
 ## Cut 命令
 

@@ -17,6 +17,9 @@ opc music --caption-file caption.txt --lyrics-file lyrics.txt --duration 120 -o 
 # Instrumental music
 opc music --caption "Cinematic orchestral score, slow emotional build" --instrumental
 
+# Enforce at least 30 seconds of valid output; retry with up to five seeds
+opc music --caption-file caption.txt --instrumental --duration 32 --min-duration 30 --attempts 5
+
 # Inspect the exact ComfyUI workflow without submitting it
 opc music --caption-file caption.txt --lyrics-file lyrics.txt --dry-run
 ```
@@ -36,7 +39,11 @@ Lyrics may use `[Intro]`, `[Verse]`, `[Pre-Chorus]`, `[Chorus]`, `[Bridge]`, `[I
 ## Defaults
 
 - Duration: 120 seconds; the model may end earlier; accepted range is 0.04-360 seconds.
+- Duration acceptance: defaults to at least 95% of `--duration`; failed outputs automatically retry with up to three consecutive seeds. Set `--min-duration 0` to disable this gate.
+- Instrumental mode automatically supplies section tags so the AR model is less likely to end after a single short phrase.
 - Sampling: 30 steps, CFG 1.7, Euler/simple, top-k 50.
 - Output: MP3 V0; FLAC is available with `--format flac` or a `.flac` output path.
 - Model files: `minimax_music3_dit_fp16.safetensors`, `minimax_music3_text_encoder_pruned_int8_convrot.safetensors`, and `minimax_music3_dav.safetensors`.
 - Generation is non-streaming.
+
+Every successful command returns a `qc` object with actual duration, sample rate, channel count, peak, RMS, clipping ratio, silence ratio, and warnings. Duration and basic audio integrity are automatic gates; musical taste and fit with the edit still require listening.
