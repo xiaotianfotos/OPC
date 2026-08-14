@@ -26,7 +26,7 @@ opc music --caption-file caption.txt --lyrics-file lyrics.txt --dry-run
 
 ## Prompt Format
 
-For best control, write the caption in English with these three sections:
+Use MiniMax's official `music-caption-rewriter` skill before generation. It routes the brief through a genre-family index and selected local templates, then returns an original 250-450 word English caption with exactly these three sections:
 
 ```text
 Global Metadata: genre, BPM, key, mood progression, use case, production profile.
@@ -35,6 +35,8 @@ Arrangement: instruments, groove, section-by-section evolution, textures, spatia
 ```
 
 Lyrics may use `[Intro]`, `[Verse]`, `[Pre-Chorus]`, `[Chorus]`, `[Bridge]`, `[Instrumental]`, `[Solo]`, and `[Outro]`. Lyrics stay in their intended language; do not copy them into the caption.
+
+The rewriter preserves explicit constraints and uses lyric text only for broad emotional context. It does not reproduce or rewrite lyric lines, and it does not enforce the generated audio duration. Keep the original lyrics or instrumental section tags as the separate Music3 lyrics input, then rely on OPC's post-generation duration gate.
 
 ## Defaults
 

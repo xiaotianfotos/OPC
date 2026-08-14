@@ -216,13 +216,15 @@ opc audio presets                              # 列出可用预设
 
 MiniMax Music3 本地歌曲与纯音乐生成。详细格式与参数见 [references/music.md](references/music.md)。
 
+创建、改写或扩写 Music3 Caption 时，必须优先使用 MiniMax 官方 `music-caption-rewriter` skill。把用户的音乐 brief、原始段落标签、目标时长和排除项交给该 Skill；将它返回的三段式英文 Caption 作为 `--caption`，原歌词或纯器乐结构标签仍单独传入 Music3。官方 Skill 只负责编曲描述，不替代 OPC 的真实时长和音频完整性验收。
+
 ```bash
 opc music --caption-file caption.txt --lyrics-file lyrics.txt --duration 120 -o song.mp3
 opc music --caption "Cinematic orchestral score" --instrumental --format flac
 opc music --caption-file caption.txt --lyrics-file lyrics.txt --dry-run
 ```
 
-优先使用英文三段式 Structured Caption：`Global Metadata`、`Vocal Details`、`Arrangement`；歌词单独传入并保留 `[Verse]`、`[Chorus]` 等段落标签。默认 30 steps、CFG 1.7、top-k 50，支持 0.04-360 秒非流式生成。输出默认必须达到目标时长的 95%，不足或音频损坏会自动换 seed 重试三次；`--min-duration` 和 `--attempts` 可调整验收门槛。
+官方 Rewriter 必须返回英文三段式 Structured Caption：`Global Metadata`、`Vocal Details`、`Arrangement`，通常为 250–450 词；歌词单独传入并保留 `[Verse]`、`[Chorus]` 等段落标签。默认 30 steps、CFG 1.7、top-k 50，支持 0.04-360 秒非流式生成。输出默认必须达到目标时长的 95%，不足或音频损坏会自动换 seed 重试三次；`--min-duration` 和 `--attempts` 可调整验收门槛。
 
 ## Cut 命令
 
