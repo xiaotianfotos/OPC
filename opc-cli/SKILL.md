@@ -1,6 +1,6 @@
 ---
 name: opc
-description: "多引擎 AI 创作工具链。TTS 语音合成、ASR 与字幕、音频压缩分析、ComfyUI 图片生成与编辑、MiniMax H3 和 LTX 视频生成、SeedVR2 超分、视频转录/理解和字幕级剪辑。使用场景：(1) 文本转语音，(2) 音频转录与字幕，(3) 音频处理，(4) AI 图片生成和编辑，(5) H3 文生视频/图生视频/全能参考视频，(6) LTX 图生视频与首尾帧视频，(7) 视频超分、理解和剪辑。触发词：语音、TTS、ASR、字幕、音频压缩、图片生成、图片编辑、视频生成、H3、LTX、SeedVR2、视频理解、prompt、知识图谱、KG、视频剪辑"
+description: "多引擎 AI 创作工具链。TTS 语音合成、ASR 与字幕、MiniMax Music3 音乐生成、音频压缩分析、ComfyUI 图片生成与编辑、MiniMax H3 和 LTX 视频生成、SeedVR2 超分、视频转录/理解和字幕级剪辑。使用场景：(1) 文本转语音，(2) 音频转录与字幕，(3) 音乐生成与音频处理，(4) AI 图片生成和编辑，(5) H3 文生视频/图生视频/全能参考视频，(6) LTX 图生视频与首尾帧视频，(7) 视频超分、理解和剪辑。触发词：语音、TTS、ASR、字幕、音乐生成、Music3、音频压缩、图片生成、图片编辑、视频生成、H3、LTX、SeedVR2、视频理解、prompt、知识图谱、KG、视频剪辑"
 ---
 
 # opc - AI 创作工具链
@@ -31,6 +31,7 @@ opc discover --set-default          # 发现播放设备
 opc tts "你好" -e edge-tts          # 生成语音
 opc say "你好"                       # 生成并播放
 opc asr audio.mp3 --format srt      # 生成字幕
+opc music --caption "Warm indie pop" --lyrics-file lyrics.txt  # 生成音乐
 opc image -w ernie-turbo -p "a cat"  # AI 生图
 opc video -w h3-t2v -p "a rainy neon street"  # H3 视频
 opc video-gen i2v --image frame.png -p "slow camera push-in"  # 图生视频
@@ -210,6 +211,18 @@ opc audio presets                              # 列出可用预设
 **压缩参数：** `-t, --threshold` 阈值 dB (默认 -20.0)、`-r, --ratio` 压缩比 (默认 4.0)、`-a, --attack` 启动时间 ms (默认 10.0)、`--release` 释放时间 ms (默认 130.0)、`--knee` 拐点宽度 dB (默认 0.0)、`--makeup` 补偿增益 dB (默认 0.0)、`--mix` 干湿比 0-1 (默认 1.0)、`--preset` 预设名称
 
 **预设：** `voice` 人声优化 (-20dB, 4:1, 10ms, 130ms)、`music` 音乐轻压缩 (-18dB, 2.5:1, 15ms, 200ms)、`limiter` 硬限制器 (-6dB, 20:1, 1ms, 50ms)、`punch` 打击乐冲击感 (-12dB, 6:1, 3ms, 80ms)、`gentle` 极轻压缩 (-24dB, 1.8:1, 30ms, 300ms)
+
+## Music 命令
+
+MiniMax Music3 本地歌曲与纯音乐生成。详细格式与参数见 [references/music.md](references/music.md)。
+
+```bash
+opc music --caption-file caption.txt --lyrics-file lyrics.txt --duration 120 -o song.mp3
+opc music --caption "Cinematic orchestral score" --instrumental --format flac
+opc music --caption-file caption.txt --lyrics-file lyrics.txt --dry-run
+```
+
+优先使用英文三段式 Structured Caption：`Global Metadata`、`Vocal Details`、`Arrangement`；歌词单独传入并保留 `[Verse]`、`[Chorus]` 等段落标签。默认 30 steps、CFG 1.7、top-k 50，支持 0.04-360 秒非流式生成。
 
 ## Cut 命令
 

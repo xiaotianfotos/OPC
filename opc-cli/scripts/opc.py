@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""opc - TTS & ASR CLI hub. Designed for AI Agent usage.
+"""opc - AI creation CLI hub designed for agent usage.
 
 Sub-commands each have their own module under scripts/{command}/.
 """
@@ -9,6 +9,7 @@ import sys
 import json
 import asyncio
 import argparse
+import secrets
 import subprocess
 import tempfile
 from pathlib import Path
@@ -38,6 +39,15 @@ from video.h3 import (
     duration_to_frames,
 )
 from audio.compressor import compress_audio, analyze_loudness, apply_preset, list_presets
+from audio.music import (
+    MUSIC3_DEFAULT_CFG,
+    MUSIC3_DEFAULT_DURATION,
+    MUSIC3_DEFAULT_STEPS,
+    MUSIC3_DEFAULT_TOP_K,
+    MUSIC3_MAX_DURATION,
+    build_music3_workflow,
+    generate_music3,
+)
 from video.generator import generate_video as generate_workflow_video, check_connection as video_check_connection, get_server_url as video_get_server_url, upload_image as video_upload_image
 from video.transcribe import download_video, extract_audio, transcribe_audio, save_transcript, summarize_text
 from video.describe import describe_video
@@ -1100,6 +1110,77 @@ def cmd_audio(args):
         print("  presets            List available compressor presets")
 
 
+def cmd_music(args):
+    """Generate music with MiniMax Music3 through ComfyUI."""
+    caption = _read_optional_text(args.caption, args.caption_file, "caption")
+    lyrics = _read_optional_text(args.lyrics, args.lyrics_file, "lyrics")
+    if not caption:
+        print("Error: Provide --caption or --caption-file.", file=sys.stderr)
+        sys.exit(1)
+    if args.instrumental and lyrics:
+        print("Error: --instrumental cannot be combined with lyrics.", file=sys.stderr)
+        sys.exit(1)
+    if args.instrumental:
+        lyrics = "[Instrumental]"
+
+    seed = args.seed if args.seed >= 0 else secrets.randbits(63)
+    output_format = args.format
+    if not output_format and args.output:
+        suffix = Path(args.output).suffix.lower().lstrip(".")
+        if suffix and suffix not in ("mp3", "flac"):
+            print("Error: Music output extension must be .mp3 or .flac.", file=sys.stderr)
+            sys.exit(1)
+        output_format = suffix or None
+    elif output_format and args.output:
+        suffix = Path(args.output).suffix.lower().lstrip(".")
+        if suffix and suffix != output_format:
+            print("Error: --format must match the --output file extension.", file=sys.stderr)
+            sys.exit(1)
+    output_format = output_format or "mp3"
+
+    try:
+        workflow = build_music3_workflow(
+            caption=caption,
+            lyrics=lyrics,
+            duration=args.duration,
+            seed=seed,
+            steps=args.steps,
+            cfg=args.cfg,
+            top_k=args.top_k,
+            output_format=output_format,
+        )
+        if args.dry_run:
+            print(json.dumps(workflow, ensure_ascii=False, indent=2))
+            return
+
+        cfg = load_config()
+        result = generate_music3(workflow, cfg, output_path=args.output)
+        result.update({
+            "model": "MiniMax-Music3",
+            "duration_seconds": args.duration,
+            "seed": seed,
+            "steps": args.steps,
+            "format": output_format,
+        })
+        print(json.dumps(result, ensure_ascii=False))
+    except (OSError, ValueError, RuntimeError, ConnectionError) as error:
+        print(f"Error: {error}", file=sys.stderr)
+        sys.exit(1)
+
+
+def _read_optional_text(value, file_path, label):
+    if value and file_path:
+        print(f"Error: Use either --{label} or --{label}-file, not both.", file=sys.stderr)
+        sys.exit(1)
+    if not file_path:
+        return (value or "").strip()
+    try:
+        return Path(file_path).read_text(encoding="utf-8").strip()
+    except OSError as error:
+        print(f"Error: Cannot read {label} file: {error}", file=sys.stderr)
+        sys.exit(1)
+
+
 def _cmd_audio_compress(args):
     """Apply compression to an audio file."""
     input_path = args.input
@@ -1656,7 +1737,7 @@ def _add_tts_args(parser):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="opc - TTS & ASR CLI Hub for AI Agents",
+        description="opc - AI creation CLI hub for agents",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\
 examples:
@@ -2247,6 +2328,37 @@ examples:
     p_vd.add_argument("--api-key", help="Vision API key (overrides config)")
     p_vd.add_argument("--model", "-m", help="Vision model name (overrides config)")
 
+    # ── opc music ──
+    p_music = subparsers.add_parser(
+        "music",
+        help="Generate music with MiniMax Music3 through ComfyUI",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""\
+examples:
+  opc music --caption "Warm Mandarin indie pop" --lyrics-file lyrics.txt -o song.mp3
+  opc music --caption-file caption.txt --lyrics-file lyrics.txt --duration 120
+  opc music --caption "Cinematic orchestral score" --instrumental --format flac
+""",
+    )
+    p_music.add_argument("--caption", "--prompt", "-p", help="Music description or structured caption")
+    p_music.add_argument("--caption-file", "--prompt-file", help="Read the caption from a UTF-8 file")
+    p_music.add_argument("--lyrics", help="Tagged lyrics text")
+    p_music.add_argument("--lyrics-file", help="Read tagged lyrics from a UTF-8 file")
+    p_music.add_argument("--instrumental", action="store_true", help="Generate instrumental music without vocals")
+    p_music.add_argument(
+        "--duration",
+        type=float,
+        default=MUSIC3_DEFAULT_DURATION,
+        help=f"Maximum duration in seconds, up to {MUSIC3_MAX_DURATION:g} (default: {MUSIC3_DEFAULT_DURATION:g})",
+    )
+    p_music.add_argument("--seed", type=int, default=-1, help="Seed; -1 selects a random seed")
+    p_music.add_argument("--steps", type=int, default=MUSIC3_DEFAULT_STEPS, help="Sampling steps (default: 30)")
+    p_music.add_argument("--cfg", type=float, default=MUSIC3_DEFAULT_CFG, help="CFG scale (default: 1.7)")
+    p_music.add_argument("--top-k", type=int, default=MUSIC3_DEFAULT_TOP_K, help="AR top-k (default: 50)")
+    p_music.add_argument("--format", choices=["mp3", "flac"], help="Output format; inferred from -o, else mp3")
+    p_music.add_argument("--output", "-o", help="Downloaded output file path")
+    p_music.add_argument("--dry-run", action="store_true", help="Print the ComfyUI API workflow without running it")
+
     # ── opc audio ──
     p_audio = subparsers.add_parser("audio", help="Audio processing tools (compressor, analyzer)",
                                     formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -2332,6 +2444,8 @@ examples:
         cmd_video_transcribe(args)
     elif args.command == "video-describe":
         cmd_video_describe(args)
+    elif args.command == "music":
+        cmd_music(args)
     elif args.command == "audio":
         cmd_audio(args)
 
