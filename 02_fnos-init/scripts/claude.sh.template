@@ -1,50 +1,136 @@
 #!/bin/bash
-set -euo pipefail
+set -eo pipefail
 
 # ═══════════════════════════════════════════════════
-#   用户配置区域 — 请修改以下三个变量
+#   模型配置区域 — 添加或修改你的模型配置
+# ═══════════════════════════════════════════════════
+#
+#   配置格式：MODEL_<序号>=( ["name"]="名称" ["token"]="密钥" ["base_url"]="地址" ["model"]="模型名" )
+#   序号从1开始，按需添加更多模型配置
 # ═══════════════════════════════════════════════════
 
-ANTHROPIC_AUTH_TOKEN=""           # API Key，例如 "sk-xxx"
-ANTHROPIC_BASE_URL=""             # API 地址，例如 "http://192.168.100.1:1234"
-ANTHROPIC_MODEL=""                # 模型名称，例如 "Qwen3.5"
+# 模型1
+declare -A MODEL_1=(
+  ["name"]="llama"
+  ["token"]="123"
+  ["base_url"]="http://127.0.0.1:33831"
+  ["model"]="gemma-4-E4B-it-Q4_K_M.gguf"
+)
 
+# 模型2
+declare -A MODEL_2=(
+  ["name"]="MiniMax"
+  ["token"]="123"
+  ["base_url"]="https://api.minimaxi.com/anthropic"
+  ["model"]="MiniMax-M2.7"
+)
+
+# 模型3
+declare -A MODEL_3=(
+  ["name"]="OpenAI"
+  ["token"]=""
+  ["base_url"]="https://api.openai.com/v1"
+  ["model"]="gpt-4"
+)
+
+# 模型4
+declare -A MODEL_4=(
+  ["name"]=""
+  ["token"]=""
+  ["base_url"]=""
+  ["model"]=""
+)
+
+# 模型5
+declare -A MODEL_5=(
+  ["name"]=""
+  ["token"]=""
+  ["base_url"]=""
+  ["model"]=""
+)
+
+# ═══════════════════════════════════════════════════
+#   内部配置区域 — 无需修改
 # ═══════════════════════════════════════════════════
 
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
 GREEN='\033[0;32m'
+CYAN='\033[0;36m'
 NC='\033[0m'
 
-# 检查变量是否都已配置
-missing=0
-if [[ -z "${ANTHROPIC_AUTH_TOKEN}" ]]; then
-    echo -e "${RED}[错误] ANTHROPIC_AUTH_TOKEN 未配置${NC}"
-    missing=1
-fi
-if [[ -z "${ANTHROPIC_BASE_URL}" ]]; then
-    echo -e "${RED}[错误] ANTHROPIC_BASE_URL 未配置${NC}"
-    missing=1
-fi
-if [[ -z "${ANTHROPIC_MODEL}" ]]; then
-    echo -e "${RED}[错误] ANTHROPIC_MODEL 未配置${NC}"
-    missing=1
+# 动态收集所有已配置的模型（扫描 MODEL_1 到 MODEL_20）
+MODEL_LIST=()
+for i in $(seq 1 20); do
+  var="MODEL_${i}"
+  if declare -p "${var}" &>/dev/null; then
+    model_name=$(eval "echo \${${var}[name]:-}")
+    if [[ -n "${model_name}" ]]; then
+      MODEL_LIST+=("${var}")
+    fi
+  fi
+done
+
+# 检查是否至少配置了一个完整模型
+configured_models=()
+for model_ref in "${MODEL_LIST[@]}"; do
+  token=$(eval "echo \${${model_ref}[token]:-}")
+  base_url=$(eval "echo \${${model_ref}[base_url]:-}")
+  model=$(eval "echo \${${model_ref}[model]:-}")
+  if [[ -n "${token}" ]] && [[ -n "${base_url}" ]] && [[ -n "${model}" ]]; then
+    configured_models+=("${model_ref}")
+  fi
+done
+
+if [[ ${#configured_models[@]} -eq 0 ]]; then
+  echo -e "${RED}[错误] 没有任何可用的模型配置${NC}"
+  echo ""
+  echo -e "${YELLOW}请先编辑此脚本，配置至少一个模型的 token、base_url 和 model：${NC}"
+  echo ""
+  echo "  nano $(realpath "$0")"
+  echo ""
+  exit 1
 fi
 
-if [[ ${missing} -eq 1 ]]; then
-    echo ""
-    echo -e "${YELLOW}请用编辑器打开此脚本，填写上方三个变量后重新运行：${NC}"
-    echo ""
-    echo "  nano $(realpath "$0")"
-    echo ""
-    echo -e "${YELLOW}示例配置：${NC}"
-    echo "  ANTHROPIC_AUTH_TOKEN=\"sk-abc123\""
-    echo "  ANTHROPIC_BASE_URL=\"http://192.168.100.207:1234\""
-    echo "  ANTHROPIC_MODEL=\"Qwen3-4B\""
-    exit 1
+# 显示选择菜单
+echo -e "${CYAN}╔══════════════════════════════════════════╗${NC}"
+echo -e "${CYAN}║         选择要使用的模型                ║${NC}"
+echo -e "${CYAN}╚══════════════════════════════════════════╝${NC}"
+echo ""
+
+index=1
+declare -A VALID_SELECTION=()
+for model_ref in "${configured_models[@]}"; do
+  name=$(eval "echo \${${model_ref}[name]:-}")
+  echo -e "  ${GREEN}${index}.${NC} ${name}"
+  VALID_SELECTION[${index}]="${model_ref}"
+  ((index++))
+done
+
+echo ""
+echo -e -n "${YELLOW}请输入数字选择模型 [1-${#VALID_SELECTION[@]}]: ${NC}"
+
+read -r selection
+
+# 验证输入
+if [[ ! "${selection}" =~ ^[0-9]+$ ]]; then
+  echo -e "${RED}[错误] 无效输入，请输入数字${NC}"
+  exit 1
 fi
 
-# 配置环境变量，所有模型统一使用同一个
+if [[ -z "${VALID_SELECTION[${selection}]:-}" ]]; then
+  echo -e "${RED}[错误] 选择无效，范围应为 1-${#VALID_SELECTION[@]}${NC}"
+  exit 1
+fi
+
+# 获取选中的模型配置
+selected_model_ref="${VALID_SELECTION[${selection}]}"
+ANTHROPIC_AUTH_TOKEN=$(eval "echo \${${selected_model_ref}[token]:-}")
+ANTHROPIC_BASE_URL=$(eval "echo \${${selected_model_ref}[base_url]:-}")
+ANTHROPIC_MODEL=$(eval "echo \${${selected_model_ref}[model]:-}")
+MODEL_DISPLAY_NAME=$(eval "echo \${${selected_model_ref}[name]:-}")
+
+# 设置环境变量
 export ANTHROPIC_AUTH_TOKEN
 export ANTHROPIC_BASE_URL
 export ANTHROPIC_MODEL
@@ -53,6 +139,8 @@ export ANTHROPIC_DEFAULT_SONNET_MODEL="${ANTHROPIC_MODEL}"
 export ANTHROPIC_DEFAULT_HAIKU_MODEL="${ANTHROPIC_MODEL}"
 export ANTHROPIC_DEFAULT_OPUS_MODEL="${ANTHROPIC_MODEL}"
 
+echo ""
+echo -e "${GREEN}[已选择] ${MODEL_DISPLAY_NAME}${NC}"
 echo -e "${GREEN}[启动] API: ${ANTHROPIC_BASE_URL}${NC}"
 echo -e "${GREEN}[启动] 模型: ${ANTHROPIC_MODEL}${NC}"
 echo ""
